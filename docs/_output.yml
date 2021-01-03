@@ -1,0 +1,14 @@
+bookdown::gitbook:
+  include:
+    after_body: disqus.html
+  css: style.css
+  config:
+    sharing:
+      facebook: false
+      twitter: false
+    toc:
+      before: |
+        <li><a href="./">Lab Meeting Nov 4 2020</a></li>
+
+bookdown::epub_book: default
+

@@ -1,0 +1,32 @@
+--- 
+title: "MSc Project Analyses: Projects 1 (colour learning) and 2 (shifting novel object preferences)"
+author: "Wyatt Toure"
+date: "Date of this version: `r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+description: ""
+---
+
+# Background
+
+Based on previous literature we have good reason to believe two things about guppy exploratory behaviour, defined as the propensity to engage with novelty: 
+
+- that there is a relatively **strong environmenetal component to exploratory behaviour** (Burns *et. al.* 2016)
+- that **exploratory tendencies across contexts are correlated** (De Serrano *et al.* 2016)
+
+My experiments try to examine whether there is a role for experience in the environment in shaping exploratory behaviour and to look at the implications of a potential behavioural corrrelation across novelty contexts. If exploratory tendencies are correlated across contexts because of shared mechanisms producing both behaviours then shifting exploration in one context should also shift exploratory tendencies in another context even without directly training for exploration in that context. 
+
+To tackle these quesitons I have tried to shift novel object exploration and spatial exploration through reinforcement training. 
+
+I took a stepwise approach to this. Before I asked whether I could shift novel object preferences I wanted to confirm that: 
+
+- <span style="color: grey;"> Guppies recognize and respond to novel objects </span> (not discussed here)
+- Guppies can have their preference for objects shifted 
+
+After confirming those I then felt comfortable to go on and see if I could shift *novel* object preferences.
+
+In this document project 1 corresponds to the experiment where I tried to shift preferences for specific objects and project 2 corresponds to the experiment where I tried to shift preferences for novel objects. 
+
