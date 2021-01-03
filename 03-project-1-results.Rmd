@@ -114,7 +114,7 @@ training.data.model =
 ```
 
 ```{r, echo=FALSE, results=FALSE}
-# Summary of model 3
+
 tidy_fit = broom.mixed::tidy(training.data.model)
 tidy_fit$p.value = ifelse(tidy_fit$p.value < .001, ## Condition
                       "< .001",  ## if condition is true
@@ -175,6 +175,8 @@ test.data.model =
 
 ```{r, echo=FALSE, results=FALSE}
 # Summary of model 3
+summary(test.data.model)
+
 tidy_fit.test.data.model = broom.mixed::tidy(test.data.model)
 
 tidy_fit.test.data.model$p.value = ifelse(tidy_fit.test.data.model$p.value < .001, ## Condition
@@ -261,17 +263,23 @@ ggplot(test.data,
 ```
 </center>
 
-Post-hoc pairwise comparisons investigating the differences between treatments based on whether guppies are untrained or trained reveals that initially there was no difference in the strength of preference for the rewarding object between the treatments (blue-trained guppies had a blue object preference of `r pairwise.comparison.means.table$emmean[1] %>% round(1)` seconds and green-trained guppies had a green object preference of `r pairwise.comparison.means.table$emmean[3] %>% round(1)` seconds, p `r formatted_p.pairwise.comparison.contrasts.table[2]`). 
+</br>
+
+**Post-Hoc Comparisons**
+
+To determine whether X was different from Y I conducted post-hoc comparisons of the mean. 
+
+```{r, echo=TRUE}
+test.data.model.pairwise.comparisons = 
+  emmeans(test.data.model, 
+          specs = pairwise ~ trial:rewarding.object.colour) %>% 
+  summary(infer = TRUE)
+```
+
+Post-hoc comparisons investigating the differences between treatments based on whether guppies are untrained or trained reveals that initially there was no difference in the strength of preference for the rewarding object between the treatments (blue-trained guppies had a blue object preference of `r pairwise.comparison.means.table$emmean[1] %>% round(1)` seconds and green-trained guppies had a green object preference of `r pairwise.comparison.means.table$emmean[3] %>% round(1)` seconds, p `r formatted_p.pairwise.comparison.contrasts.table[2]`). 
 
 Comparing the shift in rewarding object preference between initial and final preference tests in blue-trained and green-trained guppies reveals that the shift in rewarding object preference is significant for green-trained guppies but not for blue-trained guppies. Green trained guppies increased their preference for the green object by `r abs(pairwise.comparison.contrasts.table$estimate[6] %>% round(1))` seconds (going from a green object preference of `r pairwise.comparison.means.table$emmean[3] %>% round(1)` seconds initially to `r pairwise.comparison.means.table$emmean[4] %>% round(1)` seconds at final test, p `r formatted_p.pairwise.comparison.contrasts.table[6]`) whereas blue-trained guppies non-significantly increased their preference for the blue object by `r abs(pairwise.comparison.contrasts.table$estimate[1] %>% round(1))` seconds (going from a blue object preference `r pairwise.comparison.means.table$emmean[1] %>% round(1)` seconds initially to `r (pairwise.comparison.means.table$emmean[2]) %>% round(1)` seconds at final test, p `r formatted_p.pairwise.comparison.contrasts.table[1]`). For a full description of post-hoc comparisons see table \@ref(tab:contrasts-table).
 
-Overall I find that:
-
-1. <b>Green-trained guppies</b> increased their preference for the green object. 
-2. <b>Blue-trained guppies </b> non-significantly increased their preference for the blue object. 
-<br />
-<br />
-<br />
 
 ```{r contrasts-table, echo=FALSE, fig.id="contrasts-table", warning=FALSE}
 pairwise.comparison.contrasts.table.show = pairwise.comparison.contrasts.table
@@ -281,27 +289,11 @@ pairwise.comparison.contrasts.table.show$p.value =
             (pairwise.comparison.contrasts.table.show$p.value < .05 & pairwise.comparison.contrasts.table.show$p.value >= .001) ~ paste(as.character(pairwise.comparison.contrasts.table.show$p.value %>% round(3))),
             pairwise.comparison.contrasts.table.show$p.value >= .05 ~ paste(pairwise.comparison.contrasts.table.show$p.value %>% round(3)))
 
-## Rename contrast levels
-# levels(pairwise.comparison.contrasts.table$contrast) <- c(levels(pairwise.comparison.contrasts.table$contrast), "initial  blue trained - final  blue trained")
-# levels(pairwise.comparison.contrasts.table$contrast) <- c(levels(pairwise.comparison.contrasts.table$contrast), "initial  blue trained - initial  green trained")
-# levels(pairwise.comparison.contrasts.table$contrast) <- c(levels(pairwise.comparison.contrasts.table$contrast), "initial  blue trained - final  green trained")
-# levels(pairwise.comparison.contrasts.table$contrast) <- c(levels(pairwise.comparison.contrasts.table$contrast), "final  blue trained - initial  green trained")
-# levels(pairwise.comparison.contrasts.table$contrast) <- c(levels(pairwise.comparison.contrasts.table$contrast), "final  blue trained - final  green trained")
-# levels(pairwise.comparison.contrasts.table$contrast) <- c(levels(pairwise.comparison.contrasts.table$contrast), "initial  green trained - final  green trained")
-# 
-# 
-# pairwise.comparison.contrasts.table$contrast[pairwise.comparison.contrasts.table$contrast == '0 blue - 21 blue'] <- "initial  blue trained - final  blue trained"
-# pairwise.comparison.contrasts.table$contrast[pairwise.comparison.contrasts.table$contrast == '0 blue - 0 green'] <- "initial  blue trained - initial  green trained"
-# pairwise.comparison.contrasts.table$contrast[pairwise.comparison.contrasts.table$contrast == '0 blue - 21 green'] <- "initial  blue trained - final  green trained"
-# pairwise.comparison.contrasts.table$contrast[pairwise.comparison.contrasts.table$contrast == '21 blue - 0 green'] <- "final  blue trained - initial  green trained"
-# pairwise.comparison.contrasts.table$contrast[pairwise.comparison.contrasts.table$contrast == '21 blue - 21 green'] <- "final  blue trained - final  green trained"
-# pairwise.comparison.contrasts.table$contrast[pairwise.comparison.contrasts.table$contrast == '0 green - 21 green'] <- "initial  green trained - final  green trained"
-
 knitr::kable(pairwise.comparison.contrasts.table.show %>% select(contrast, estimate, df, lower.CL,upper.CL,p.value),
              caption = "Table of post-hoc tests with Tukey adjustment for multiple comparisons. The numbers represent the initial test trial (0) and the final test trial (21). The colour corressponds to the identity of the rewarding object (blue for blue-trained guppies, green for green-trained guppies). Values are all rounded to 3 decimal places. Significant p-values are bolded.")
 
 ```
-<br />
+
 <br />
 
 **Testing blue-trained guppies separately**
@@ -310,9 +302,7 @@ It does look like blue trained guppies are shifting their preference slightly bu
 
 ```{r, echo=TRUE}
 blue.guppies.test.data = test.data %>% filter(rewarding.object.colour == 'blue')
-```
 
-```{r, echo=TRUE}
 blue.guppies.test.data.model = 
   lm(rewarding.object.preference ~ trial,
        data = blue.guppies.test.data)
@@ -374,7 +364,7 @@ formatted_p.rewarding.object = ifelse(tidy_fit.rewarding.object$p.value < .001, 
                       paste("=", tidy_fit.rewarding.object$p.value %>% round(3))) ## if condition is false
 ```
 
-Throughout all of training, fish that ate during a session spent on average `r tidy_fit.rewarding.object$estimate[2] %>% round(1)` more seconds near the rewarded object compared to fish that did not eat (Figure, \@ref(fig:training-data-ate-plot), p `r formatted_p.rewarding.object[2]`). Fish that spent more trials eating may therefore have received more reinforcement for the object-food association. 
+Throughout all of training, fish that ate during a session spent on average `r tidy_fit.rewarding.object$estimate[2] %>% round(1)` more seconds near the rewarded object compared to fish that did not eat (Figure, \@ref(fig:training-data-ate-plot), p `r formatted_p.rewarding.object[2]`). Fish that spent more trials eating may therefore have received more reinforcement for the object-food association. This led me to perform my next test which investigated whether there was a difference in food reinforcement between the two treatments. 
 
 ```{r training-data-ate-plot, echo=FALSE, fig.cap="Preference for the rewarding object during training based on whether an individual ate during a trial or not. Dashed line represents the no preference value. Data are means +/- 95% CI.", fig.id="training-data-ate-plot", warning=FALSE}
 ###### Time with rewarding object plot during training [gaussian] ######
@@ -478,9 +468,9 @@ ggplot(my.feeding.data,
   theme(legend.position = "none", axis.text=element_text(size=14), axis.title=element_text(size=14,face="bold"), 
         plot.title = element_text(size=16, hjust=0.5)) + scale_color_manual(values=c("#2980b9", "#27ae60"))
 ```
- 
 
-# Model 6 - What if I control for feeding count?
+
+# Model 6 - Controlling for feeding count
 
 ```{r, include=FALSE}
 test.feeding.data = left_join(test.data, feeding, by ="id")
@@ -490,9 +480,34 @@ retest.feeding.data = test.feeding.data %>% filter(trial == "21")
 retest.feeding.data = retest.feeding.data %>% mutate(time.with.both.objects = time.with.trained.object+time.with.untrained.object)
 ```
 
+There is a fish that did not eat during any trials, however removing this individual does not change the results. 
+
+```{r, echo=TRUE}
+test.feeding.data.low.feeders.removed = test.feeding.data %>% filter(feeding.count > 0)
+
+test.data.low.feeders.removed.model = 
+  lmer(rewarding.object.preference ~ trial * rewarding.object.colour + (1 | id), 
+     data = test.feeding.data.low.feeders.removed)
+```
+
+```{r, echo=FALSE, results=FALSE}
+tidy_fit.test.feeding.data.low.feeders.removed = broom.mixed::tidy(test.data.low.feeders.removed.model)
+tidy_fit.test.feeding.data.low.feeders.removed$p.value = ifelse(tidy_fit.test.feeding.data.low.feeders.removed$p.value < .001, ## Condition
+                      "< .001",  ## if condition is true
+                      paste(tidy_fit.test.feeding.data.low.feeders.removed$p.value %>% round(3))) ## if condition is false
+tidy_fit.test.feeding.data.low.feeders.removed
+```
+
+```{r, results=TRUE, echo=FALSE}
+knitr::kable(tidy_fit.test.feeding.data.low.feeders.removed[2:4,] %>% select(-group, -effect))
+```
+
+
+Moreover, as I demonstrate in the next model including the amount of trials fed as a covariate in the model does not change the results.
+
 ```{r, echo = TRUE}
 test.data.feeding.controlled.model = 
-  lm(rewarding.object.preference ~ trial * rewarding.object.colour + feeding.count, 
+  lmer(rewarding.object.preference ~ trial * rewarding.object.colour + feeding.count + (1 |id), 
      data = test.feeding.data)
 ```
 
@@ -507,11 +522,11 @@ tidy_fit.test.data.feeding.controlled.model[2:5,]
 ```
 
 ```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy_fit.test.data.feeding.controlled.model[2:5,])
+knitr::kable(tidy_fit.test.data.feeding.controlled.model[2:5,]%>% select(-group, -effect))
 ```
 
 
-Nothing changes if I control for feeding count. The above model is the feeding controlled model. Below we have the non-feeding-count controlled model from earlier.
+The main results do not change if I control for feeding count. The above table is the output feeding controlled model. Below we have the output table for the non-feeding-count controlled model from model 3.
 
 ```{r, echo=FALSE, results=FALSE}
 tidy_fit.test.data.model[2:4,] %>% select(-group, -effect)
@@ -547,116 +562,5 @@ summary(test.data.feeding.controlled.model2)
 # Nothing
 
 ```
-
-<br />
-
-What if I control for feeding count in just blue guppies. 
-
-```{r, echo=TRUE}
-blue.guppies.test.data2 = test.feeding.data %>% filter(rewarding.object.colour == 'blue')
-```
-
-```{r, echo=TRUE}
-blue.guppies.test.data.model2 = 
-  lm(rewarding.object.preference ~ trial + feeding.count,
-       data = blue.guppies.test.data2)
-```
-
-```{r,results=FALSE,echo=FALSE}
-tidy_fit.blue.test.data.model2 = broom.mixed::tidy(blue.guppies.test.data.model2)
-tidy_fit.blue.test.data.model2$p.value = ifelse(tidy_fit.blue.test.data.model2$p.value < .001, ## Condition
-                      "< .001",  ## if condition is true
-                      paste(tidy_fit.blue.test.data.model2$p.value %>% round(3))) ## if condition is false
-tidy_fit.blue.test.data.model2
-```
-
-```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy_fit.blue.test.data.model2)
-```
-
-
-The p-values get smaller compared to when we first look at blue-trained guppies separately without controlling for feeding count but there is still no significant effect. Compare the above with the below to see how the values differ.
-
-```{r, echo=TRUE}
-blue.guppies.test.data.model = 
-  lm(rewarding.object.preference ~ trial,
-       data = blue.guppies.test.data)
-```
-
-```{r,results=FALSE,echo=FALSE}
-tidy_fit.blue.test.data.model = broom.mixed::tidy(blue.guppies.test.data.model)
-tidy_fit.blue.test.data.model$p.value = ifelse(tidy_fit.blue.test.data.model$p.value < .001, ## Condition
-                      "< .001",  ## if condition is true
-                      paste(tidy_fit.blue.test.data.model$p.value %>% round(3))) ## if condition is false
-tidy_fit.blue.test.data.model
-```
-
-```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy_fit.blue.test.data.model)
-```
-
-
-# Model 7 - Does feeding count predict anything?
-
-** These data are just the final preference trial**
-
-```{r, echo=TRUE}
-test.data.feeding.controlled.model1 = 
-  lm(rewarding.object.preference ~ feeding.count,
-     data = retest.feeding.data)
-```
-
-```{r, echo=FALSE, results=FALSE}
-# Summary of model 6
-tidy_fit.test.data.feeding.controlled.model1 = broom.mixed::tidy(test.data.feeding.controlled.model1)
-tidy_fit.test.data.feeding.controlled.model1$p.value = ifelse(tidy_fit.test.data.feeding.controlled.model1$p.value < .001, ## Condition
-                      "< .001",  ## if condition is true
-                      paste(tidy_fit.test.data.feeding.controlled.model1$p.value %>% round(3))) ## if condition is false
-tidy_fit.test.data.feeding.controlled.model1[2:2,]
-```
-
-```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy_fit.test.data.feeding.controlled.model1[2:2,])
-```
-
-
-Testing for an effect of feeding count on rewarding object preference finds that there is no significant effect but the effect is in the expected direction. 
-
-```{r, echo=FALSE, results=TRUE}
-# Summary of model 6
-plot(allEffects(test.data.feeding.controlled.model1))
-```
-
-
-However,there is an effect of feeding on the time spent near **both** objects at re-test. 
-
-```{r, echo=TRUE}
-test.data.feeding.controlled.model2 = 
-  lm(time.with.both.objects ~ feeding.count,
-     data = retest.feeding.data)
-```
-
-```{r, echo=FALSE, results=FALSE}
-# Summary of model 
-tidy_fit.test.data.feeding.controlled.model2 = broom.mixed::tidy(test.data.feeding.controlled.model2)
-tidy_fit.test.data.feeding.controlled.model2$p.value = ifelse(tidy_fit.test.data.feeding.controlled.model2$p.value < .001, ## Condition
-                      "< .001",  ## if condition is true
-                      paste(tidy_fit.test.data.feeding.controlled.model2$p.value %>% round(3))) ## if condition is false
-tidy_fit.test.data.feeding.controlled.model2[2:2,]
-```
-
-```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy_fit.test.data.feeding.controlled.model2[2:2,])
-
-plot((allEffects(test.data.feeding.controlled.model2)))
-```
-
-
-```{r, include=FALSE}
-# Summary of model 3
-feeding.effect = as.data.frame(allEffects(test.data.feeding.controlled.model2))
-```
-
-During the final test, a fish that had `r feeding.effect$feeding.count$feeding.count[1]` feedings spent `r feeding.effect$feeding.count$fit[1] %>% round(3)` seconds near both objects whereas fish that fed in `r feeding.effect$feeding.count$feeding.count[5]` trials spent `r feeding.effect$feeding.count$fit[5] %>% round(3)` seconds near both objects, a `r (feeding.effect$feeding.count$fit[5]/feeding.effect$feeding.count$fit[1]) %>% round(1)`-fold increase.
 
 

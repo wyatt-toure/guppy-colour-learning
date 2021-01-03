@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>2 Model 1 - Preference for the green object at baseline | Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies</title>
-  <meta name="description" content="2 Model 1 - Preference for the green object at baseline | Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies" />
+  <title>7 Model 6 - Controlling for feeding count | Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies</title>
+  <meta name="description" content="7 Model 6 - Controlling for feeding count | Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies" />
   <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="2 Model 1 - Preference for the green object at baseline | Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies" />
+  <meta property="og:title" content="7 Model 6 - Controlling for feeding count | Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="2 Model 1 - Preference for the green object at baseline | Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies" />
+  <meta name="twitter:title" content="7 Model 6 - Controlling for feeding count | Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies" />
   
   
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="index.html"/>
-<link rel="next" href="model-2-preference-for-the-rewarding-object-during-training.html"/>
+<link rel="prev" href="model-5-is-there-a-difference-in-feeding-attempts-between-treatments.html"/>
+
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -131,13 +131,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="model-1---preference-for-the-green-object-at-baseline" class="section level1">
-<h1><span class="header-section-number">2</span> Model 1 - Preference for the green object at baseline</h1>
-<p>This first model contains the data for all individual guppies. I looked at the green object preference of all guppies in an intercept only model to see if the green object preference at baseline was significantly different from zero.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baseline.data.model =<span class="st"> </span>
-<span class="st">  </span><span class="kw">lm</span>(green.object.preference <span class="op">~</span><span class="st"> </span><span class="dv">1</span>,
-     <span class="dt">data =</span> baseline.data)</code></pre></div>
-<p>At baseline, there was no significant preference for the green object preference across all guppies (p = 0.727).</p>
+<div id="model-6---controlling-for-feeding-count" class="section level1">
+<h1><span class="header-section-number">7</span> Model 6 - Controlling for feeding count</h1>
+<p>There is a fish that did not eat during any trials, however removing this individual does not change the results.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test.feeding.data.low.feeders.removed =<span class="st"> </span>test.feeding.data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(feeding.count <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)
+
+test.data.low.feeders.removed.model =<span class="st"> </span>
+<span class="st">  </span><span class="kw">lmer</span>(rewarding.object.preference <span class="op">~</span><span class="st"> </span>trial <span class="op">*</span><span class="st"> </span>rewarding.object.colour <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id), 
+     <span class="dt">data =</span> test.feeding.data.low.feeders.removed)</code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -145,27 +146,137 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <th align="right">estimate</th>
 <th align="right">std.error</th>
 <th align="right">statistic</th>
+<th align="right">df</th>
 <th align="left">p.value</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">(Intercept)</td>
-<td align="right">1.064679</td>
-<td align="right">3.00754</td>
-<td align="right">0.3540034</td>
-<td align="left">0.727</td>
+<td align="left">trial21</td>
+<td align="right">24.090290</td>
+<td align="right">17.37373</td>
+<td align="right">1.3865928</td>
+<td align="right">19.00000</td>
+<td align="left">0.182</td>
+</tr>
+<tr class="even">
+<td align="left">rewarding.object.colourgreen</td>
+<td align="right">3.041865</td>
+<td align="right">16.87576</td>
+<td align="right">0.1802505</td>
+<td align="right">37.80076</td>
+<td align="left">0.858</td>
+</tr>
+<tr class="odd">
+<td align="left">trial21:rewarding.object.colourgreen</td>
+<td align="right">58.957668</td>
+<td align="right">22.98329</td>
+<td align="right">2.5652411</td>
+<td align="right">19.00000</td>
+<td align="left">0.019</td>
 </tr>
 </tbody>
 </table>
+<p>Moreover, as I demonstrate in the next model including the amount of trials fed as a covariate in the model does not change the results.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test.data.feeding.controlled.model =<span class="st"> </span>
+<span class="st">  </span><span class="kw">lmer</span>(rewarding.object.preference <span class="op">~</span><span class="st"> </span>trial <span class="op">*</span><span class="st"> </span>rewarding.object.colour <span class="op">+</span><span class="st"> </span>feeding.count <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span>id), 
+     <span class="dt">data =</span> test.feeding.data)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">df</th>
+<th align="left">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">trial21</td>
+<td align="right">17.6973610</td>
+<td align="right">16.62737</td>
+<td align="right">1.0643514</td>
+<td align="right">20.00044</td>
+<td align="left">0.3</td>
+</tr>
+<tr class="even">
+<td align="left">rewarding.object.colourgreen</td>
+<td align="right">0.5377365</td>
+<td align="right">16.19018</td>
+<td align="right">0.0332137</td>
+<td align="right">38.86553</td>
+<td align="left">0.974</td>
+</tr>
+<tr class="odd">
+<td align="left">feeding.count</td>
+<td align="right">1.3557636</td>
+<td align="right">1.03652</td>
+<td align="right">1.3079953</td>
+<td align="right">19.00034</td>
+<td align="left">0.206</td>
+</tr>
+<tr class="even">
+<td align="left">trial21:rewarding.object.colourgreen</td>
+<td align="right">65.3505973</td>
+<td align="right">22.51356</td>
+<td align="right">2.9027214</td>
+<td align="right">20.00044</td>
+<td align="left">0.009</td>
+</tr>
+</tbody>
+</table>
+<p>The main results do not change if I control for feeding count. The above table is the output feeding controlled model. Below we have the output table for the non-feeding-count controlled model from model 3.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">df</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">rewarding.object.colourgreen</td>
+<td align="right">1.644943</td>
+<td align="right">16.31541</td>
+<td align="right">0.1008214</td>
+<td align="right">39.90828</td>
+<td align="right">0.9201970</td>
+</tr>
+<tr class="even">
+<td align="left">trial21</td>
+<td align="right">17.697361</td>
+<td align="right">16.62739</td>
+<td align="right">1.0643497</td>
+<td align="right">19.99995</td>
+<td align="right">0.2998524</td>
+</tr>
+<tr class="odd">
+<td align="left">rewarding.object.colourgreen:trial21</td>
+<td align="right">65.350597</td>
+<td align="right">22.51360</td>
+<td align="right">2.9027170</td>
+<td align="right">19.99995</td>
+<td align="right">0.0088005</td>
+</tr>
+</tbody>
+</table>
+<p>In both models the p-values are similar. However the effect of feeding count trends in the expected direction in our feeding count controlled model. In the effect plot below to the left we see that as feeding count increases the preference for the rewarding object colour also increases.</p>
+<p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="model-2-preference-for-the-rewarding-object-during-training.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="model-5-is-there-a-difference-in-feeding-attempts-between-treatments.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

@@ -104,7 +104,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">Lab Meeting Nov 4 2020</a></li>
+<li><a href="./">Colour learning analysis</a></li>
 
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Background</a></li>
@@ -113,8 +113,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4" data-path="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><i class="fa fa-check"></i><b>4</b> Model 3 - Preference for the rewarded object during testing depending on treatment</a></li>
 <li class="chapter" data-level="5" data-path="model-4-preference-for-the-rewarded-object-during-training-based-on-feeding.html"><a href="model-4-preference-for-the-rewarded-object-during-training-based-on-feeding.html"><i class="fa fa-check"></i><b>5</b> Model 4 - Preference for the rewarded object during training based on feeding</a></li>
 <li class="chapter" data-level="6" data-path="model-5-is-there-a-difference-in-feeding-attempts-between-treatments.html"><a href="model-5-is-there-a-difference-in-feeding-attempts-between-treatments.html"><i class="fa fa-check"></i><b>6</b> Model 5 - Is there a difference in feeding attempts between treatments?</a></li>
-<li class="chapter" data-level="7" data-path="model-6-what-if-i-control-for-feeding-count.html"><a href="model-6-what-if-i-control-for-feeding-count.html"><i class="fa fa-check"></i><b>7</b> Model 6 - What if I control for feeding count?</a></li>
-<li class="chapter" data-level="8" data-path="model-7-does-feeding-count-predict-anything.html"><a href="model-7-does-feeding-count-predict-anything.html"><i class="fa fa-check"></i><b>8</b> Model 7 - Does feeding count predict anything?</a></li>
+<li class="chapter" data-level="7" data-path="model-6-controlling-for-feeding-count.html"><a href="model-6-controlling-for-feeding-count.html"><i class="fa fa-check"></i><b>7</b> Model 6 - Controlling for feeding count</a></li>
 </ul>
 
       </nav>
@@ -185,13 +184,15 @@ Figure 4.1: The initial and final rewarding object preference. Dashed line repre
 </p>
 </div>
 </center>
-<p>Post-hoc pairwise comparisons investigating the differences between treatments based on whether guppies are untrained or trained reveals that initially there was no difference in the strength of preference for the rewarding object between the treatments (blue-trained guppies had a blue object preference of 1.8 seconds and green-trained guppies had a green object preference of 3.5 seconds, p = 1).</p>
+<p></br></p>
+<p><strong>Post-Hoc Comparisons</strong></p>
+<p>To determine whether X was different from Y I conducted post-hoc comparisons of the mean.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test.data.model.pairwise.comparisons =<span class="st"> </span>
+<span class="st">  </span><span class="kw">emmeans</span>(test.data.model, 
+          <span class="dt">specs =</span> pairwise <span class="op">~</span><span class="st"> </span>trial<span class="op">:</span>rewarding.object.colour) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summary</span>(<span class="dt">infer =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<p>Post-hoc comparisons investigating the differences between treatments based on whether guppies are untrained or trained reveals that initially there was no difference in the strength of preference for the rewarding object between the treatments (blue-trained guppies had a blue object preference of 1.8 seconds and green-trained guppies had a green object preference of 3.5 seconds, p = 1).</p>
 <p>Comparing the shift in rewarding object preference between initial and final preference tests in blue-trained and green-trained guppies reveals that the shift in rewarding object preference is significant for green-trained guppies but not for blue-trained guppies. Green trained guppies increased their preference for the green object by 83 seconds (going from a green object preference of 3.5 seconds initially to 86.5 seconds at final test, p &lt; .001) whereas blue-trained guppies non-significantly increased their preference for the blue object by 17.7 seconds (going from a blue object preference 1.8 seconds initially to 19.5 seconds at final test, p = 0.714). For a full description of post-hoc comparisons see table <a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#tab:contrasts-table">4.1</a>.</p>
-<p>Overall I find that:</p>
-<ol style="list-style-type: decimal">
-<li><b>Green-trained guppies</b> increased their preference for the green object.</li>
-<li><b>Blue-trained guppies </b> non-significantly increased their preference for the blue object. <br /> <br /> <br /></li>
-</ol>
 <table>
 <caption><span id="tab:contrasts-table">Table 4.1: </span>Table of post-hoc tests with Tukey adjustment for multiple comparisons. The numbers represent the initial test trial (0) and the final test trial (21). The colour corressponds to the identity of the rewarding object (blue for blue-trained guppies, green for green-trained guppies). Values are all rounded to 3 decimal places. Significant p-values are bolded.</caption>
 <thead>
@@ -253,28 +254,14 @@ Figure 4.1: The initial and final rewarding object preference. Dashed line repre
 <td align="right">-40.564</td>
 <td align="left"><strong>&lt; .001</strong></td>
 </tr>
-<tr class="odd">
-<td align="left"><br /></td>
-<td align="right"></td>
-<td align="right"></td>
-<td align="right"></td>
-<td align="right"></td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left"><br /></td>
-<td align="right"></td>
-<td align="right"></td>
-<td align="right"></td>
-<td align="right"></td>
-<td align="left"></td>
-</tr>
 </tbody>
 </table>
+<p><br /></p>
 <p><strong>Testing blue-trained guppies separately</strong></p>
 <p>It does look like blue trained guppies are shifting their preference slightly but the effect might be getting drowned out by the large shift in preference of green-trained guppies so I looked at blue-trained guppies alone in a separate model.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">blue.guppies.test.data =<span class="st"> </span>test.data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(rewarding.object.colour <span class="op">==</span><span class="st"> &#39;blue&#39;</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">blue.guppies.test.data.model =<span class="st"> </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">blue.guppies.test.data =<span class="st"> </span>test.data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(rewarding.object.colour <span class="op">==</span><span class="st"> &#39;blue&#39;</span>)
+
+blue.guppies.test.data.model =<span class="st"> </span>
 <span class="st">  </span><span class="kw">lm</span>(rewarding.object.preference <span class="op">~</span><span class="st"> </span>trial,
        <span class="dt">data =</span> blue.guppies.test.data)</code></pre></div>
 <table>

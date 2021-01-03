@@ -14,3 +14,6 @@ description: ""
 
 This site contains the full code and model outputs, and residual diagnostics for the analysis demonstrated in the manuscript 'Bias in the shift of foraging preference for coloured objects in Trinidadian guppies, *Poecilia reticulata*'. 
 
+
+
+
