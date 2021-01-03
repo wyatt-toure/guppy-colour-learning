@@ -1,6 +1,5 @@
 bookdown::gitbook:
   include:
-    after_body: disqus.html
   css: style.css
   config:
     sharing:

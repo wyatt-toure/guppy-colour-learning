@@ -63,6 +63,8 @@ baseline.data$trial = as.factor(baseline.data$trial)
 
 
 # Model 1 -  Preference for the green object at baseline
+
+This first model contains the data for all individual guppies. I looked at the green object preference of all guppies in an intercept only model to see if the green object preference at baseline was significantly different from zero.
 ```{r model 1, echo=TRUE}
 baseline.data.model = 
   lm(green.object.preference ~ 1,
@@ -656,53 +658,5 @@ feeding.effect = as.data.frame(allEffects(test.data.feeding.controlled.model2))
 ```
 
 During the final test, a fish that had `r feeding.effect$feeding.count$feeding.count[1]` feedings spent `r feeding.effect$feeding.count$fit[1] %>% round(3)` seconds near both objects whereas fish that fed in `r feeding.effect$feeding.count$feeding.count[5]` trials spent `r feeding.effect$feeding.count$fit[5] %>% round(3)` seconds near both objects, a `r (feeding.effect$feeding.count$fit[5]/feeding.effect$feeding.count$fit[1]) %>% round(1)`-fold increase.
-
-
-# An interesting trend from a very early pilot 
-
-![Objects from a very early experiment](images/objects.jpg)
-
-```{r, include=FALSE}
-
-pilot.data = read.csv('Exp2_Shifting_Pref.csv')
-
-pilot.data$trial = as.factor(pilot.data$trial)
-
-pilot.data = pilot.data %>% mutate(time.with.trained.object = case_when(object.side.etho.view == "R" ~ time.with.right.object,
-                                                            object.side.etho.view == "L" ~ time.with.left.object))
-
-pilot.data = pilot.data %>% mutate(time.with.untrained.object = case_when(object.side.etho.view == "L" ~ time.with.right.object,
-                                                              object.side.etho.view == "R" ~ time.with.left.object))
-
-pilot.data = pilot.data %>% mutate(rewarding.object.preference = (time.with.trained.object-time.with.untrained.object))
-
-pilot.data = pilot.data %>% mutate(rewarding.object.preference.prop = (time.with.trained.object/(time.with.trained.object+time.with.untrained.object)))
-
-```
-
-```{r, echo=TRUE}
-pilot.model = 
-  lmer(time.with.trained.object ~ trial * object.colour + (1 | id), 
-       data = pilot.data)
-```
-
-
-```{r, results=FALSE,echo=FALSE}
-tidy.fit.pilot.data = broom.mixed::tidy(pilot.model)
-
-
-tidy.fit.pilot.data$p.value = ifelse(tidy.fit.pilot.data$p.value < .001, ## Condition
-                                           "< .001",  ## if condition is true
-                                           paste(tidy.fit.pilot.data$p.value %>% round(3)))
-
-tidy.fit.pilot.data[10:16,] %>% select(-group,-effect)
-```
-
-```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy.fit.pilot.data[10:16,] %>% select(-group,-effect))
-
-allEffects(pilot.model)
-```
-
 
 
