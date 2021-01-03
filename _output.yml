@@ -7,7 +7,7 @@ bookdown::gitbook:
       twitter: false
     toc:
       before: |
-        <li><a href="./">Lab Meeting Nov 4 2020</a></li>
+        <li><a href="./">Colour learning analysis</a></li>
 
 bookdown::epub_book: default
 
