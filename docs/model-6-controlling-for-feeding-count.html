@@ -133,7 +133,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="model-6---controlling-for-feeding-count" class="section level1">
 <h1><span class="header-section-number">7</span> Model 6 - Controlling for feeding count</h1>
-<p>There is a fish that did not eat during any trials, however removing this individual does not change the results.</p>
+<p>There is a fish that did not eat during any trials, however removing this individual does not change the conclusions</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test.feeding.data.low.feeders.removed =<span class="st"> </span>test.feeding.data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(feeding.count <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)
 
 test.data.low.feeders.removed.model =<span class="st"> </span>
@@ -177,7 +177,7 @@ test.data.low.feeders.removed.model =<span class="st"> </span>
 </tr>
 </tbody>
 </table>
-<p>Moreover, as I demonstrate in the next model including the amount of trials fed as a covariate in the model does not change the results.</p>
+<p>Moreover, as I demonstrate in the next model including the amount of trials fed as a covariate in the model does not change the conclusions.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test.data.feeding.controlled.model =<span class="st"> </span>
 <span class="st">  </span><span class="kw">lmer</span>(rewarding.object.preference <span class="op">~</span><span class="st"> </span>trial <span class="op">*</span><span class="st"> </span>rewarding.object.colour <span class="op">+</span><span class="st"> </span>feeding.count <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span>id), 
      <span class="dt">data =</span> test.feeding.data)</code></pre></div>
@@ -227,7 +227,7 @@ test.data.low.feeders.removed.model =<span class="st"> </span>
 </tr>
 </tbody>
 </table>
-<p>The main results do not change if I control for feeding count. The above table is the output feeding controlled model. Below we have the output table for the non-feeding-count controlled model from model 3.</p>
+<p>The main results do not change if I control for feeding count. The above table is the output feeding controlled model. Below we have the output table for the non-feeding-count controlled model from <a href="https://wyatt-toure.github.io/colour-learning-project-analysis/model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html">model 3</a>.</p>
 <table>
 <thead>
 <tr class="header">
@@ -267,7 +267,7 @@ test.data.low.feeders.removed.model =<span class="st"> </span>
 </tbody>
 </table>
 <p>In both models the p-values are similar. However the effect of feeding count trends in the expected direction in our feeding count controlled model. In the effect plot below to the left we see that as feeding count increases the preference for the rewarding object colour also increases.</p>
-<p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+<p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
 
 </div>
             </section>

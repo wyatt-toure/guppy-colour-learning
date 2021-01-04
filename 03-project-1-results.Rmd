@@ -103,6 +103,14 @@ knitr::kable(tidy_fit0)
 ```
 
 
+**Model Diagnostics**
+
+```{r, include=FALSE}
+simulationOutput <- simulateResiduals(fittedModel = baseline.data.model)
+testResiduals(simulationOutput)
+```
+
+
 # Model 2 -  Preference for the rewarding object during training
 
 To see whether fish were responsive during training our second model asks whether the preference for the rewarding object changes throughout training between the treatments.
@@ -159,6 +167,15 @@ ggplot(training.data,
   geom_hline(yintercept = 0, linetype = 'dashed') +
   geom_line(aes(group = id), alpha = 0.3, arrow = arrow(angle = 30, length = unit(0, "inches"), ends = "first", type = "closed"), lty = 1) + geom_smooth(method = lm)  
 
+```
+
+**Model Diagnostics**
+
+```{r, include=FALSE, warning=FALSE}
+simulationOutput <- simulateResiduals(fittedModel = training.data.model)
+testDispersion(simulationOutput)
+testUniformity(simulationOutput = simulationOutput)
+plotResiduals(simulationOutput)
 ```
 
 
@@ -261,7 +278,17 @@ ggplot(test.data,
   scale_x_discrete(labels = testing.data.x.axis.labels) + facet_grid(~rewarding.object.colour, labeller = labeller(rewarding.object.colour = object.labels)) +
   stat_summary(fun=mean, geom="line", aes(group = rewarding.object.colour))
 ```
+
 </center>
+
+</br>
+
+**Model Diagnostics**
+
+```{r, include=TRUE}
+simulationOutput <- simulateResiduals(fittedModel = test.data.model)
+plot(simulationOutput)
+```
 
 </br>
 
@@ -285,12 +312,12 @@ Comparing the shift in rewarding object preference between initial and final pre
 pairwise.comparison.contrasts.table.show = pairwise.comparison.contrasts.table
 
 pairwise.comparison.contrasts.table.show$p.value = 
-  case_when(pairwise.comparison.contrasts.table.show$p.value < .001 ~ paste('**< .001**'),
+  case_when(pairwise.comparison.contrasts.table.show$p.value < .001 ~ paste('< .001'),
             (pairwise.comparison.contrasts.table.show$p.value < .05 & pairwise.comparison.contrasts.table.show$p.value >= .001) ~ paste(as.character(pairwise.comparison.contrasts.table.show$p.value %>% round(3))),
             pairwise.comparison.contrasts.table.show$p.value >= .05 ~ paste(pairwise.comparison.contrasts.table.show$p.value %>% round(3)))
 
 knitr::kable(pairwise.comparison.contrasts.table.show %>% select(contrast, estimate, df, lower.CL,upper.CL,p.value),
-             caption = "Table of post-hoc tests with Tukey adjustment for multiple comparisons. The numbers represent the initial test trial (0) and the final test trial (21). The colour corressponds to the identity of the rewarding object (blue for blue-trained guppies, green for green-trained guppies). Values are all rounded to 3 decimal places. Significant p-values are bolded.")
+             caption = "Table of post-hoc tests with Tukey adjustment for multiple comparisons. The numbers represent the initial test trial (0) and the final test trial (21). The colour corressponds to the identity of the rewarding object (blue for blue-trained guppies, green for green-trained guppies). Values are all rounded to 3 decimal places.")
 
 ```
 
@@ -322,6 +349,9 @@ knitr::kable(tidy_fit.blue.test.data.model)
 
 
 We see that the shift in preference between baseline trial and the final trial is still not significant (p = `r tidy_fit.blue.test.data.model$p.value[2]`) in blue trained guppies though there seems to be a definite trend and the effect is in the expected direction. The random effect of ID was dropped here since it led to a singular fit, there was much more residual variance compared to individual variance, ID random effect did not significantly improve model fit. 
+
+
+
 
 # Model 4 - Preference for the rewarded object during training based on feeding
 
@@ -480,7 +510,7 @@ retest.feeding.data = test.feeding.data %>% filter(trial == "21")
 retest.feeding.data = retest.feeding.data %>% mutate(time.with.both.objects = time.with.trained.object+time.with.untrained.object)
 ```
 
-There is a fish that did not eat during any trials, however removing this individual does not change the results. 
+There is a fish that did not eat during any trials, however removing this individual does not change the conclusions 
 
 ```{r, echo=TRUE}
 test.feeding.data.low.feeders.removed = test.feeding.data %>% filter(feeding.count > 0)
@@ -503,7 +533,7 @@ knitr::kable(tidy_fit.test.feeding.data.low.feeders.removed[2:4,] %>% select(-gr
 ```
 
 
-Moreover, as I demonstrate in the next model including the amount of trials fed as a covariate in the model does not change the results.
+Moreover, as I demonstrate in the next model including the amount of trials fed as a covariate in the model does not change the conclusions.
 
 ```{r, echo = TRUE}
 test.data.feeding.controlled.model = 
@@ -526,7 +556,7 @@ knitr::kable(tidy_fit.test.data.feeding.controlled.model[2:5,]%>% select(-group,
 ```
 
 
-The main results do not change if I control for feeding count. The above table is the output feeding controlled model. Below we have the output table for the non-feeding-count controlled model from model 3.
+The main results do not change if I control for feeding count. The above table is the output feeding controlled model. Below we have the output table for the non-feeding-count controlled model from [model 3](https://wyatt-toure.github.io/colour-learning-project-analysis/model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html).
 
 ```{r, echo=FALSE, results=FALSE}
 tidy_fit.test.data.model[2:4,] %>% select(-group, -effect)
@@ -539,7 +569,7 @@ knitr::kable(tidy_fit.test.data.model[2:4,] %>% select(-group, -effect))
 In both models the p-values are similar. However the effect of feeding count trends in the expected direction in our feeding count controlled model. In the effect plot below to the left we see that as feeding count increases the preference for the rewarding object colour also increases.
 
 ```{r, echo=FALSE, results=TRUE}
-plot(allEffects(test.data.feeding.controlled.model))
+plot(allEffects(test.data.feeding.controlled.model)[1])
 ```
 
 
