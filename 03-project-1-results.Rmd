@@ -11,6 +11,7 @@ library(psych)
 library(ggplot2)
 library(ggpubr)
 library(DHARMa)
+library(MASS)
 library(dplyr)
 library(Hmisc)
 library(effects)
@@ -20,7 +21,6 @@ library(broom.mixed)
 library(knitr)
 library(emmeans)
 library(pbkrtest)
-
 library(report)
 #### Reading in Data 
 my.data = read.csv('experiment-2-master-sheet-clean.csv')
@@ -123,12 +123,12 @@ tidy_fit = broom.mixed::tidy(training.data.model)
 tidy_fit$p.value = ifelse(tidy_fit$p.value < .001, ## Condition
                       "< .001",  ## if condition is true
                       paste(tidy_fit$p.value %>% round(3))) ## if condition is false
-tidy_fit[2:4,] %>% select(-group, -effect)
+tidy_fit[2:4,] %>% dplyr::select(-group, -effect)
 
 ```
 
 ```{r,  results=TRUE, echo=FALSE}
-knitr::kable(tidy_fit[2:4,] %>% select(-group, -effect))
+knitr::kable(tidy_fit[2:4,] %>% dplyr::select(-group, -effect))
 ```
 
 
@@ -176,6 +176,8 @@ plot(simulationOutput)
 
 # Model 3 -  Preference for the rewarded object during testing depending on treatment
 
+## Main effects
+
 For the main effects of **training** and **rewarding object colour** on object preference I fit a **linear mixed effects model** with **fixed effects of trial** and **rewarding object colour** and a random effect of **individual id**. My third model asks whether the preference for the rewarding object changed between baseline and final test and looks for an interaction with rewarded object colour. In this model trial is a categorical variable composed of the intial preference trial (trial 0) and the final preference trial (trial 21). 
 
 
@@ -195,12 +197,12 @@ tidy_fit.test.data.model$p.value = ifelse(tidy_fit.test.data.model$p.value < .00
                       "< .001",  ## if condition is true
                       paste(tidy_fit.test.data.model$p.value %>% round(3))) ## if condition is false
 
-tidy_fit.test.data.model[2:4,] %>% select(-group, -effect)
+tidy_fit.test.data.model[2:4,] %>% dplyr::select(-group, -effect)
 ```
 
 
 ```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy_fit.test.data.model[2:4,] %>% select(-group, -effect))
+knitr::kable(tidy_fit.test.data.model[2:4,] %>% dplyr::select(-group, -effect))
 ```
 
 
@@ -287,7 +289,7 @@ plot(simulationOutput)
 
 </br>
 
-**Post-Hoc Comparisons**
+## Post-hoc Comparisons
 
 To determine whether the means of the final rewarding object preference for thw two treatments were different I conducted post-hoc comparisons with the package emmeans.
 
@@ -311,14 +313,14 @@ pairwise.comparison.contrasts.table.show$p.value =
             (pairwise.comparison.contrasts.table.show$p.value < .05 & pairwise.comparison.contrasts.table.show$p.value >= .001) ~ paste(as.character(pairwise.comparison.contrasts.table.show$p.value %>% round(3))),
             pairwise.comparison.contrasts.table.show$p.value >= .05 ~ paste(pairwise.comparison.contrasts.table.show$p.value %>% round(3)))
 
-knitr::kable(pairwise.comparison.contrasts.table.show %>% select(contrast, estimate, df, lower.CL,upper.CL,p.value),
+knitr::kable(pairwise.comparison.contrasts.table.show %>% dplyr::select(contrast, estimate, df, lower.CL,upper.CL,p.value),
              caption = "Table of post-hoc tests with Tukey adjustment for multiple comparisons. The numbers represent the initial test trial (0) and the final test trial (21). The colour corressponds to the identity of the rewarding object (blue for blue-trained guppies, green for green-trained guppies). Values are all rounded to 3 decimal places.")
 
 ```
 
 <br />
 
-**Testing blue-trained guppies separately**
+## Testing blue-trained guppies separately
 
 It does look like blue trained guppies are shifting their preference slightly but the effect might be getting drowned out by the large shift in preference of green-trained guppies so I looked at blue-trained guppies alone in a separate model.
 
@@ -364,11 +366,11 @@ tidy_fit.rewarding.object = broom.mixed::tidy(training.data.model.rewarding.obje
 tidy_fit.rewarding.object$p.value = ifelse(tidy_fit.rewarding.object$p.value < .001, ## Condition
                       "< .001",  ## if condition is true
                       paste(tidy_fit.rewarding.object$p.value %>% round(3))) ## if condition is false
-tidy_fit.rewarding.object[2:2,] %>% select(-group, -effect)
+tidy_fit.rewarding.object[2:2,] %>% dplyr::select(-group, -effect)
 ```
 
 ```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy_fit.rewarding.object[2:2,] %>% select(-group, -effect))
+knitr::kable(tidy_fit.rewarding.object[2:2,] %>% dplyr::select(-group, -effect))
 ```
 
 
@@ -411,7 +413,7 @@ ggplot(training.data,
 
 **Model Diagnostics**
 
-```{r, include=TRUE}
+```{r, echo=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = training.data.model.rewarding.object)
 plot(simulationOutput)
 ```
@@ -429,7 +431,7 @@ feeding
 # Count only the yeses
 feeding = feeding %>% filter(feeding.count == 'TRUE')
 # Remove the column session.ate to keep only the counts
-feeding = feeding %>% select(-feeding.count)
+feeding = feeding %>% dplyr::select(-feeding.count)
 feeding
 
 # Add the feeding values to the main data frame and replace NAs with 0 
@@ -437,17 +439,17 @@ my.feeding.data = left_join(baseline.data, feeding, by ="id")
 my.feeding.data = my.feeding.data %>% replace_na(list(n = 0))
 my.feeding.data
 my.feeding.data = rename(my.feeding.data, feeding.count = n)
-my.feeding.data =  my.feeding.data %>% select(id,feeding.count,rewarding.object.colour)
+my.feeding.data =  my.feeding.data %>% dplyr::select(id,feeding.count,rewarding.object.colour)
 my.feeding.data
 ```
 
 # Model 5 - Is there a difference in feeding attempts between treatments?
 
-A discrepancy in reinforcement between treatments may influence performance on a final preference test. To see whether there was a difference in feeding between treatments I counted the number of trials in which an individual fish ate throughout all of training and compared the feeding counts between treatments. To do this I fit a generalized linear model with a Poisson distribution. The response variable 'feeding count' is a sum of the number of trials in which a guppy ate.
+A discrepancy in reinforcement between treatments may influence performance on a final preference test. To see whether there was a difference in feeding between treatments I counted the number of trials in which an individual fish ate throughout all of training and compared the feeding counts between treatments. To do this I fit a generalized linear model with a negative binomial distribution. The response variable 'feeding count' is a sum of the number of trials in which a guppy ate.
 
 ```{r model 5, echo=TRUE}
 feeding.data.model = 
-  glm(feeding.count ~ rewarding.object.colour, family = "poisson", 
+  glm.nb(feeding.count ~ rewarding.object.colour, 
       data = my.feeding.data)
 ```
 
@@ -503,7 +505,16 @@ ggplot(my.feeding.data,
 ```
 
 
+**Model Diagnostics**
+
+```{r, include=TRUE}
+simulationOutput <- simulateResiduals(fittedModel = feeding.data.model)
+plot(simulationOutput)
+```
+
 # Model 6 - Controlling for feeding count
+
+## Model 6a - Removing individual that did not feed
 
 ```{r, include=FALSE}
 test.feeding.data = left_join(test.data, feeding, by ="id")
@@ -532,15 +543,17 @@ tidy_fit.test.feeding.data.low.feeders.removed
 ```
 
 ```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy_fit.test.feeding.data.low.feeders.removed[2:4,] %>% select(-group, -effect))
+knitr::kable(tidy_fit.test.feeding.data.low.feeders.removed[2:4,] %>% dplyr::select(-group, -effect))
 ```
 
 **Model Diagnostics**
 
-```{r, include=FALSE, warning=FALSE}
+```{r, echo=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = test.data.low.feeders.removed.model)
 plot(simulationOutput)
 ```
+
+## Model 6b - Including feeding counut as a covariate
 
 Moreover, as I demonstrate in the next model including the amount of trials fed as a covariate in the model does not change the conclusions.
 
@@ -561,18 +574,18 @@ tidy_fit.test.data.feeding.controlled.model[2:5,]
 ```
 
 ```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy_fit.test.data.feeding.controlled.model[2:5,]%>% select(-group, -effect))
+knitr::kable(tidy_fit.test.data.feeding.controlled.model[2:5,]%>% dplyr::select(-group, -effect))
 ```
 
 
 The main results do not change if I control for feeding count. The above table is the output feeding controlled model. Below we have the output table for the non-feeding-count controlled model from [model 3](https://wyatt-toure.github.io/colour-learning-project-analysis/model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html).
 
 ```{r, echo=FALSE, results=FALSE}
-tidy_fit.test.data.model[2:4,] %>% select(-group, -effect)
+tidy_fit.test.data.model[2:4,] %>% dplyr::select(-group, -effect)
 ```
 
 ```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy_fit.test.data.model[2:4,] %>% select(-group, -effect))
+knitr::kable(tidy_fit.test.data.model[2:4,] %>% dplyr::select(-group, -effect))
 ```
 
 In both models the p-values are similar. However the effect of feeding count trends in the expected direction in our feeding count controlled model. In the effect plot below to the left we see that as feeding count increases the preference for the rewarding object colour also increases.
@@ -583,7 +596,7 @@ plot(allEffects(test.data.feeding.controlled.model)[1])
 
 **Model Diagnostics**
 
-```{r, include=FALSE, warning=FALSE}
+```{r, echo=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = test.data.feeding.controlled.model)
 plot(simulationOutput)
 ```
@@ -593,7 +606,7 @@ plot(simulationOutput)
 ## What if I look at just the shift in rewarding object preference frorm baseline to re-test and look for an effect of feeding count. 
 
 test.feeding.data.as.shift.variable = test.feeding.data %>% 
-  select(id,trial,rewarding.object.colour,rewarding.object.preference,feeding.count) %>% 
+  dplyr::select(id,trial,rewarding.object.colour,rewarding.object.preference,feeding.count) %>% 
   pivot_wider(names_from = trial, values_from = rewarding.object.preference) %>%
   rename(baseline = "0", retest = "21") %>% 
   mutate(shift.rewarding.object.preference = (retest - baseline))

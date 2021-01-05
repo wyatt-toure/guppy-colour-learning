@@ -110,10 +110,17 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Background</a></li>
 <li class="chapter" data-level="2" data-path="model-1-preference-for-the-green-object-at-baseline.html"><a href="model-1-preference-for-the-green-object-at-baseline.html"><i class="fa fa-check"></i><b>2</b> Model 1 - Preference for the green object at baseline</a></li>
 <li class="chapter" data-level="3" data-path="model-2-preference-for-the-rewarding-object-during-training.html"><a href="model-2-preference-for-the-rewarding-object-during-training.html"><i class="fa fa-check"></i><b>3</b> Model 2 - Preference for the rewarding object during training</a></li>
-<li class="chapter" data-level="4" data-path="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><i class="fa fa-check"></i><b>4</b> Model 3 - Preference for the rewarded object during testing depending on treatment</a></li>
+<li class="chapter" data-level="4" data-path="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><i class="fa fa-check"></i><b>4</b> Model 3 - Preference for the rewarded object during testing depending on treatment</a><ul>
+<li class="chapter" data-level="4.1" data-path="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#main-effects"><i class="fa fa-check"></i><b>4.1</b> Main effects</a></li>
+<li class="chapter" data-level="4.2" data-path="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#post-hoc-comparisons"><i class="fa fa-check"></i><b>4.2</b> Post-hoc Comparisons</a></li>
+<li class="chapter" data-level="4.3" data-path="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#testing-blue-trained-guppies-separately"><i class="fa fa-check"></i><b>4.3</b> Testing blue-trained guppies separately</a></li>
+</ul></li>
 <li class="chapter" data-level="5" data-path="model-4-preference-for-the-rewarded-object-during-training-based-on-feeding.html"><a href="model-4-preference-for-the-rewarded-object-during-training-based-on-feeding.html"><i class="fa fa-check"></i><b>5</b> Model 4 - Preference for the rewarded object during training based on feeding</a></li>
 <li class="chapter" data-level="6" data-path="model-5-is-there-a-difference-in-feeding-attempts-between-treatments.html"><a href="model-5-is-there-a-difference-in-feeding-attempts-between-treatments.html"><i class="fa fa-check"></i><b>6</b> Model 5 - Is there a difference in feeding attempts between treatments?</a></li>
-<li class="chapter" data-level="7" data-path="model-6-controlling-for-feeding-count.html"><a href="model-6-controlling-for-feeding-count.html"><i class="fa fa-check"></i><b>7</b> Model 6 - Controlling for feeding count</a></li>
+<li class="chapter" data-level="7" data-path="model-6-controlling-for-feeding-count.html"><a href="model-6-controlling-for-feeding-count.html"><i class="fa fa-check"></i><b>7</b> Model 6 - Controlling for feeding count</a><ul>
+<li class="chapter" data-level="7.1" data-path="model-6-controlling-for-feeding-count.html"><a href="model-6-controlling-for-feeding-count.html#model-6a---removing-individual-that-did-not-feed"><i class="fa fa-check"></i><b>7.1</b> Model 6a - Removing individual that did not feed</a></li>
+<li class="chapter" data-level="7.2" data-path="model-6-controlling-for-feeding-count.html"><a href="model-6-controlling-for-feeding-count.html#model-6b---including-feeding-counut-as-a-covariate"><i class="fa fa-check"></i><b>7.2</b> Model 6b - Including feeding counut as a covariate</a></li>
+</ul></li>
 <li class="chapter" data-level="8" data-path="tools-used-and-references.html"><a href="tools-used-and-references.html"><i class="fa fa-check"></i><b>8</b> Tools used and References</a></li>
 </ul>
 
@@ -134,6 +141,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="model-3---preference-for-the-rewarded-object-during-testing-depending-on-treatment" class="section level1">
 <h1><span class="header-section-number">4</span> Model 3 - Preference for the rewarded object during testing depending on treatment</h1>
+<div id="main-effects" class="section level2">
+<h2><span class="header-section-number">4.1</span> Main effects</h2>
 <p>For the main effects of <strong>training</strong> and <strong>rewarding object colour</strong> on object preference I fit a <strong>linear mixed effects model</strong> with <strong>fixed effects of trial</strong> and <strong>rewarding object colour</strong> and a random effect of <strong>individual id</strong>. My third model asks whether the preference for the rewarding object changed between baseline and final test and looks for an interaction with rewarded object colour. In this model trial is a categorical variable composed of the intial preference trial (trial 0) and the final preference trial (trial 21).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test.data.model =<span class="st"> </span>
 <span class="st">  </span><span class="kw">lmer</span>(rewarding.object.preference <span class="op">~</span><span class="st"> </span>rewarding.object.colour <span class="op">*</span><span class="st"> </span>trial <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),
@@ -191,7 +200,9 @@ Figure 4.1: The initial and final rewarding object preference. Dashed line repre
 <span class="kw">plot</span>(simulationOutput)</code></pre></div>
 <p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 <p></br></p>
-<p><strong>Post-Hoc Comparisons</strong></p>
+</div>
+<div id="post-hoc-comparisons" class="section level2">
+<h2><span class="header-section-number">4.2</span> Post-hoc Comparisons</h2>
 <p>To determine whether the means of the final rewarding object preference for thw two treatments were different I conducted post-hoc comparisons with the package emmeans.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test.data.model.pairwise.comparisons =<span class="st"> </span>
 <span class="st">  </span><span class="kw">emmeans</span>(test.data.model, 
@@ -263,7 +274,9 @@ Figure 4.1: The initial and final rewarding object preference. Dashed line repre
 </tbody>
 </table>
 <p><br /></p>
-<p><strong>Testing blue-trained guppies separately</strong></p>
+</div>
+<div id="testing-blue-trained-guppies-separately" class="section level2">
+<h2><span class="header-section-number">4.3</span> Testing blue-trained guppies separately</h2>
 <p>It does look like blue trained guppies are shifting their preference slightly but the effect might be getting drowned out by the large shift in preference of green-trained guppies so I looked at blue-trained guppies alone in a separate model.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">blue.guppies.test.data =<span class="st"> </span>test.data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(rewarding.object.colour <span class="op">==</span><span class="st"> &#39;blue&#39;</span>)
 
@@ -298,6 +311,7 @@ blue.guppies.test.data.model =<span class="st"> </span>
 </tbody>
 </table>
 <p>We see that the shift in preference between baseline trial and the final trial is still not significant (p = 0.111) in blue trained guppies though there seems to be a definite trend and the effect is in the expected direction. The random effect of ID was dropped here since it led to a singular fit, there was much more residual variance compared to individual variance, ID random effect did not significantly improve model fit.</p>
+</div>
 </div>
             </section>
 

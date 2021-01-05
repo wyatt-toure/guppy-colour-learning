@@ -110,10 +110,17 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Background</a></li>
 <li class="chapter" data-level="2" data-path="model-1-preference-for-the-green-object-at-baseline.html"><a href="model-1-preference-for-the-green-object-at-baseline.html"><i class="fa fa-check"></i><b>2</b> Model 1 - Preference for the green object at baseline</a></li>
 <li class="chapter" data-level="3" data-path="model-2-preference-for-the-rewarding-object-during-training.html"><a href="model-2-preference-for-the-rewarding-object-during-training.html"><i class="fa fa-check"></i><b>3</b> Model 2 - Preference for the rewarding object during training</a></li>
-<li class="chapter" data-level="4" data-path="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><i class="fa fa-check"></i><b>4</b> Model 3 - Preference for the rewarded object during testing depending on treatment</a></li>
+<li class="chapter" data-level="4" data-path="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><i class="fa fa-check"></i><b>4</b> Model 3 - Preference for the rewarded object during testing depending on treatment</a><ul>
+<li class="chapter" data-level="4.1" data-path="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#main-effects"><i class="fa fa-check"></i><b>4.1</b> Main effects</a></li>
+<li class="chapter" data-level="4.2" data-path="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#post-hoc-comparisons"><i class="fa fa-check"></i><b>4.2</b> Post-hoc Comparisons</a></li>
+<li class="chapter" data-level="4.3" data-path="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#testing-blue-trained-guppies-separately"><i class="fa fa-check"></i><b>4.3</b> Testing blue-trained guppies separately</a></li>
+</ul></li>
 <li class="chapter" data-level="5" data-path="model-4-preference-for-the-rewarded-object-during-training-based-on-feeding.html"><a href="model-4-preference-for-the-rewarded-object-during-training-based-on-feeding.html"><i class="fa fa-check"></i><b>5</b> Model 4 - Preference for the rewarded object during training based on feeding</a></li>
 <li class="chapter" data-level="6" data-path="model-5-is-there-a-difference-in-feeding-attempts-between-treatments.html"><a href="model-5-is-there-a-difference-in-feeding-attempts-between-treatments.html"><i class="fa fa-check"></i><b>6</b> Model 5 - Is there a difference in feeding attempts between treatments?</a></li>
-<li class="chapter" data-level="7" data-path="model-6-controlling-for-feeding-count.html"><a href="model-6-controlling-for-feeding-count.html"><i class="fa fa-check"></i><b>7</b> Model 6 - Controlling for feeding count</a></li>
+<li class="chapter" data-level="7" data-path="model-6-controlling-for-feeding-count.html"><a href="model-6-controlling-for-feeding-count.html"><i class="fa fa-check"></i><b>7</b> Model 6 - Controlling for feeding count</a><ul>
+<li class="chapter" data-level="7.1" data-path="model-6-controlling-for-feeding-count.html"><a href="model-6-controlling-for-feeding-count.html#model-6a---removing-individual-that-did-not-feed"><i class="fa fa-check"></i><b>7.1</b> Model 6a - Removing individual that did not feed</a></li>
+<li class="chapter" data-level="7.2" data-path="model-6-controlling-for-feeding-count.html"><a href="model-6-controlling-for-feeding-count.html#model-6b---including-feeding-counut-as-a-covariate"><i class="fa fa-check"></i><b>7.2</b> Model 6b - Including feeding counut as a covariate</a></li>
+</ul></li>
 <li class="chapter" data-level="8" data-path="tools-used-and-references.html"><a href="tools-used-and-references.html"><i class="fa fa-check"></i><b>8</b> Tools used and References</a></li>
 </ul>
 
@@ -134,9 +141,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="model-5---is-there-a-difference-in-feeding-attempts-between-treatments" class="section level1">
 <h1><span class="header-section-number">6</span> Model 5 - Is there a difference in feeding attempts between treatments?</h1>
-<p>A discrepancy in reinforcement between treatments may influence performance on a final preference test. To see whether there was a difference in feeding between treatments I counted the number of trials in which an individual fish ate throughout all of training and compared the feeding counts between treatments. To do this I fit a generalized linear model with a Poisson distribution. The response variable 'feeding count' is a sum of the number of trials in which a guppy ate.</p>
+<p>A discrepancy in reinforcement between treatments may influence performance on a final preference test. To see whether there was a difference in feeding between treatments I counted the number of trials in which an individual fish ate throughout all of training and compared the feeding counts between treatments. To do this I fit a generalized linear model with a negative binomial distribution. The response variable 'feeding count' is a sum of the number of trials in which a guppy ate.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">feeding.data.model =<span class="st"> </span>
-<span class="st">  </span><span class="kw">glm</span>(feeding.count <span class="op">~</span><span class="st"> </span>rewarding.object.colour, <span class="dt">family =</span> <span class="st">&quot;poisson&quot;</span>, 
+<span class="st">  </span><span class="kw">glm.nb</span>(feeding.count <span class="op">~</span><span class="st"> </span>rewarding.object.colour, 
       <span class="dt">data =</span> my.feeding.data)</code></pre></div>
 <table>
 <thead>
@@ -152,19 +159,23 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <tr class="odd">
 <td align="left">rewarding.object.colourgreen</td>
 <td align="right">0.0709929</td>
-<td align="right">0.1264991</td>
-<td align="right">0.5612126</td>
-<td align="left">0.575</td>
+<td align="right">0.2628925</td>
+<td align="right">0.2700452</td>
+<td align="left">0.787</td>
 </tr>
 </tbody>
 </table>
-<p>I found no significant difference in the amount of feeding done by individuals trained to green versus individuals trained to blue (Figure <a href="model-5-is-there-a-difference-in-feeding-attempts-between-treatments.html#fig:feeding-count-plot">6.1</a>, p = 0.575) which suggests that the observed group-level differences in final test performance between blue-trained guppies versus green-trained guppies cannot be explained by differences in performance during training.</p>
+<p>I found no significant difference in the amount of feeding done by individuals trained to green versus individuals trained to blue (Figure <a href="model-5-is-there-a-difference-in-feeding-attempts-between-treatments.html#fig:feeding-count-plot">6.1</a>, p = 0.787) which suggests that the observed group-level differences in final test performance between blue-trained guppies versus green-trained guppies cannot be explained by differences in performance during training.</p>
 <div class="figure"><span id="fig:feeding-count-plot"></span>
 <img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/feeding-count-plot-1.png" alt="Average number of trials in which a fish fed during training. Data are means +/- 95% confidence intervals" width="672" />
 <p class="caption">
 Figure 6.1: Average number of trials in which a fish fed during training. Data are means +/- 95% confidence intervals
 </p>
 </div>
+<p><strong>Model Diagnostics</strong></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">simulationOutput &lt;-<span class="st"> </span><span class="kw">simulateResiduals</span>(<span class="dt">fittedModel =</span> feeding.data.model)
+<span class="kw">plot</span>(simulationOutput)</code></pre></div>
+<p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
 </div>
             </section>
 

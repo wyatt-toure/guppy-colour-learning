@@ -110,10 +110,17 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Background</a></li>
 <li class="chapter" data-level="2" data-path="model-1-preference-for-the-green-object-at-baseline.html"><a href="model-1-preference-for-the-green-object-at-baseline.html"><i class="fa fa-check"></i><b>2</b> Model 1 - Preference for the green object at baseline</a></li>
 <li class="chapter" data-level="3" data-path="model-2-preference-for-the-rewarding-object-during-training.html"><a href="model-2-preference-for-the-rewarding-object-during-training.html"><i class="fa fa-check"></i><b>3</b> Model 2 - Preference for the rewarding object during training</a></li>
-<li class="chapter" data-level="4" data-path="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><i class="fa fa-check"></i><b>4</b> Model 3 - Preference for the rewarded object during testing depending on treatment</a></li>
+<li class="chapter" data-level="4" data-path="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><i class="fa fa-check"></i><b>4</b> Model 3 - Preference for the rewarded object during testing depending on treatment</a><ul>
+<li class="chapter" data-level="4.1" data-path="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#main-effects"><i class="fa fa-check"></i><b>4.1</b> Main effects</a></li>
+<li class="chapter" data-level="4.2" data-path="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#post-hoc-comparisons"><i class="fa fa-check"></i><b>4.2</b> Post-hoc Comparisons</a></li>
+<li class="chapter" data-level="4.3" data-path="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#testing-blue-trained-guppies-separately"><i class="fa fa-check"></i><b>4.3</b> Testing blue-trained guppies separately</a></li>
+</ul></li>
 <li class="chapter" data-level="5" data-path="model-4-preference-for-the-rewarded-object-during-training-based-on-feeding.html"><a href="model-4-preference-for-the-rewarded-object-during-training-based-on-feeding.html"><i class="fa fa-check"></i><b>5</b> Model 4 - Preference for the rewarded object during training based on feeding</a></li>
 <li class="chapter" data-level="6" data-path="model-5-is-there-a-difference-in-feeding-attempts-between-treatments.html"><a href="model-5-is-there-a-difference-in-feeding-attempts-between-treatments.html"><i class="fa fa-check"></i><b>6</b> Model 5 - Is there a difference in feeding attempts between treatments?</a></li>
-<li class="chapter" data-level="7" data-path="model-6-controlling-for-feeding-count.html"><a href="model-6-controlling-for-feeding-count.html"><i class="fa fa-check"></i><b>7</b> Model 6 - Controlling for feeding count</a></li>
+<li class="chapter" data-level="7" data-path="model-6-controlling-for-feeding-count.html"><a href="model-6-controlling-for-feeding-count.html"><i class="fa fa-check"></i><b>7</b> Model 6 - Controlling for feeding count</a><ul>
+<li class="chapter" data-level="7.1" data-path="model-6-controlling-for-feeding-count.html"><a href="model-6-controlling-for-feeding-count.html#model-6a---removing-individual-that-did-not-feed"><i class="fa fa-check"></i><b>7.1</b> Model 6a - Removing individual that did not feed</a></li>
+<li class="chapter" data-level="7.2" data-path="model-6-controlling-for-feeding-count.html"><a href="model-6-controlling-for-feeding-count.html#model-6b---including-feeding-counut-as-a-covariate"><i class="fa fa-check"></i><b>7.2</b> Model 6b - Including feeding counut as a covariate</a></li>
+</ul></li>
 <li class="chapter" data-level="8" data-path="tools-used-and-references.html"><a href="tools-used-and-references.html"><i class="fa fa-check"></i><b>8</b> Tools used and References</a></li>
 </ul>
 
@@ -134,6 +141,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="model-6---controlling-for-feeding-count" class="section level1">
 <h1><span class="header-section-number">7</span> Model 6 - Controlling for feeding count</h1>
+<div id="model-6a---removing-individual-that-did-not-feed" class="section level2">
+<h2><span class="header-section-number">7.1</span> Model 6a - Removing individual that did not feed</h2>
 <p>There is a fish that did not eat during any trials, however removing this individual does not change the conclusions</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test.feeding.data.low.feeders.removed =<span class="st"> </span>test.feeding.data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(feeding.count <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)
 
@@ -179,6 +188,10 @@ test.data.low.feeders.removed.model =<span class="st"> </span>
 </tbody>
 </table>
 <p><strong>Model Diagnostics</strong></p>
+<p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+</div>
+<div id="model-6b---including-feeding-counut-as-a-covariate" class="section level2">
+<h2><span class="header-section-number">7.2</span> Model 6b - Including feeding counut as a covariate</h2>
 <p>Moreover, as I demonstrate in the next model including the amount of trials fed as a covariate in the model does not change the conclusions.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test.data.feeding.controlled.model =<span class="st"> </span>
 <span class="st">  </span><span class="kw">lmer</span>(rewarding.object.preference <span class="op">~</span><span class="st"> </span>trial <span class="op">*</span><span class="st"> </span>rewarding.object.colour <span class="op">+</span><span class="st"> </span>feeding.count <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span>id), 
@@ -269,8 +282,10 @@ test.data.low.feeders.removed.model =<span class="st"> </span>
 </tbody>
 </table>
 <p>In both models the p-values are similar. However the effect of feeding count trends in the expected direction in our feeding count controlled model. In the effect plot below to the left we see that as feeding count increases the preference for the rewarding object colour also increases.</p>
-<p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+<p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
 <p><strong>Model Diagnostics</strong></p>
+<p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
+</div>
 </div>
             </section>
 
