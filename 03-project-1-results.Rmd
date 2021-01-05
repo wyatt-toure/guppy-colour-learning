@@ -20,6 +20,7 @@ library(broom.mixed)
 library(knitr)
 library(emmeans)
 library(pbkrtest)
+
 library(report)
 #### Reading in Data 
 my.data = read.csv('experiment-2-master-sheet-clean.csv')
@@ -100,7 +101,7 @@ knitr::kable(tidy_fit0)
 
 **Model Diagnostics**
 
-```{r, include=FALSE}
+```{r, echo=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = baseline.data.model)
 plot(simulationOutput)
 ```
@@ -167,7 +168,7 @@ ggplot(training.data,
 
 **Model Diagnostics**
 
-```{r, include=FALSE, warning=FALSE}
+```{r, echo=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = training.data.model)
 plot(simulationOutput)
 ```
