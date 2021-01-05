@@ -114,6 +114,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5" data-path="model-4-preference-for-the-rewarded-object-during-training-based-on-feeding.html"><a href="model-4-preference-for-the-rewarded-object-during-training-based-on-feeding.html"><i class="fa fa-check"></i><b>5</b> Model 4 - Preference for the rewarded object during training based on feeding</a></li>
 <li class="chapter" data-level="6" data-path="model-5-is-there-a-difference-in-feeding-attempts-between-treatments.html"><a href="model-5-is-there-a-difference-in-feeding-attempts-between-treatments.html"><i class="fa fa-check"></i><b>6</b> Model 5 - Is there a difference in feeding attempts between treatments?</a></li>
 <li class="chapter" data-level="7" data-path="model-6-controlling-for-feeding-count.html"><a href="model-6-controlling-for-feeding-count.html"><i class="fa fa-check"></i><b>7</b> Model 6 - Controlling for feeding count</a></li>
+<li class="chapter" data-level="8" data-path="tools-used-and-references.html"><a href="tools-used-and-references.html"><i class="fa fa-check"></i><b>8</b> Tools used and References</a></li>
 </ul>
 
       </nav>
@@ -175,7 +176,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </tr>
 </tbody>
 </table>
-<p>I found a significant interaction effect between trial and rewarding object colour (p = 0.009). Guppies that had green rewarded had a rewarded object preference that was 65.4 seconds stronger than the rewarded object preference of guppies trained to blue (Figure <a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#fig:test-data-pref-plot">4.1</a>).</p>
+<p>I found a significant interaction effect between trial and rewarding object colour (p = 0.009). Guppies that had green rewarded had a final rewarded object preference that was 65.4 seconds stronger than the rewarded object preference of guppies trained to blue (Figure <a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#fig:test-data-pref-plot">4.1</a>).</p>
 <center>
 <div class="figure"><span id="fig:test-data-pref-plot"></span>
 <img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/test-data-pref-plot-1.png" alt="The initial and final rewarding object preference. Dashed line represents the no preference value. Data are means +/- 95% CI. Bold line connects means across trials." width="672" />
@@ -186,14 +187,12 @@ Figure 4.1: The initial and final rewarding object preference. Dashed line repre
 </center>
 <p></br></p>
 <p><strong>Model Diagnostics</strong></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">simulationOutput &lt;-<span class="st"> </span><span class="kw">simulateResiduals</span>(<span class="dt">fittedModel =</span> test.data.model)</code></pre></div>
-<pre><code>## Warning in checkModel(fittedModel): DHARMa: fittedModel not in class of
-## supported models. Absolutely no guarantee that this will work!</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(simulationOutput)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">simulationOutput &lt;-<span class="st"> </span><span class="kw">simulateResiduals</span>(<span class="dt">fittedModel =</span> test.data.model)
+<span class="kw">plot</span>(simulationOutput)</code></pre></div>
 <p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 <p></br></p>
 <p><strong>Post-Hoc Comparisons</strong></p>
-<p>To determine whether X was different from Y I conducted post-hoc comparisons of the mean.</p>
+<p>To determine whether the means of the final rewarding object preference for thw two treatments were different I conducted post-hoc comparisons with the package emmeans.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test.data.model.pairwise.comparisons =<span class="st"> </span>
 <span class="st">  </span><span class="kw">emmeans</span>(test.data.model, 
           <span class="dt">specs =</span> pairwise <span class="op">~</span><span class="st"> </span>trial<span class="op">:</span>rewarding.object.colour) <span class="op">%&gt;%</span><span class="st"> </span>

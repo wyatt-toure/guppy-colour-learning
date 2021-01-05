@@ -9,10 +9,10 @@ biblio-style: apalike
 link-citations: yes
 description: ""
 ---
-
 # Background
 
 This site contains the code, model outputs, data tables, and residual diagnostics for the analyses demonstrated in the manuscript 'Bias in the shift of foraging preference for coloured objects in Trinidadian guppies, *Poecilia reticulata*'. The raw data used to conduct these analyses are available at the [github repository for this site](https://github.com/wyatt-toure/colour-learning-project-analysis/blob/main/experiment-2-master-sheet-clean.csv). The raw R code to produce the analysis is also available [here](https://github.com/wyatt-toure/colour-learning-project-analysis/blob/main/03-project-1-results.Rmd).
+
 
 
 
