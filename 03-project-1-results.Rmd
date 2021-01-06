@@ -169,7 +169,7 @@ ggplot(training.data,
 **Model Diagnostics**
 
 ```{r, echo=FALSE}
-simulationOutput <- simulateResiduals(fittedModel = training.data.model)
+simulationOutput <- simulateResiduals(fittedModel = training.data.model, n = 1000)
 plot(simulationOutput)
 ```
 
@@ -283,7 +283,7 @@ ggplot(test.data,
 **Model Diagnostics**
 
 ```{r, include=TRUE}
-simulationOutput <- simulateResiduals(fittedModel = test.data.model)
+simulationOutput <- simulateResiduals(fittedModel = test.data.model, n = 1000)
 plot(simulationOutput)
 ```
 
@@ -414,11 +414,15 @@ ggplot(training.data,
 **Model Diagnostics**
 
 ```{r, echo=FALSE}
-simulationOutput <- simulateResiduals(fittedModel = training.data.model.rewarding.object)
+simulationOutput <- simulateResiduals(fittedModel = training.data.model.rewarding.object, n = 1000)
 plot(simulationOutput)
 ```
 
+```{r, include=FALSE}
+testUniformity(simulationOutput)[1]
+```
 
+There is a significant deviation from uniformity as indicated by the significant Kolmogorov-Smirnov test. However, this model has a particularly large sample size (n = 456) so even slight deviations will be significant. Looking at the effect size of the deviation (D = `r testUniformity(simulationOutput)[1]`) shows that it is minor (D < 0.1) and visual inspection does not suggest large deviations in the residuals so our model is still appropriate.
 
 ```{r, include = FALSE}
 #### Get feeding data #####
@@ -507,7 +511,7 @@ ggplot(my.feeding.data,
 
 **Model Diagnostics**
 
-```{r, include=TRUE}
+```{r, echo=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = feeding.data.model)
 plot(simulationOutput)
 ```
