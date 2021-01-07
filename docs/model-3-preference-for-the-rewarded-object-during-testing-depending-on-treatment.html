@@ -195,7 +195,7 @@ Figure 4.1: The initial and final rewarding object preference. Dashed line repre
 </div>
 </center>
 <p></br></p>
-<p><strong>Model Diagnostics</strong></p>
+<p><strong>Model Residuals</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">simulationOutput &lt;-<span class="st"> </span><span class="kw">simulateResiduals</span>(<span class="dt">fittedModel =</span> test.data.model, <span class="dt">n =</span> <span class="dv">1000</span>)
 <span class="kw">plot</span>(simulationOutput)</code></pre></div>
 <p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
@@ -205,71 +205,62 @@ Figure 4.1: The initial and final rewarding object preference. Dashed line repre
 <h2><span class="header-section-number">4.2</span> Post-hoc Comparisons</h2>
 <p>To determine whether the means of the final rewarding object preference for thw two treatments were different I conducted post-hoc comparisons with the package emmeans.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test.data.model.pairwise.comparisons =<span class="st"> </span>
-<span class="st">  </span><span class="kw">emmeans</span>(test.data.model, 
-          <span class="dt">specs =</span> pairwise <span class="op">~</span><span class="st"> </span>trial<span class="op">:</span>rewarding.object.colour) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">emmeans</span>(test.data.model, <span class="dt">specs =</span> <span class="op">~</span><span class="st"> </span>trial<span class="op">:</span>rewarding.object.colour)
+
+custom.contrasts =<span class="st"> </span><span class="kw">contrast</span>(test.data.model.pairwise.comparisons, 
+                            <span class="dt">method =</span> <span class="kw">list</span>(<span class="st">&quot;21 blue - 0 blue&quot;</span> =<span class="st"> </span>blue21<span class="op">-</span><span class="st"> </span>blue0,
+                                          <span class="st">&quot;21 green - 0 green &quot;</span> =<span class="st"> </span>green21 <span class="op">-</span><span class="st"> </span>green0,
+                                          <span class="st">&quot;21 green - 21 blue&quot;</span> =<span class="st"> </span>green21 <span class="op">-</span><span class="st"> </span>blue21,
+                                          <span class="st">&quot;0 green - 0 blue&quot;</span> =<span class="st"> </span>green0<span class="op">-</span><span class="st"> </span>blue0), 
+                            <span class="dt">adjust =</span> <span class="st">&quot;mvt&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">summary</span>(<span class="dt">infer =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<p>Post-hoc comparisons investigating the differences between treatments based on whether guppies are untrained or trained reveals that initially there was no difference in the strength of preference for the rewarding object between the treatments (blue-trained guppies had a blue object preference of 1.8 seconds and green-trained guppies had a green object preference of 3.5 seconds, p = 1).</p>
-<p>Comparing the shift in rewarding object preference between initial and final preference tests in blue-trained and green-trained guppies reveals that the shift in rewarding object preference is significant for green-trained guppies but not for blue-trained guppies. Green trained guppies increased their preference for the green object by 83 seconds (going from a green object preference of 3.5 seconds initially to 86.5 seconds at final test, p &lt; .001) whereas blue-trained guppies non-significantly increased their preference for the blue object by 17.7 seconds (going from a blue object preference 1.8 seconds initially to 19.5 seconds at final test, p = 0.714). For a full description of post-hoc comparisons see table <a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#tab:contrasts-table">4.1</a>.</p>
+<p>Post-hoc comparisons investigating the differences between treatments based on whether guppies are untrained or trained reveals that initially there was no difference in the strength of preference for the rewarding object between the treatments (blue-trained guppies had a blue object preference of 1.8 seconds and green-trained guppies had a green object preference of 3.5 seconds, p &lt; .001).</p>
+<p>Comparing the shift in rewarding object preference between initial and final preference tests in blue-trained and green-trained guppies reveals that the shift in rewarding object preference is significant for green-trained guppies but not for blue-trained guppies. Green trained guppies increased their preference for the green object by 83 seconds (going from a green object preference of 3.5 seconds initially to 86.5 seconds at final test, p &lt; .001) whereas blue-trained guppies non-significantly increased their preference for the blue object by 17.7 seconds (going from a blue object preference 1.8 seconds initially to 19.5 seconds at final test, p = 0.664). For a full description of post-hoc comparisons see table <a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#tab:contrasts-table">4.1</a>.</p>
+<p><br /></p>
 <table>
-<caption><span id="tab:contrasts-table">Table 4.1: </span>Table of post-hoc tests with Tukey adjustment for multiple comparisons. The numbers represent the initial test trial (0) and the final test trial (21). The colour corressponds to the identity of the rewarding object (blue for blue-trained guppies, green for green-trained guppies). Values are all rounded to 3 decimal places.</caption>
+<caption><span id="tab:contrasts-table">Table 4.1: </span>Table of post-hoc tests with a multivariate-t adjustment for multiple comparisons of a selected set of means. The numbers represent the initial test trial (0) and the final test trial (21). The colour corressponds to the identity of the rewarding object (blue for blue-trained guppies, green for green-trained guppies). Values are all rounded to 3 decimal places.</caption>
 <thead>
 <tr class="header">
 <th align="left">contrast</th>
 <th align="right">estimate</th>
-<th align="right">df</th>
 <th align="right">lower.CL</th>
 <th align="right">upper.CL</th>
+<th align="right">df</th>
 <th align="left">p.value</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">0 blue - 21 blue</td>
-<td align="right">-17.697</td>
+<td align="left">21 blue - 0 blue</td>
+<td align="right">17.697</td>
+<td align="right">-26.624</td>
+<td align="right">62.018</td>
 <td align="right">20.000</td>
-<td align="right">-64.236</td>
-<td align="right">28.842</td>
-<td align="left">0.714</td>
+<td align="left">0.664</td>
 </tr>
 <tr class="even">
-<td align="left">0 blue - 0 green</td>
-<td align="right">-1.645</td>
+<td align="left">21 green - 0 green</td>
+<td align="right">83.048</td>
+<td align="right">42.557</td>
+<td align="right">123.539</td>
+<td align="right">20.000</td>
+<td align="left">&lt; .001</td>
+</tr>
+<tr class="odd">
+<td align="left">21 green - 21 blue</td>
+<td align="right">66.996</td>
+<td align="right">25.272</td>
+<td align="right">108.719</td>
 <td align="right">39.908</td>
-<td align="right">-45.381</td>
-<td align="right">42.092</td>
+<td align="left">&lt; .001</td>
+</tr>
+<tr class="even">
+<td align="left">0 green - 0 blue</td>
+<td align="right">1.645</td>
+<td align="right">-40.073</td>
+<td align="right">43.363</td>
+<td align="right">39.908</td>
 <td align="left">1</td>
-</tr>
-<tr class="odd">
-<td align="left">0 blue - 21 green</td>
-<td align="right">-84.693</td>
-<td align="right">39.908</td>
-<td align="right">-128.429</td>
-<td align="right">-40.956</td>
-<td align="left">&lt; .001</td>
-</tr>
-<tr class="even">
-<td align="left">21 blue - 0 green</td>
-<td align="right">16.052</td>
-<td align="right">39.908</td>
-<td align="right">-27.684</td>
-<td align="right">59.789</td>
-<td align="left">0.759</td>
-</tr>
-<tr class="odd">
-<td align="left">21 blue - 21 green</td>
-<td align="right">-66.996</td>
-<td align="right">39.908</td>
-<td align="right">-110.732</td>
-<td align="right">-23.259</td>
-<td align="left">0.001</td>
-</tr>
-<tr class="even">
-<td align="left">0 green - 21 green</td>
-<td align="right">-83.048</td>
-<td align="right">20.000</td>
-<td align="right">-125.532</td>
-<td align="right">-40.564</td>
-<td align="left">&lt; .001</td>
 </tr>
 </tbody>
 </table>

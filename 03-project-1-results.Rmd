@@ -99,7 +99,7 @@ knitr::kable(tidy_fit0)
 ```
 
 
-**Model Diagnostics**
+**Model Residuals**
 
 ```{r, echo=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = baseline.data.model)
@@ -166,7 +166,7 @@ ggplot(training.data,
 
 ```
 
-**Model Diagnostics**
+**Model Residuals**
 
 ```{r, echo=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = training.data.model, n = 1000)
@@ -224,13 +224,25 @@ formatted_p.test.data.model = ifelse(tidy_fit.test.data.model$p.value < .001, ##
 
 # Is the differencee in rewarding object preference between trials (baseline and re-test) significant in both object treatments (blue-trained and green-trained)?
 
-test.data.model.pairwise.comparisons = emmeans(test.data.model, specs = pairwise ~ trial:rewarding.object.colour) %>% 
-  summary(infer = TRUE)
+test.data.model.pairwise.comparisons = emmeans(test.data.model, specs = ~ trial:rewarding.object.colour)
 
+blue0 = c(1,0,0,0)
+blue21 = c(0,1,0,0)
+green0 = c(0,0,1,0)
+green21 = c(0,0,0,1)
+
+test.data.model.pairwise.comparisons
+
+custom.contrasts = contrast(test.data.model.pairwise.comparisons, 
+                            method = list("21 blue - 0 blue" = blue21- blue0,
+                                          "21 green - 0 green " = green21 - green0,
+                                          "21 green - 21 blue" = green21 - blue21,
+                                          "0 green - 0 blue" = green0- blue0), adjust = "mvt") %>% summary(infer = TRUE)
+custom.contrasts
 # Pull out the summary statistics of the contrasts and turn them into a table
-pairwise.comparison.means.table = as.data.frame(test.data.model.pairwise.comparisons$emmeans)
+pairwise.comparison.means.table = as.data.frame(test.data.model.pairwise.comparisons)
 
-pairwise.comparison.contrasts.table = as.data.frame(test.data.model.pairwise.comparisons$contrasts)
+pairwise.comparison.contrasts.table = as.data.frame(custom.contrasts)
 
 # Rounding contrast table values
 
@@ -280,7 +292,7 @@ ggplot(test.data,
 
 </br>
 
-**Model Diagnostics**
+**Model Residuals**
 
 ```{r, include=TRUE}
 simulationOutput <- simulateResiduals(fittedModel = test.data.model, n = 1000)
@@ -293,17 +305,24 @@ plot(simulationOutput)
 
 To determine whether the means of the final rewarding object preference for thw two treatments were different I conducted post-hoc comparisons with the package emmeans.
 
-```{r, echo=TRUE}
+```{r, echo=TRUE, eval=FALSE}
 test.data.model.pairwise.comparisons = 
-  emmeans(test.data.model, 
-          specs = pairwise ~ trial:rewarding.object.colour) %>% 
+  emmeans(test.data.model, specs = ~ trial:rewarding.object.colour)
+
+custom.contrasts = contrast(test.data.model.pairwise.comparisons, 
+                            method = list("21 blue - 0 blue" = blue21- blue0,
+                                          "21 green - 0 green " = green21 - green0,
+                                          "21 green - 21 blue" = green21 - blue21,
+                                          "0 green - 0 blue" = green0- blue0), 
+                            adjust = "mvt") %>% 
   summary(infer = TRUE)
 ```
 
 Post-hoc comparisons investigating the differences between treatments based on whether guppies are untrained or trained reveals that initially there was no difference in the strength of preference for the rewarding object between the treatments (blue-trained guppies had a blue object preference of `r pairwise.comparison.means.table$emmean[1] %>% round(1)` seconds and green-trained guppies had a green object preference of `r pairwise.comparison.means.table$emmean[3] %>% round(1)` seconds, p `r formatted_p.pairwise.comparison.contrasts.table[2]`). 
 
-Comparing the shift in rewarding object preference between initial and final preference tests in blue-trained and green-trained guppies reveals that the shift in rewarding object preference is significant for green-trained guppies but not for blue-trained guppies. Green trained guppies increased their preference for the green object by `r abs(pairwise.comparison.contrasts.table$estimate[6] %>% round(1))` seconds (going from a green object preference of `r pairwise.comparison.means.table$emmean[3] %>% round(1)` seconds initially to `r pairwise.comparison.means.table$emmean[4] %>% round(1)` seconds at final test, p `r formatted_p.pairwise.comparison.contrasts.table[6]`) whereas blue-trained guppies non-significantly increased their preference for the blue object by `r abs(pairwise.comparison.contrasts.table$estimate[1] %>% round(1))` seconds (going from a blue object preference `r pairwise.comparison.means.table$emmean[1] %>% round(1)` seconds initially to `r (pairwise.comparison.means.table$emmean[2]) %>% round(1)` seconds at final test, p `r formatted_p.pairwise.comparison.contrasts.table[1]`). For a full description of post-hoc comparisons see table \@ref(tab:contrasts-table).
+Comparing the shift in rewarding object preference between initial and final preference tests in blue-trained and green-trained guppies reveals that the shift in rewarding object preference is significant for green-trained guppies but not for blue-trained guppies. Green trained guppies increased their preference for the green object by `r abs(pairwise.comparison.contrasts.table$estimate[2] %>% round(1))` seconds (going from a green object preference of `r pairwise.comparison.means.table$emmean[3] %>% round(1)` seconds initially to `r pairwise.comparison.means.table$emmean[4] %>% round(1)` seconds at final test, p `r formatted_p.pairwise.comparison.contrasts.table[2]`) whereas blue-trained guppies non-significantly increased their preference for the blue object by `r abs(pairwise.comparison.contrasts.table$estimate[1] %>% round(1))` seconds (going from a blue object preference `r pairwise.comparison.means.table$emmean[1] %>% round(1)` seconds initially to `r (pairwise.comparison.means.table$emmean[2]) %>% round(1)` seconds at final test, p `r formatted_p.pairwise.comparison.contrasts.table[1]`). For a full description of post-hoc comparisons see table \@ref(tab:contrasts-table).
 
+<br />
 
 ```{r contrasts-table, echo=FALSE, fig.id="contrasts-table", warning=FALSE}
 pairwise.comparison.contrasts.table.show = pairwise.comparison.contrasts.table
@@ -313,8 +332,8 @@ pairwise.comparison.contrasts.table.show$p.value =
             (pairwise.comparison.contrasts.table.show$p.value < .05 & pairwise.comparison.contrasts.table.show$p.value >= .001) ~ paste(as.character(pairwise.comparison.contrasts.table.show$p.value %>% round(3))),
             pairwise.comparison.contrasts.table.show$p.value >= .05 ~ paste(pairwise.comparison.contrasts.table.show$p.value %>% round(3)))
 
-knitr::kable(pairwise.comparison.contrasts.table.show %>% dplyr::select(contrast, estimate, df, lower.CL,upper.CL,p.value),
-             caption = "Table of post-hoc tests with Tukey adjustment for multiple comparisons. The numbers represent the initial test trial (0) and the final test trial (21). The colour corressponds to the identity of the rewarding object (blue for blue-trained guppies, green for green-trained guppies). Values are all rounded to 3 decimal places.")
+knitr::kable(pairwise.comparison.contrasts.table.show %>% dplyr::select(contrast, estimate,lower.CL,upper.CL, df,p.value),
+             caption = "Table of post-hoc tests with a multivariate-t adjustment for multiple comparisons of a selected set of means. The numbers represent the initial test trial (0) and the final test trial (21). The colour corressponds to the identity of the rewarding object (blue for blue-trained guppies, green for green-trained guppies). Values are all rounded to 3 decimal places.")
 
 ```
 
@@ -411,7 +430,7 @@ ggplot(training.data,
   geom_line(aes(group = id), alpha = 0.3, arrow = arrow(angle = 30, length = unit(0, "inches"), ends = "first", type = "closed"), lty = 1) 
 ```
 
-**Model Diagnostics**
+**Model Residuals**
 
 ```{r, echo=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = training.data.model.rewarding.object, n = 1000)
@@ -509,7 +528,7 @@ ggplot(my.feeding.data,
 ```
 
 
-**Model Diagnostics**
+**Model Residuals**
 
 ```{r, echo=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = feeding.data.model)
@@ -550,7 +569,7 @@ tidy_fit.test.feeding.data.low.feeders.removed
 knitr::kable(tidy_fit.test.feeding.data.low.feeders.removed[2:4,] %>% dplyr::select(-group, -effect))
 ```
 
-**Model Diagnostics**
+**Model Residuals**
 
 ```{r, echo=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = test.data.low.feeders.removed.model)
@@ -598,7 +617,7 @@ In both models the p-values are similar. However the effect of feeding count tre
 plot(allEffects(test.data.feeding.controlled.model)[1])
 ```
 
-**Model Diagnostics**
+**Model Residuals**
 
 ```{r, echo=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = test.data.feeding.controlled.model)
