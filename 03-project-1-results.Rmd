@@ -61,6 +61,13 @@ baseline.data$trial = as.factor(baseline.data$trial)
 # Model 1 -  Preference for the green object at baseline
 
 This first model contains the data for all individual guppies. I looked at the green object preference of all guppies in an intercept only model to see if the green object preference at baseline was significantly different from zero.
+
+**Variables**
+
+`green.object.preference` is the time spent near the green object subtracted by the time spent near the blue object
+
+**Model**
+
 ```{r model 1, echo=TRUE}
 baseline.data.model = 
   lm(green.object.preference ~ 1,
@@ -83,6 +90,8 @@ baseline.data.model.formatted_p = ifelse(baseline.data.model.tidy_fit$p.value < 
                       "< .001",  ## if condition is true
                       paste("=", baseline.data.model.tidy_fit$p.value %>% round(3))) ## if condition is false
 ```
+
+**Result**
 
 At baseline, there was no significant preference for the green object preference across all guppies (p `r baseline.data.model.formatted_p[1]`).
 
@@ -111,6 +120,15 @@ plot(simulationOutput)
 
 To see whether fish were responsive during training our second model asks whether the preference for the rewarding object changes throughout training between the treatments.
 
+**Variables**
+
+- `rewarding.object.preference` is the time (seconds) spent near the rewarding object subtracted by the time spent near the unrewarding object 
+- `rewarding.object.colour` is the identity of the rewarding object (blue or green)
+- `trial` is the number of the training trial. In this model it is supplied as an integer
+- `id` is the identity of the individual fish 
+
+**Model**
+
 ```{r model 2, echo=TRUE}
 training.data.model = 
   lmer(rewarding.object.preference ~ rewarding.object.colour * trial + (1 | id), 
@@ -126,6 +144,8 @@ tidy_fit$p.value = ifelse(tidy_fit$p.value < .001, ## Condition
 tidy_fit[2:4,] %>% dplyr::select(-group, -effect)
 
 ```
+
+**Results**
 
 ```{r,  results=TRUE, echo=FALSE}
 knitr::kable(tidy_fit[2:4,] %>% dplyr::select(-group, -effect))
@@ -149,6 +169,8 @@ formatted_p = ifelse(tidy_fit$p.value < .001, ## Condition
                       "< .001",  ## if condition is true
                       paste("=", tidy_fit$p.value %>% round(3))) ## if condition is false
 ```
+
+
 
 Throughout training, over the 20 trials, guppies increased their relative preference for the rewarded object by `r tidy_fit$estimate[3] %>% round(3)` seconds each trial (Figure \@ref(fig:novel-pref-plot), p `r formatted_p[3]`).
 
@@ -178,8 +200,16 @@ plot(simulationOutput)
 
 ## Main effects
 
-For the main effects of **training** and **rewarding object colour** on object preference I fit a **linear mixed effects model** with **fixed effects of trial** and **rewarding object colour** and a random effect of **individual id**. My third model asks whether the preference for the rewarding object changed between baseline and final test and looks for an interaction with rewarded object colour. In this model trial is a categorical variable composed of the intial preference trial (trial 0) and the final preference trial (trial 21). 
+For the main effects of **training** and **rewarding object colour** on object preference I fit a **linear mixed effects model** with **fixed effects of trial** and **rewarding object colour** and a random effect of **individual id**. My third model asks whether the preference for the rewarding object changed between baseline and final test and looks for an interaction with rewarded object colour.
 
+**Variables**
+
+- `rewarding.object.preference` is the time (seconds) spent near the rewarding object subtracted by the time spent near the unrewarding object 
+- `rewarding.object.colour` is the identity of the rewarding object (blue or green)
+- `trial` is the number of the training trial. In this model it is supplied as a factor where 0 is the baseline trial and 21 is the final trial
+- `id` is the identity of the individual fish 
+
+**Model**
 
 ```{r model 3, echo=TRUE}
 test.data.model = 
@@ -200,6 +230,7 @@ tidy_fit.test.data.model$p.value = ifelse(tidy_fit.test.data.model$p.value < .00
 tidy_fit.test.data.model[2:4,] %>% dplyr::select(-group, -effect)
 ```
 
+**Results**
 
 ```{r, results=TRUE, echo=FALSE}
 knitr::kable(tidy_fit.test.data.model[2:4,] %>% dplyr::select(-group, -effect))
@@ -373,6 +404,15 @@ We see that the shift in preference between baseline trial and the final trial i
 
 It might be the case that some fish behaved in a way that was not conducive to learning the association during training. My fourth model asks whether the time spent near the rewarding object during a training session is influenced by whether a fish ate or not. Here trial is a variable containing the training trials (1-20). It is supplied as a random effect along with individual ID in the model. 
 
+**Variables**
+
+- `rewarding.object.preference` is the time (seconds) spent near the rewarding object subtracted by the time spent near the unrewarding object 
+- `ate` is a binary factor (Yes or No) and corresponds to whether the fish ate in a given trial
+- `trial` is the number of the training trial. In this model it is supplied as an integer
+- `id` is the identity of the individual fish 
+
+**Model**
+
 ```{r model 4, echo=TRUE}
 training.data.model.rewarding.object = 
   lmer(rewarding.object.preference ~ ate + (1 | id) + (1 | trial),
@@ -387,6 +427,8 @@ tidy_fit.rewarding.object$p.value = ifelse(tidy_fit.rewarding.object$p.value < .
                       paste(tidy_fit.rewarding.object$p.value %>% round(3))) ## if condition is false
 tidy_fit.rewarding.object[2:2,] %>% dplyr::select(-group, -effect)
 ```
+
+**Results**
 
 ```{r, results=TRUE, echo=FALSE}
 knitr::kable(tidy_fit.rewarding.object[2:2,] %>% dplyr::select(-group, -effect))
@@ -470,6 +512,13 @@ my.feeding.data
 
 A discrepancy in reinforcement between treatments may influence performance on a final preference test. To see whether there was a difference in feeding between treatments I counted the number of trials in which an individual fish ate throughout all of training and compared the feeding counts between treatments. To do this I fit a generalized linear model with a negative binomial distribution. The response variable 'feeding count' is a sum of the number of trials in which a guppy ate.
 
+**Variables**
+
+- `feeding.count` is the number of trials in which an individual fish ate
+- `rewarding.object.colour` is the identity of the rewarding object (blue or green)
+
+**Model**
+
 ```{r model 5, echo=TRUE}
 feeding.data.model = 
   glm.nb(feeding.count ~ rewarding.object.colour, 
@@ -486,6 +535,8 @@ tidy_fit.feeding.data.model$p.value = ifelse(tidy_fit.feeding.data.model$p.value
                       paste(tidy_fit.feeding.data.model$p.value %>% round(3))) ## if condition is false
 tidy_fit.feeding.data.model[2:2,]
 ```
+
+**Results**
 
 ```{r, results=TRUE, echo=FALSE}
 knitr::kable(tidy_fit.feeding.data.model[2:2,])
@@ -537,6 +588,15 @@ plot(simulationOutput)
 
 # Model 6 - Controlling for feeding count
 
+**Variables**
+
+- `rewarding.object.preference` is the time (seconds) spent near the rewarding object subtracted by the time spent near the unrewarding object 
+- `rewarding.object.colour` is the identity of the rewarding object (blue or green)
+- `trial` is the number of the training trial. In this model it is supplied as an integer
+- `id` is the identity of the individual fish 
+- `feeding.count` is the number of trials in which an individual fish ate
+
+
 ## Model 6a - Removing individual that did not feed
 
 ```{r, include=FALSE}
@@ -548,6 +608,8 @@ retest.feeding.data = retest.feeding.data %>% mutate(time.with.both.objects = ti
 ```
 
 There is a fish that did not eat during any trials, however removing this individual does not change the conclusions 
+
+**Model**
 
 ```{r, echo=TRUE}
 test.feeding.data.low.feeders.removed = test.feeding.data %>% filter(feeding.count > 0)
@@ -564,6 +626,8 @@ tidy_fit.test.feeding.data.low.feeders.removed$p.value = ifelse(tidy_fit.test.fe
                       paste(tidy_fit.test.feeding.data.low.feeders.removed$p.value %>% round(3))) ## if condition is false
 tidy_fit.test.feeding.data.low.feeders.removed
 ```
+
+**Results**
 
 ```{r, results=TRUE, echo=FALSE}
 knitr::kable(tidy_fit.test.feeding.data.low.feeders.removed[2:4,] %>% dplyr::select(-group, -effect))
@@ -595,6 +659,8 @@ tidy_fit.test.data.feeding.controlled.model$p.value = ifelse(tidy_fit.test.data.
                       paste(tidy_fit.test.data.feeding.controlled.model$p.value %>% round(3))) ## if condition is false
 tidy_fit.test.data.feeding.controlled.model[2:5,]
 ```
+
+**Results** 
 
 ```{r, results=TRUE, echo=FALSE}
 knitr::kable(tidy_fit.test.data.feeding.controlled.model[2:5,]%>% dplyr::select(-group, -effect))

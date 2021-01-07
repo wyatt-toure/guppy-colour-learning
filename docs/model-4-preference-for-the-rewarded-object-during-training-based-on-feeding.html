@@ -142,9 +142,18 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="model-4---preference-for-the-rewarded-object-during-training-based-on-feeding" class="section level1">
 <h1><span class="header-section-number">5</span> Model 4 - Preference for the rewarded object during training based on feeding</h1>
 <p>It might be the case that some fish behaved in a way that was not conducive to learning the association during training. My fourth model asks whether the time spent near the rewarding object during a training session is influenced by whether a fish ate or not. Here trial is a variable containing the training trials (1-20). It is supplied as a random effect along with individual ID in the model.</p>
+<p><strong>Variables</strong></p>
+<ul>
+<li><code>rewarding.object.preference</code> is the time (seconds) spent near the rewarding object subtracted by the time spent near the unrewarding object</li>
+<li><code>ate</code> is a binary factor (Yes or No) and corresponds to whether the fish ate in a given trial</li>
+<li><code>trial</code> is the number of the training trial. In this model it is supplied as an integer</li>
+<li><code>id</code> is the identity of the individual fish</li>
+</ul>
+<p><strong>Model</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">training.data.model.rewarding.object =<span class="st"> </span>
 <span class="st">  </span><span class="kw">lmer</span>(rewarding.object.preference <span class="op">~</span><span class="st"> </span>ate <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>trial),
        <span class="dt">data =</span> training.data)</code></pre></div>
+<p><strong>Results</strong></p>
 <table>
 <thead>
 <tr class="header">

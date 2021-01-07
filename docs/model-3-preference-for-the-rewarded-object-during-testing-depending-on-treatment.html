@@ -143,10 +143,19 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1><span class="header-section-number">4</span> Model 3 - Preference for the rewarded object during testing depending on treatment</h1>
 <div id="main-effects" class="section level2">
 <h2><span class="header-section-number">4.1</span> Main effects</h2>
-<p>For the main effects of <strong>training</strong> and <strong>rewarding object colour</strong> on object preference I fit a <strong>linear mixed effects model</strong> with <strong>fixed effects of trial</strong> and <strong>rewarding object colour</strong> and a random effect of <strong>individual id</strong>. My third model asks whether the preference for the rewarding object changed between baseline and final test and looks for an interaction with rewarded object colour. In this model trial is a categorical variable composed of the intial preference trial (trial 0) and the final preference trial (trial 21).</p>
+<p>For the main effects of <strong>training</strong> and <strong>rewarding object colour</strong> on object preference I fit a <strong>linear mixed effects model</strong> with <strong>fixed effects of trial</strong> and <strong>rewarding object colour</strong> and a random effect of <strong>individual id</strong>. My third model asks whether the preference for the rewarding object changed between baseline and final test and looks for an interaction with rewarded object colour.</p>
+<p><strong>Variables</strong></p>
+<ul>
+<li><code>rewarding.object.preference</code> is the time (seconds) spent near the rewarding object subtracted by the time spent near the unrewarding object</li>
+<li><code>rewarding.object.colour</code> is the identity of the rewarding object (blue or green)</li>
+<li><code>trial</code> is the number of the training trial. In this model it is supplied as a factor where 0 is the baseline trial and 21 is the final trial</li>
+<li><code>id</code> is the identity of the individual fish</li>
+</ul>
+<p><strong>Model</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test.data.model =<span class="st"> </span>
 <span class="st">  </span><span class="kw">lmer</span>(rewarding.object.preference <span class="op">~</span><span class="st"> </span>rewarding.object.colour <span class="op">*</span><span class="st"> </span>trial <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),
        <span class="dt">data =</span> test.data)</code></pre></div>
+<p><strong>Results</strong></p>
 <table>
 <thead>
 <tr class="header">
@@ -233,32 +242,32 @@ custom.contrasts =<span class="st"> </span><span class="kw">contrast</span>(test
 <tr class="odd">
 <td align="left">21 blue - 0 blue</td>
 <td align="right">17.697</td>
-<td align="right">-26.632</td>
-<td align="right">62.027</td>
+<td align="right">-26.682</td>
+<td align="right">62.076</td>
 <td align="right">20.000</td>
 <td align="left">0.664</td>
 </tr>
 <tr class="even">
 <td align="left">21 green - 0 green</td>
 <td align="right">83.048</td>
-<td align="right">42.559</td>
-<td align="right">123.537</td>
+<td align="right">42.542</td>
+<td align="right">123.554</td>
 <td align="right">20.000</td>
 <td align="left">&lt; .001</td>
 </tr>
 <tr class="odd">
 <td align="left">21 green - 21 blue</td>
 <td align="right">66.996</td>
-<td align="right">25.339</td>
-<td align="right">108.652</td>
+<td align="right">25.226</td>
+<td align="right">108.765</td>
 <td align="right">39.908</td>
 <td align="left">&lt; .001</td>
 </tr>
 <tr class="even">
 <td align="left">0 green - 0 blue</td>
 <td align="right">1.645</td>
-<td align="right">-40.067</td>
-<td align="right">43.357</td>
+<td align="right">-40.115</td>
+<td align="right">43.404</td>
 <td align="right">39.908</td>
 <td align="left">1</td>
 </tr>

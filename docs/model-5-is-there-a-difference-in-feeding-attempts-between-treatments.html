@@ -142,9 +142,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="model-5---is-there-a-difference-in-feeding-attempts-between-treatments" class="section level1">
 <h1><span class="header-section-number">6</span> Model 5 - Is there a difference in feeding attempts between treatments?</h1>
 <p>A discrepancy in reinforcement between treatments may influence performance on a final preference test. To see whether there was a difference in feeding between treatments I counted the number of trials in which an individual fish ate throughout all of training and compared the feeding counts between treatments. To do this I fit a generalized linear model with a negative binomial distribution. The response variable 'feeding count' is a sum of the number of trials in which a guppy ate.</p>
+<p><strong>Variables</strong></p>
+<ul>
+<li><code>feeding.count</code> is the number of trials in which an individual fish ate</li>
+<li><code>rewarding.object.colour</code> is the identity of the rewarding object (blue or green)</li>
+</ul>
+<p><strong>Model</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">feeding.data.model =<span class="st"> </span>
 <span class="st">  </span><span class="kw">glm.nb</span>(feeding.count <span class="op">~</span><span class="st"> </span>rewarding.object.colour, 
       <span class="dt">data =</span> my.feeding.data)</code></pre></div>
+<p><strong>Results</strong></p>
 <table>
 <thead>
 <tr class="header">

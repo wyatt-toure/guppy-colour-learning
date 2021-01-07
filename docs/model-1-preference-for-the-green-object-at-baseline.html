@@ -142,9 +142,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="model-1---preference-for-the-green-object-at-baseline" class="section level1">
 <h1><span class="header-section-number">2</span> Model 1 - Preference for the green object at baseline</h1>
 <p>This first model contains the data for all individual guppies. I looked at the green object preference of all guppies in an intercept only model to see if the green object preference at baseline was significantly different from zero.</p>
+<p><strong>Variables</strong></p>
+<p><code>green.object.preference</code> is the time spent near the green object subtracted by the time spent near the blue object</p>
+<p><strong>Model</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baseline.data.model =<span class="st"> </span>
 <span class="st">  </span><span class="kw">lm</span>(green.object.preference <span class="op">~</span><span class="st"> </span><span class="dv">1</span>,
      <span class="dt">data =</span> baseline.data)</code></pre></div>
+<p><strong>Result</strong></p>
 <p>At baseline, there was no significant preference for the green object preference across all guppies (p = 0.727).</p>
 <table>
 <thead>
