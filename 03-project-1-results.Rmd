@@ -677,7 +677,7 @@ tidy_fit.test.data.model[2:4,] %>% dplyr::select(-group, -effect)
 knitr::kable(tidy_fit.test.data.model[2:4,] %>% dplyr::select(-group, -effect))
 ```
 
-In both models the p-values are similar. However the effect of feeding count trends in the expected direction in our feeding count controlled model. In the effect plot below to the left we see that as feeding count increases the preference for the rewarding object colour also increases.
+In both models the p-values are similar. While the effect of feeding count is not significant (p = `r tidy_fit.test.data.feeding.controlled.model$p.value[4]`) the effect of feeding count trends in the expected direction in our feeding count controlled model. In the effect plot below to the left we see that as feeding count increases the preference for the rewarding object colour also increases.
 
 ```{r, echo=FALSE, results=TRUE}
 plot(allEffects(test.data.feeding.controlled.model)[1])
