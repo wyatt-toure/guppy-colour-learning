@@ -212,7 +212,13 @@ Figure 4.1: The initial and final rewarding object preference. Dashed line repre
 </div>
 <div id="post-hoc-comparisons" class="section level2">
 <h2><span class="header-section-number">4.2</span> Post-hoc Comparisons</h2>
-<p>To determine whether the means of the final rewarding object preference for thw two treatments were different I conducted post-hoc comparisons with the package emmeans.</p>
+<p>To determine whether the means of the final rewarding object preference for thw two treatments were different I conducted post-hoc comparisons with the package <a href="https://cran.r-project.org/package=emmeans"><code>emmeans</code></a>. I comapred the following means:</p>
+<ul>
+<li>Final test blue-trained and initial test blue-trained</li>
+<li>Final test green-trained and initial test green-trained</li>
+<li>Final test green-trained and final test blue-trained</li>
+<li>Initial test green-trained and initial test blue-trained</li>
+</ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test.data.model.pairwise.comparisons =<span class="st"> </span>
 <span class="st">  </span><span class="kw">emmeans</span>(test.data.model, <span class="dt">specs =</span> <span class="op">~</span><span class="st"> </span>trial<span class="op">:</span>rewarding.object.colour)
 
@@ -242,32 +248,32 @@ custom.contrasts =<span class="st"> </span><span class="kw">contrast</span>(test
 <tr class="odd">
 <td align="left">21 blue - 0 blue</td>
 <td align="right">17.697</td>
-<td align="right">-26.698</td>
-<td align="right">62.092</td>
+<td align="right">-26.573</td>
+<td align="right">61.968</td>
 <td align="right">20.000</td>
 <td align="left">0.664</td>
 </tr>
 <tr class="even">
 <td align="left">21 green - 0 green</td>
 <td align="right">83.048</td>
-<td align="right">42.537</td>
-<td align="right">123.559</td>
+<td align="right">42.520</td>
+<td align="right">123.576</td>
 <td align="right">20.000</td>
 <td align="left">&lt; .001</td>
 </tr>
 <tr class="odd">
 <td align="left">21 green - 21 blue</td>
 <td align="right">66.996</td>
-<td align="right">25.271</td>
-<td align="right">108.720</td>
+<td align="right">25.246</td>
+<td align="right">108.745</td>
 <td align="right">39.908</td>
 <td align="left">&lt; .001</td>
 </tr>
 <tr class="even">
 <td align="left">0 green - 0 blue</td>
 <td align="right">1.645</td>
-<td align="right">-40.146</td>
-<td align="right">43.436</td>
+<td align="right">-40.109</td>
+<td align="right">43.399</td>
 <td align="right">39.908</td>
 <td align="left">1</td>
 </tr>
