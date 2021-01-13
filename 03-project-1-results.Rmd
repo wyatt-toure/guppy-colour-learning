@@ -22,11 +22,14 @@ library(knitr)
 library(emmeans)
 library(pbkrtest)
 library(report)
+library(glmmTMB)
 #### Reading in Data 
 my.data = read.csv('experiment-2-master-sheet-clean.csv')
 
 # Crerating new variables 
 my.data = my.data %>% group_by(id) %>% mutate(rewarding.object.preference = (time.with.trained.object-time.with.untrained.object))
+
+my.data = my.data %>% group_by(id) %>% mutate(rewarding.object.preference.prop = (time.with.trained.object/(time.with.trained.object+time.with.untrained.object)))
 
 my.data = my.data %>% mutate(green.object.preference = (case_when(
   rewarding.object.colour == "green" ~ (time.with.trained.object-time.with.untrained.object), 
@@ -211,29 +214,37 @@ For the main effects of **training** and **rewarding object colour** on object p
 
 **Model**
 
+
+
 ```{r model 3, echo=TRUE}
 test.data.model = 
-  lmer(rewarding.object.preference ~ rewarding.object.colour * trial + (1 | id),
+  lmer(rewarding.object.preference ~ trial * rewarding.object.colour + (1 | id),
        data = test.data)
+
+test.data.model2 = glmmTMB(
+  rewarding.object.preference ~  trial * rewarding.object.colour + (1|id) + 
+    diag(0 + rewarding.object.colour * trial |id), 
+  data = test.data, family = gaussian
+)
 ```
 
 ```{r, echo=FALSE, results=FALSE}
 # Summary of model 3
-summary(test.data.model)
+summary(test.data.model2)
 
-tidy_fit.test.data.model = broom.mixed::tidy(test.data.model)
-
+tidy_fit.test.data.model = broom.mixed::tidy(test.data.model2)
+tidy_fit.test.data.model
 tidy_fit.test.data.model$p.value = ifelse(tidy_fit.test.data.model$p.value < .001, ## Condition
                       "< .001",  ## if condition is true
                       paste(tidy_fit.test.data.model$p.value %>% round(3))) ## if condition is false
 
-tidy_fit.test.data.model[2:4,] %>% dplyr::select(-group, -effect)
+tidy_fit.test.data.model[2:4,] %>% dplyr::select(-group, -effect, -component)
 ```
 
 **Results**
 
 ```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy_fit.test.data.model[2:4,] %>% dplyr::select(-group, -effect))
+knitr::kable(tidy_fit.test.data.model[2:4,] %>% dplyr::select(-group, -effect, -component))
 ```
 
 
@@ -241,7 +252,7 @@ knitr::kable(tidy_fit.test.data.model[2:4,] %>% dplyr::select(-group, -effect))
 
 # This is needed to get the model output in a format that can be referenced later
 
-tidy_fit.test.data.model = broom.mixed::tidy(test.data.model)
+tidy_fit.test.data.model = broom.mixed::tidy(test.data.model2)
 
 # This formats the p-value depending on whether it is less than 0.001. If that is true
 # it will just report p < .001 otherwise it will give the exact value rounded to 3 decimal points
@@ -255,7 +266,7 @@ formatted_p.test.data.model = ifelse(tidy_fit.test.data.model$p.value < .001, ##
 
 # Is the differencee in rewarding object preference between trials (baseline and re-test) significant in both object treatments (blue-trained and green-trained)?
 
-test.data.model.pairwise.comparisons = emmeans(test.data.model, specs = ~ trial:rewarding.object.colour)
+test.data.model.pairwise.comparisons = emmeans(test.data.model2, specs = ~ trial:rewarding.object.colour)
 
 blue0 = c(1,0,0,0)
 blue21 = c(0,1,0,0)
@@ -269,7 +280,7 @@ custom.contrasts = contrast(test.data.model.pairwise.comparisons,
                                           "21 green - 0 green " = green21 - green0,
                                           "21 green - 21 blue" = green21 - blue21,
                                           "0 green - 0 blue" = green0- blue0), adjust = "mvt") %>% summary(infer = TRUE)
-custom.contrasts
+
 # Pull out the summary statistics of the contrasts and turn them into a table
 pairwise.comparison.means.table = as.data.frame(test.data.model.pairwise.comparisons)
 
@@ -325,10 +336,20 @@ ggplot(test.data,
 
 **Model Residuals**
 
+Originally I fit a LMM but they variance among the groups was uneven producing the following residual plot. 
+
 ```{r, include=TRUE}
 simulationOutput <- simulateResiduals(fittedModel = test.data.model, n = 1000)
 plot(simulationOutput)
 ```
+
+I therefore used GLMMTMB to allow for the modelling of the variances in order to accounut for heterogeneous variance
+
+```{r, include=TRUE}
+simulationOutput <- simulateResiduals(fittedModel = test.data.model2, n = 1000)
+plot(simulationOutput)
+```
+
 
 </br>
 

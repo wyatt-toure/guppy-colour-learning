@@ -153,8 +153,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul>
 <p><strong>Model</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test.data.model =<span class="st"> </span>
-<span class="st">  </span><span class="kw">lmer</span>(rewarding.object.preference <span class="op">~</span><span class="st"> </span>rewarding.object.colour <span class="op">*</span><span class="st"> </span>trial <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),
-       <span class="dt">data =</span> test.data)</code></pre></div>
+<span class="st">  </span><span class="kw">lmer</span>(rewarding.object.preference <span class="op">~</span><span class="st"> </span>trial <span class="op">*</span><span class="st"> </span>rewarding.object.colour <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),
+       <span class="dt">data =</span> test.data)
+
+test.data.model2 =<span class="st"> </span><span class="kw">glmmTMB</span>(
+  rewarding.object.preference <span class="op">~</span><span class="st">  </span>trial <span class="op">*</span><span class="st"> </span>rewarding.object.colour <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>id) <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">diag</span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>rewarding.object.colour <span class="op">*</span><span class="st"> </span>trial <span class="op">|</span>id), 
+  <span class="dt">data =</span> test.data, <span class="dt">family =</span> gaussian
+)</code></pre></div>
 <p><strong>Results</strong></p>
 <table>
 <thead>
@@ -163,38 +169,34 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <th align="right">estimate</th>
 <th align="right">std.error</th>
 <th align="right">statistic</th>
-<th align="right">df</th>
 <th align="left">p.value</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">rewarding.object.colourgreen</td>
-<td align="right">1.644943</td>
-<td align="right">16.31541</td>
-<td align="right">0.1008214</td>
-<td align="right">39.90828</td>
-<td align="left">0.92</td>
+<td align="left">trial21</td>
+<td align="right">17.697370</td>
+<td align="right">10.011902</td>
+<td align="right">1.7676331</td>
+<td align="left">0.077</td>
 </tr>
 <tr class="even">
-<td align="left">trial21</td>
-<td align="right">17.697361</td>
-<td align="right">16.62739</td>
-<td align="right">1.0643497</td>
-<td align="right">19.99995</td>
-<td align="left">0.3</td>
+<td align="left">rewarding.object.colourgreen</td>
+<td align="right">1.645018</td>
+<td align="right">5.551534</td>
+<td align="right">0.2963177</td>
+<td align="left">0.767</td>
 </tr>
 <tr class="odd">
-<td align="left">rewarding.object.colourgreen:trial21</td>
-<td align="right">65.350597</td>
-<td align="right">22.51360</td>
-<td align="right">2.9027170</td>
-<td align="right">19.99995</td>
-<td align="left">0.009</td>
+<td align="left">trial21:rewarding.object.colourgreen</td>
+<td align="right">65.350747</td>
+<td align="right">19.999728</td>
+<td align="right">3.2675818</td>
+<td align="left">0.001</td>
 </tr>
 </tbody>
 </table>
-<p>I found a significant interaction effect between trial and rewarding object colour (p = 0.009). Guppies that had green rewarded had a final rewarded object preference that was 65.4 seconds stronger than the rewarded object preference of guppies trained to blue (Figure <a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#fig:test-data-pref-plot">4.1</a>).</p>
+<p>I found a significant interaction effect between trial and rewarding object colour (p = 0.001). Guppies that had green rewarded had a final rewarded object preference that was 65.4 seconds stronger than the rewarded object preference of guppies trained to blue (Figure <a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#fig:test-data-pref-plot">4.1</a>).</p>
 <center>
 <div class="figure"><span id="fig:test-data-pref-plot"></span>
 <img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/test-data-pref-plot-1.png" alt="The initial and final rewarding object preference. Dashed line represents the no preference value. Data are means +/- 95% CI. Bold line connects means across trials." width="672" />
@@ -205,9 +207,14 @@ Figure 4.1: The initial and final rewarding object preference. Dashed line repre
 </center>
 <p></br></p>
 <p><strong>Model Residuals</strong></p>
+<p>Originally I fit a LMM but they variance among the groups was uneven producing the following residual plot.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">simulationOutput &lt;-<span class="st"> </span><span class="kw">simulateResiduals</span>(<span class="dt">fittedModel =</span> test.data.model, <span class="dt">n =</span> <span class="dv">1000</span>)
 <span class="kw">plot</span>(simulationOutput)</code></pre></div>
 <p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>I therefore used GLMMTMB to allow for the modelling of the variances in order to accounut for heterogeneous variance</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">simulationOutput &lt;-<span class="st"> </span><span class="kw">simulateResiduals</span>(<span class="dt">fittedModel =</span> test.data.model2, <span class="dt">n =</span> <span class="dv">1000</span>)
+<span class="kw">plot</span>(simulationOutput)</code></pre></div>
+<p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 <p></br></p>
 </div>
 <div id="post-hoc-comparisons" class="section level2">
@@ -230,7 +237,7 @@ custom.contrasts =<span class="st"> </span><span class="kw">contrast</span>(test
                             <span class="dt">adjust =</span> <span class="st">&quot;mvt&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">summary</span>(<span class="dt">infer =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p>Post-hoc comparisons investigating the differences between treatments based on whether guppies are untrained or trained reveals that initially there was no difference in the strength of preference for the rewarding object between the treatments (blue-trained guppies had a blue object preference of 1.8 seconds and green-trained guppies had a green object preference of 3.5 seconds, p &lt; .001).</p>
-<p>Comparing the shift in rewarding object preference between initial and final preference tests in blue-trained and green-trained guppies reveals that the shift in rewarding object preference is significant for green-trained guppies but not for blue-trained guppies. Green trained guppies increased their preference for the green object by 83 seconds (going from a green object preference of 3.5 seconds initially to 86.5 seconds at final test, p &lt; .001) whereas blue-trained guppies non-significantly increased their preference for the blue object by 17.7 seconds (going from a blue object preference 1.8 seconds initially to 19.5 seconds at final test, p = 0.664). For a full description of post-hoc comparisons see table <a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#tab:contrasts-table">4.1</a>.</p>
+<p>Comparing the shift in rewarding object preference between initial and final preference tests in blue-trained and green-trained guppies reveals that the shift in rewarding object preference is significant for green-trained guppies but not for blue-trained guppies. Green trained guppies increased their preference for the green object by 83 seconds (going from a green object preference of 3.5 seconds initially to 86.5 seconds at final test, p &lt; .001) whereas blue-trained guppies non-significantly increased their preference for the blue object by 17.7 seconds (going from a blue object preference 1.8 seconds initially to 19.5 seconds at final test, p = 0.252). For a full description of post-hoc comparisons see table <a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#tab:contrasts-table">4.1</a>.</p>
 <p><br /></p>
 <table>
 <caption><span id="tab:contrasts-table">Table 4.1: </span>Table of post-hoc tests with a multivariate-t adjustment for multiple comparisons of a selected set of means. The numbers represent the initial test trial (0) and the final test trial (21). The colour corressponds to the identity of the rewarding object (blue for blue-trained guppies, green for green-trained guppies). Values are all rounded to 3 decimal places.</caption>
@@ -248,34 +255,34 @@ custom.contrasts =<span class="st"> </span><span class="kw">contrast</span>(test
 <tr class="odd">
 <td align="left">21 blue - 0 blue</td>
 <td align="right">17.697</td>
-<td align="right">-26.573</td>
-<td align="right">61.968</td>
-<td align="right">20.000</td>
-<td align="left">0.664</td>
+<td align="right">-7.951</td>
+<td align="right">43.346</td>
+<td align="right">34</td>
+<td align="left">0.252</td>
 </tr>
 <tr class="even">
 <td align="left">21 green - 0 green</td>
 <td align="right">83.048</td>
-<td align="right">42.520</td>
-<td align="right">123.576</td>
-<td align="right">20.000</td>
+<td align="right">38.694</td>
+<td align="right">127.402</td>
+<td align="right">34</td>
 <td align="left">&lt; .001</td>
 </tr>
 <tr class="odd">
 <td align="left">21 green - 21 blue</td>
 <td align="right">66.996</td>
-<td align="right">25.246</td>
-<td align="right">108.745</td>
-<td align="right">39.908</td>
-<td align="left">&lt; .001</td>
+<td align="right">15.891</td>
+<td align="right">118.100</td>
+<td align="right">34</td>
+<td align="left">0.007</td>
 </tr>
 <tr class="even">
 <td align="left">0 green - 0 blue</td>
 <td align="right">1.645</td>
-<td align="right">-40.109</td>
-<td align="right">43.399</td>
-<td align="right">39.908</td>
-<td align="left">1</td>
+<td align="right">-12.577</td>
+<td align="right">15.867</td>
+<td align="right">34</td>
+<td align="left">0.988</td>
 </tr>
 </tbody>
 </table>
