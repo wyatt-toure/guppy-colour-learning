@@ -155,9 +155,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p><strong>Model</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test.feeding.data.low.feeders.removed =<span class="st"> </span>test.feeding.data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(feeding.count <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)
 
-test.data.low.feeders.removed.model =<span class="st"> </span>
-<span class="st">  </span><span class="kw">lmer</span>(rewarding.object.preference <span class="op">~</span><span class="st"> </span>trial <span class="op">*</span><span class="st"> </span>rewarding.object.colour <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id), 
-     <span class="dt">data =</span> test.feeding.data.low.feeders.removed)</code></pre></div>
+test.feeding.data.low.feeders.removed.model =<span class="st"> </span><span class="kw">glmmTMB</span>(rewarding.object.preference <span class="op">~</span><span class="st">  </span>trial <span class="op">*</span><span class="st"> </span>rewarding.object.colour <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>id) <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">diag</span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>rewarding.object.colour <span class="op">*</span><span class="st"> </span>trial <span class="op">|</span>id),<span class="dt">data =</span> test.feeding.data.low.feeders.removed, <span class="dt">family =</span> gaussian)</code></pre></div>
 <p><strong>Results</strong></p>
 <table>
 <thead>
@@ -166,34 +165,30 @@ test.data.low.feeders.removed.model =<span class="st"> </span>
 <th align="right">estimate</th>
 <th align="right">std.error</th>
 <th align="right">statistic</th>
-<th align="right">df</th>
 <th align="left">p.value</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td align="left">trial21</td>
-<td align="right">24.090290</td>
-<td align="right">17.37373</td>
-<td align="right">1.3865928</td>
-<td align="right">19.00000</td>
-<td align="left">0.182</td>
+<td align="right">24.090296</td>
+<td align="right">9.689765</td>
+<td align="right">2.4861589</td>
+<td align="left">0.013</td>
 </tr>
 <tr class="even">
 <td align="left">rewarding.object.colourgreen</td>
-<td align="right">3.041865</td>
-<td align="right">16.87576</td>
-<td align="right">0.1802505</td>
-<td align="right">37.80076</td>
-<td align="left">0.858</td>
+<td align="right">3.041868</td>
+<td align="right">5.544519</td>
+<td align="right">0.5486262</td>
+<td align="left">0.583</td>
 </tr>
 <tr class="odd">
 <td align="left">trial21:rewarding.object.colourgreen</td>
-<td align="right">58.957668</td>
-<td align="right">22.98329</td>
-<td align="right">2.5652411</td>
-<td align="right">19.00000</td>
-<td align="left">0.019</td>
+<td align="right">58.957664</td>
+<td align="right">19.821594</td>
+<td align="right">2.9744159</td>
+<td align="left">0.003</td>
 </tr>
 </tbody>
 </table>
@@ -203,9 +198,9 @@ test.data.low.feeders.removed.model =<span class="st"> </span>
 <div id="model-6b---including-feeding-counut-as-a-covariate" class="section level2">
 <h2><span class="header-section-number">7.2</span> Model 6b - Including feeding counut as a covariate</h2>
 <p>Moreover, as I demonstrate in the next model including the amount of trials fed as a covariate in the model does not change the conclusions.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test.data.feeding.controlled.model =<span class="st"> </span>
-<span class="st">  </span><span class="kw">lmer</span>(rewarding.object.preference <span class="op">~</span><span class="st"> </span>trial <span class="op">*</span><span class="st"> </span>rewarding.object.colour <span class="op">+</span><span class="st"> </span>feeding.count <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span>id), 
-     <span class="dt">data =</span> test.feeding.data)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test.data.feeding.controlled.model =<span class="st"> </span><span class="kw">glmmTMB</span>(rewarding.object.preference <span class="op">~</span><span class="st">  </span>trial <span class="op">*</span><span class="st"> </span>rewarding.object.colour <span class="op">+</span><span class="st"> </span>feeding.count <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>id) <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">diag</span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>rewarding.object.colour <span class="op">*</span><span class="st"> </span>trial <span class="op">|</span>id), 
+  <span class="dt">data =</span> test.feeding.data, <span class="dt">family =</span> gaussian)</code></pre></div>
 <p><strong>Results</strong></p>
 <table>
 <thead>
@@ -214,42 +209,37 @@ test.data.low.feeders.removed.model =<span class="st"> </span>
 <th align="right">estimate</th>
 <th align="right">std.error</th>
 <th align="right">statistic</th>
-<th align="right">df</th>
 <th align="left">p.value</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td align="left">trial21</td>
-<td align="right">17.6973610</td>
-<td align="right">16.62737</td>
-<td align="right">1.0643514</td>
-<td align="right">20.00044</td>
-<td align="left">0.3</td>
+<td align="right">17.6968896</td>
+<td align="right">9.5533254</td>
+<td align="right">1.8524324</td>
+<td align="left">0.064</td>
 </tr>
 <tr class="even">
 <td align="left">rewarding.object.colourgreen</td>
-<td align="right">0.5377365</td>
-<td align="right">16.19018</td>
-<td align="right">0.0332137</td>
-<td align="right">38.86553</td>
-<td align="left">0.974</td>
+<td align="right">1.2413021</td>
+<td align="right">5.5140983</td>
+<td align="right">0.2251142</td>
+<td align="left">0.822</td>
 </tr>
 <tr class="odd">
 <td align="left">feeding.count</td>
-<td align="right">1.3557636</td>
-<td align="right">1.03652</td>
-<td align="right">1.3079953</td>
-<td align="right">19.00034</td>
-<td align="left">0.206</td>
+<td align="right">0.4940784</td>
+<td align="right">0.5786047</td>
+<td align="right">0.8539136</td>
+<td align="left">0.393</td>
 </tr>
 <tr class="even">
 <td align="left">trial21:rewarding.object.colourgreen</td>
-<td align="right">65.3505973</td>
-<td align="right">22.51356</td>
-<td align="right">2.9027214</td>
-<td align="right">20.00044</td>
-<td align="left">0.009</td>
+<td align="right">65.3519392</td>
+<td align="right">19.8470755</td>
+<td align="right">3.2927743</td>
+<td align="left">&lt; .001</td>
 </tr>
 </tbody>
 </table>
@@ -292,7 +282,7 @@ test.data.low.feeders.removed.model =<span class="st"> </span>
 </tr>
 </tbody>
 </table>
-<p>In both models the p-values are similar. While the effect of feeding count is not significant (p = 0.206) the effect of feeding count trends in the expected direction in our feeding count controlled model. In the effect plot below to the left we see that as feeding count increases the preference for the rewarding object colour also increases.</p>
+<p>In both models the p-values are similar. While the effect of feeding count is not significant (p = 0.393) the effect of feeding count trends in the expected direction in our feeding count controlled model. In the effect plot below to the left we see that as feeding count increases the preference for the rewarding object colour also increases.</p>
 <p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
 <p><strong>Model Residuals</strong></p>
 <p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-39-1.png" width="672" /></p>

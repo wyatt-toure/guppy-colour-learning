@@ -640,13 +640,12 @@ There is a fish that did not eat during any trials, however removing this indivi
 ```{r, echo=TRUE}
 test.feeding.data.low.feeders.removed = test.feeding.data %>% filter(feeding.count > 0)
 
-test.data.low.feeders.removed.model = 
-  lmer(rewarding.object.preference ~ trial * rewarding.object.colour + (1 | id), 
-     data = test.feeding.data.low.feeders.removed)
+test.feeding.data.low.feeders.removed.model = glmmTMB(rewarding.object.preference ~  trial * rewarding.object.colour + (1|id) + 
+    diag(0 + rewarding.object.colour * trial |id),data = test.feeding.data.low.feeders.removed, family = gaussian)
 ```
 
 ```{r, echo=FALSE, results=FALSE}
-tidy_fit.test.feeding.data.low.feeders.removed = broom.mixed::tidy(test.data.low.feeders.removed.model)
+tidy_fit.test.feeding.data.low.feeders.removed = broom.mixed::tidy(test.feeding.data.low.feeders.removed.model)
 tidy_fit.test.feeding.data.low.feeders.removed$p.value = ifelse(tidy_fit.test.feeding.data.low.feeders.removed$p.value < .001, ## Condition
                       "< .001",  ## if condition is true
                       paste(tidy_fit.test.feeding.data.low.feeders.removed$p.value %>% round(3))) ## if condition is false
@@ -656,13 +655,13 @@ tidy_fit.test.feeding.data.low.feeders.removed
 **Results**
 
 ```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy_fit.test.feeding.data.low.feeders.removed[2:4,] %>% dplyr::select(-group, -effect))
+knitr::kable(tidy_fit.test.feeding.data.low.feeders.removed[2:4,] %>% dplyr::select(-group, -effect, -component))
 ```
 
 **Model Residuals**
 
 ```{r, echo=FALSE}
-simulationOutput <- simulateResiduals(fittedModel = test.data.low.feeders.removed.model)
+simulationOutput <- simulateResiduals(fittedModel = test.feeding.data.low.feeders.removed.model)
 plot(simulationOutput)
 ```
 
@@ -671,9 +670,9 @@ plot(simulationOutput)
 Moreover, as I demonstrate in the next model including the amount of trials fed as a covariate in the model does not change the conclusions.
 
 ```{r, echo = TRUE}
-test.data.feeding.controlled.model = 
-  lmer(rewarding.object.preference ~ trial * rewarding.object.colour + feeding.count + (1 |id), 
-     data = test.feeding.data)
+test.data.feeding.controlled.model = glmmTMB(rewarding.object.preference ~  trial * rewarding.object.colour + feeding.count + (1|id) + 
+    diag(0 + rewarding.object.colour * trial |id), 
+  data = test.feeding.data, family = gaussian)
 ```
 
 
@@ -689,7 +688,7 @@ tidy_fit.test.data.feeding.controlled.model[2:5,]
 **Results** 
 
 ```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy_fit.test.data.feeding.controlled.model[2:5,]%>% dplyr::select(-group, -effect))
+knitr::kable(tidy_fit.test.data.feeding.controlled.model[2:5,]%>% dplyr::select(-group, -effect, -component))
 ```
 
 
