@@ -143,7 +143,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1><span class="header-section-number">4</span> Model 3 - Preference for the rewarded object during testing depending on treatment</h1>
 <div id="main-effects" class="section level2">
 <h2><span class="header-section-number">4.1</span> Main effects</h2>
-<p>For the main effects of <strong>training</strong> and <strong>rewarding object colour</strong> on object preference I first fit a <strong>linear mixed effects model</strong> with <strong>fixed effects of trial</strong> and <strong>rewarding object colour</strong> and a random effect of <strong>individual id</strong>. Due to heterogeneity in the variance among grouops however, I switched to a generalized linear mixed model with a gaussian distribution which also modelled the variances the vaiances to account for variance heterogeneity. My third model asks whether the preference for the rewarding object changed between baseline and final test and looks for an interaction with rewarded object colour.</p>
+<p>For the main effects of <strong>training</strong> and <strong>rewarding object colour</strong> on object preference I first fit a <strong>linear mixed effects model</strong> with <strong>fixed effects of trial</strong> and <strong>rewarding object colour</strong> and a random effect of <strong>individual id</strong>. Due to heterogeneity in the variance among groups however, I switched to a generalized linear mixed model with a gaussian distribution which also modelled the vaiances to account for variance heterogeneity. My third model asks whether the preference for the rewarding object changed between baseline and final test and looks for an interaction with rewarded object colour.</p>
 <p><strong>Variables</strong></p>
 <ul>
 <li><code>rewarding.object.preference</code> is the time (seconds) spent near the rewarding object subtracted by the time spent near the unrewarding object</li>
@@ -227,7 +227,7 @@ Figure 4.1: The initial and final rewarding object preference. Dashed line repre
 <li>Initial test green-trained and initial test blue-trained</li>
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test.data.model.pairwise.comparisons =<span class="st"> </span>
-<span class="st">  </span><span class="kw">emmeans</span>(test.data.model, <span class="dt">specs =</span> <span class="op">~</span><span class="st"> </span>trial<span class="op">:</span>rewarding.object.colour)
+<span class="st">  </span><span class="kw">emmeans</span>(test.data.model2, <span class="dt">specs =</span> <span class="op">~</span><span class="st"> </span>trial<span class="op">:</span>rewarding.object.colour)
 
 custom.contrasts =<span class="st"> </span><span class="kw">contrast</span>(test.data.model.pairwise.comparisons, 
                             <span class="dt">method =</span> <span class="kw">list</span>(<span class="st">&quot;21 blue - 0 blue&quot;</span> =<span class="st"> </span>blue21<span class="op">-</span><span class="st"> </span>blue0,
@@ -255,7 +255,7 @@ custom.contrasts =<span class="st"> </span><span class="kw">contrast</span>(test
 <tr class="odd">
 <td align="left">21 blue - 0 blue</td>
 <td align="right">17.697</td>
-<td align="right">-7.960</td>
+<td align="right">-7.961</td>
 <td align="right">43.355</td>
 <td align="right">34</td>
 <td align="left">0.252</td>
@@ -263,16 +263,16 @@ custom.contrasts =<span class="st"> </span><span class="kw">contrast</span>(test
 <tr class="even">
 <td align="left">21 green - 0 green</td>
 <td align="right">83.048</td>
-<td align="right">38.680</td>
-<td align="right">127.417</td>
+<td align="right">38.679</td>
+<td align="right">127.418</td>
 <td align="right">34</td>
 <td align="left">&lt; .001</td>
 </tr>
 <tr class="odd">
 <td align="left">21 green - 21 blue</td>
 <td align="right">66.996</td>
-<td align="right">15.874</td>
-<td align="right">118.118</td>
+<td align="right">15.873</td>
+<td align="right">118.119</td>
 <td align="right">34</td>
 <td align="left">0.007</td>
 </tr>

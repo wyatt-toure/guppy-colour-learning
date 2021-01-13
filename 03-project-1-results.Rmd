@@ -203,7 +203,7 @@ plot(simulationOutput)
 
 ## Main effects
 
-For the main effects of **training** and **rewarding object colour** on object preference I first fit a **linear mixed effects model** with **fixed effects of trial** and **rewarding object colour** and a random effect of **individual id**. Due to heterogeneity in the variance among grouops however, I switched to a generalized linear mixed model with a gaussian distribution which also modelled the variances the vaiances to account for variance heterogeneity.  My third model asks whether the preference for the rewarding object changed between baseline and final test and looks for an interaction with rewarded object colour.
+For the main effects of **training** and **rewarding object colour** on object preference I first fit a **linear mixed effects model** with **fixed effects of trial** and **rewarding object colour** and a random effect of **individual id**. Due to heterogeneity in the variance among groups however, I switched to a generalized linear mixed model with a gaussian distribution which also modelled the vaiances to account for variance heterogeneity.  My third model asks whether the preference for the rewarding object changed between baseline and final test and looks for an interaction with rewarded object colour.
 
 **Variables**
 
@@ -364,7 +364,7 @@ To determine whether the means of the final rewarding object preference for thw 
 
 ```{r, echo=TRUE, eval=FALSE}
 test.data.model.pairwise.comparisons = 
-  emmeans(test.data.model, specs = ~ trial:rewarding.object.colour)
+  emmeans(test.data.model2, specs = ~ trial:rewarding.object.colour)
 
 custom.contrasts = contrast(test.data.model.pairwise.comparisons, 
                             method = list("21 blue - 0 blue" = blue21- blue0,
