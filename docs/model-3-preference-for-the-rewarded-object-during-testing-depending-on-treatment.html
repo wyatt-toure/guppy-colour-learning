@@ -143,7 +143,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1><span class="header-section-number">4</span> Model 3 - Preference for the rewarded object during testing depending on treatment</h1>
 <div id="main-effects" class="section level2">
 <h2><span class="header-section-number">4.1</span> Main effects</h2>
-<p>For the main effects of <strong>training</strong> and <strong>rewarding object colour</strong> on object preference I fit a <strong>linear mixed effects model</strong> with <strong>fixed effects of trial</strong> and <strong>rewarding object colour</strong> and a random effect of <strong>individual id</strong>. My third model asks whether the preference for the rewarding object changed between baseline and final test and looks for an interaction with rewarded object colour.</p>
+<p>For the main effects of <strong>training</strong> and <strong>rewarding object colour</strong> on object preference I first fit a <strong>linear mixed effects model</strong> with <strong>fixed effects of trial</strong> and <strong>rewarding object colour</strong> and a random effect of <strong>individual id</strong>. Due to heterogeneity in the variance among grouops however, I switched to a generalized linear mixed model with a gaussian distribution which also modelled the variances the vaiances to account for variance heterogeneity. My third model asks whether the preference for the rewarding object changed between baseline and final test and looks for an interaction with rewarded object colour.</p>
 <p><strong>Variables</strong></p>
 <ul>
 <li><code>rewarding.object.preference</code> is the time (seconds) spent near the rewarding object subtracted by the time spent near the unrewarding object</li>
@@ -255,32 +255,32 @@ custom.contrasts =<span class="st"> </span><span class="kw">contrast</span>(test
 <tr class="odd">
 <td align="left">21 blue - 0 blue</td>
 <td align="right">17.697</td>
-<td align="right">-7.951</td>
-<td align="right">43.346</td>
+<td align="right">-7.960</td>
+<td align="right">43.355</td>
 <td align="right">34</td>
 <td align="left">0.252</td>
 </tr>
 <tr class="even">
 <td align="left">21 green - 0 green</td>
 <td align="right">83.048</td>
-<td align="right">38.694</td>
-<td align="right">127.402</td>
+<td align="right">38.680</td>
+<td align="right">127.417</td>
 <td align="right">34</td>
 <td align="left">&lt; .001</td>
 </tr>
 <tr class="odd">
 <td align="left">21 green - 21 blue</td>
 <td align="right">66.996</td>
-<td align="right">15.891</td>
-<td align="right">118.100</td>
+<td align="right">15.874</td>
+<td align="right">118.118</td>
 <td align="right">34</td>
 <td align="left">0.007</td>
 </tr>
 <tr class="even">
 <td align="left">0 green - 0 blue</td>
 <td align="right">1.645</td>
-<td align="right">-12.577</td>
-<td align="right">15.867</td>
+<td align="right">-12.582</td>
+<td align="right">15.872</td>
 <td align="right">34</td>
 <td align="left">0.988</td>
 </tr>
