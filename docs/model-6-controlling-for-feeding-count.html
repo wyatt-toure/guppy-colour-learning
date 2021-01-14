@@ -113,7 +113,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4" data-path="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><i class="fa fa-check"></i><b>4</b> Model 3 - Preference for the rewarded object during testing depending on treatment</a><ul>
 <li class="chapter" data-level="4.1" data-path="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#main-effects"><i class="fa fa-check"></i><b>4.1</b> Main effects</a></li>
 <li class="chapter" data-level="4.2" data-path="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#post-hoc-comparisons"><i class="fa fa-check"></i><b>4.2</b> Post-hoc Comparisons</a></li>
-<li class="chapter" data-level="4.3" data-path="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#testing-blue-trained-guppies-separately"><i class="fa fa-check"></i><b>4.3</b> Testing blue-trained guppies separately</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="model-4-preference-for-the-rewarded-object-during-training-based-on-feeding.html"><a href="model-4-preference-for-the-rewarded-object-during-training-based-on-feeding.html"><i class="fa fa-check"></i><b>5</b> Model 4 - Preference for the rewarded object during training based on feeding</a></li>
 <li class="chapter" data-level="6" data-path="model-5-is-there-a-difference-in-feeding-attempts-between-treatments.html"><a href="model-5-is-there-a-difference-in-feeding-attempts-between-treatments.html"><i class="fa fa-check"></i><b>6</b> Model 5 - Is there a difference in feeding attempts between treatments?</a></li>
@@ -155,8 +154,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p><strong>Model</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test.feeding.data.low.feeders.removed =<span class="st"> </span>test.feeding.data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(feeding.count <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)
 
-test.feeding.data.low.feeders.removed.model =<span class="st"> </span><span class="kw">glmmTMB</span>(rewarding.object.preference <span class="op">~</span><span class="st">  </span>trial <span class="op">*</span><span class="st"> </span>rewarding.object.colour <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>id) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw">diag</span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>rewarding.object.colour <span class="op">*</span><span class="st"> </span>trial <span class="op">|</span>id),<span class="dt">data =</span> test.feeding.data.low.feeders.removed, <span class="dt">family =</span> gaussian)</code></pre></div>
+test.feeding.data.low.feeders.removed.model =<span class="st"> </span>
+<span class="st">  </span><span class="kw">glmmTMB</span>(rewarding.object.preference <span class="op">~</span><span class="st">  </span>trial <span class="op">*</span><span class="st"> </span>rewarding.object.colour <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>id) <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">diag</span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>rewarding.object.colour <span class="op">*</span><span class="st"> </span>trial <span class="op">|</span>id),
+    <span class="dt">data =</span> test.feeding.data.low.feeders.removed, <span class="dt">family =</span> gaussian)</code></pre></div>
 <p><strong>Results</strong></p>
 <table>
 <thead>
@@ -193,12 +194,13 @@ test.feeding.data.low.feeders.removed.model =<span class="st"> </span><span clas
 </tbody>
 </table>
 <p><strong>Model Residuals</strong></p>
-<p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
+<p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
 </div>
 <div id="model-6b---including-feeding-counut-as-a-covariate" class="section level2">
 <h2><span class="header-section-number">7.2</span> Model 6b - Including feeding counut as a covariate</h2>
 <p>Moreover, as I demonstrate in the next model including the amount of trials fed as a covariate in the model does not change the conclusions.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test.data.feeding.controlled.model =<span class="st"> </span><span class="kw">glmmTMB</span>(rewarding.object.preference <span class="op">~</span><span class="st">  </span>trial <span class="op">*</span><span class="st"> </span>rewarding.object.colour <span class="op">+</span><span class="st"> </span>feeding.count <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>id) <span class="op">+</span><span class="st"> </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test.data.feeding.controlled.model =<span class="st"> </span>
+<span class="st">  </span><span class="kw">glmmTMB</span>(rewarding.object.preference <span class="op">~</span><span class="st">  </span>trial <span class="op">*</span><span class="st"> </span>rewarding.object.colour <span class="op">+</span><span class="st"> </span>feeding.count <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>id) <span class="op">+</span><span class="st"> </span>
 <span class="st">    </span><span class="kw">diag</span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>rewarding.object.colour <span class="op">*</span><span class="st"> </span>trial <span class="op">|</span>id), 
   <span class="dt">data =</span> test.feeding.data, <span class="dt">family =</span> gaussian)</code></pre></div>
 <p><strong>Results</strong></p>
@@ -279,9 +281,9 @@ test.feeding.data.low.feeders.removed.model =<span class="st"> </span><span clas
 </tbody>
 </table>
 <p>In both models the p-values are similar. While the effect of feeding count is not significant (p = 0.393) the effect of feeding count trends in the expected direction in our feeding count controlled model. In the effect plot below to the left we see that as feeding count increases the preference for the rewarding object colour also increases.</p>
-<p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
+<p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
 <p><strong>Model Residuals</strong></p>
-<p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
+<p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
 </div>
 </div>
             </section>

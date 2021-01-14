@@ -82,6 +82,7 @@ baseline.data.model =
 
 summary(baseline.data.model)
 
+confint(baseline.data.model)
 # This is needed to get the model output in a format that can be referenced later
 
 baseline.data.model.tidy_fit = broom.mixed::tidy(baseline.data.model)
@@ -96,7 +97,8 @@ baseline.data.model.formatted_p = ifelse(baseline.data.model.tidy_fit$p.value < 
 
 **Result**
 
-At baseline, there was no significant preference for the green object preference across all guppies (p `r baseline.data.model.formatted_p[1]`).
+
+At baseline, there was no significant preference for the green object across all guppies (p `r baseline.data.model.formatted_p[1]`).
 
 ```{r, echo=FALSE, results=FALSE}
 tidy_fit0 = broom.mixed::tidy(baseline.data.model)
@@ -203,7 +205,9 @@ plot(simulationOutput)
 
 ## Main effects
 
-For the main effects of **training** and **rewarding object colour** on object preference I first fit a **linear mixed effects model** with **fixed effects of trial** and **rewarding object colour** and a random effect of **individual id**. Due to heterogeneity in the variance among groups however, I switched to a generalized linear mixed model with a gaussian distribution which also modelled the vaiances to account for variance heterogeneity.  My third model asks whether the preference for the rewarding object changed between baseline and final test and looks for an interaction with rewarded object colour.
+For the main effects of **training** and **rewarding object colour** on rewarding object preference I initially fit a **linear mixed effects model** with **fixed effects of trial** and **rewarding object colour** and a random effect of **individual id**. 
+
+Due to heterogeneity in the variance among groups however, I switched to a generalized linear mixed model with a gaussian distribution which also modelled the vaiances to account for variance heterogeneity.  My third model asks whether the preference for the rewarding object changed between baseline and final test and looks for an interaction with rewarded object colour.
 
 **Variables**
 
@@ -343,7 +347,7 @@ simulationOutput <- simulateResiduals(fittedModel = test.data.model, n = 1000)
 plot(simulationOutput)
 ```
 
-I therefore used GLMMTMB to allow for the modelling of the variances in order to accounut for heterogeneous variance
+I therefore used glmmTMB to allow for the modelling of the variances and accounut for heterogeneous variance.
 
 ```{r, include=TRUE}
 simulationOutput <- simulateResiduals(fittedModel = test.data.model2, n = 1000)
@@ -371,8 +375,7 @@ custom.contrasts = contrast(test.data.model.pairwise.comparisons,
                                           "21 green - 0 green " = green21 - green0,
                                           "21 green - 21 blue" = green21 - blue21,
                                           "0 green - 0 blue" = green0- blue0), 
-                            adjust = "mvt") %>% 
-  summary(infer = TRUE)
+                            adjust = "mvt") %>% summary(infer = TRUE)
 ```
 
 Post-hoc comparisons investigating the differences between treatments based on whether guppies are untrained or trained reveals that initially there was no difference in the strength of preference for the rewarding object between the treatments (blue-trained guppies had a blue object preference of `r pairwise.comparison.means.table$emmean[1] %>% round(1)` seconds and green-trained guppies had a green object preference of `r pairwise.comparison.means.table$emmean[3] %>% round(1)` seconds, p `r formatted_p.pairwise.comparison.contrasts.table[2]`). 
@@ -390,39 +393,9 @@ pairwise.comparison.contrasts.table.show$p.value =
             pairwise.comparison.contrasts.table.show$p.value >= .05 ~ paste(pairwise.comparison.contrasts.table.show$p.value %>% round(3)))
 
 knitr::kable(pairwise.comparison.contrasts.table.show %>% dplyr::select(contrast, estimate,lower.CL,upper.CL, df,p.value),
-             caption = "Table of post-hoc tests with a multivariate-t adjustment for multiple comparisons of a selected set of means. The numbers represent the initial test trial (0) and the final test trial (21). The colour corressponds to the identity of the rewarding object (blue for blue-trained guppies, green for green-trained guppies). Values are all rounded to 3 decimal places.")
+             caption = "Table of post-hoc tests with a multivariate-t adjustment for multiple comparisons of a selected set of means. The numbers represent the initial test trial (0) and the final test trial (21). The colour corressponds to the identity of the rewarding object (blue for blue-trained guppies, green for green-trained guppies). Values are all rounded to 3 decimal places. CL = confidence limit")
 
 ```
-
-<br />
-
-## Testing blue-trained guppies separately
-
-It does look like blue trained guppies are shifting their preference slightly but the effect might be getting drowned out by the large shift in preference of green-trained guppies so I looked at blue-trained guppies alone in a separate model.
-
-```{r, echo=TRUE}
-blue.guppies.test.data = test.data %>% filter(rewarding.object.colour == 'blue')
-
-blue.guppies.test.data.model = 
-  lm(rewarding.object.preference ~ trial,
-       data = blue.guppies.test.data)
-```
-
-```{r,results=FALSE,echo=FALSE}
-tidy_fit.blue.test.data.model = broom.mixed::tidy(blue.guppies.test.data.model)
-tidy_fit.blue.test.data.model$p.value = ifelse(tidy_fit.blue.test.data.model$p.value < .001, ## Condition
-                      "< .001",  ## if condition is true
-                      paste(tidy_fit.blue.test.data.model$p.value %>% round(3))) ## if condition is false
-tidy_fit.blue.test.data.model
-```
-
-```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy_fit.blue.test.data.model)
-```
-
-
-We see that the shift in preference between baseline trial and the final trial is still not significant (p = `r tidy_fit.blue.test.data.model$p.value[2]`) in blue trained guppies though there seems to be a definite trend and the effect is in the expected direction. The random effect of ID was dropped here since it led to a singular fit, there was much more residual variance compared to individual variance, ID random effect did not significantly improve model fit. 
-
 
 
 
@@ -640,8 +613,10 @@ There is a fish that did not eat during any trials, however removing this indivi
 ```{r, echo=TRUE}
 test.feeding.data.low.feeders.removed = test.feeding.data %>% filter(feeding.count > 0)
 
-test.feeding.data.low.feeders.removed.model = glmmTMB(rewarding.object.preference ~  trial * rewarding.object.colour + (1|id) + 
-    diag(0 + rewarding.object.colour * trial |id),data = test.feeding.data.low.feeders.removed, family = gaussian)
+test.feeding.data.low.feeders.removed.model = 
+  glmmTMB(rewarding.object.preference ~  trial * rewarding.object.colour + (1|id) + 
+    diag(0 + rewarding.object.colour * trial |id),
+    data = test.feeding.data.low.feeders.removed, family = gaussian)
 ```
 
 ```{r, echo=FALSE, results=FALSE}
@@ -670,7 +645,8 @@ plot(simulationOutput)
 Moreover, as I demonstrate in the next model including the amount of trials fed as a covariate in the model does not change the conclusions.
 
 ```{r, echo = TRUE}
-test.data.feeding.controlled.model = glmmTMB(rewarding.object.preference ~  trial * rewarding.object.colour + feeding.count + (1|id) + 
+test.data.feeding.controlled.model = 
+  glmmTMB(rewarding.object.preference ~  trial * rewarding.object.colour + feeding.count + (1|id) + 
     diag(0 + rewarding.object.colour * trial |id), 
   data = test.feeding.data, family = gaussian)
 ```
@@ -709,27 +685,6 @@ plot(allEffects(test.data.feeding.controlled.model)[1])
 ```{r, echo=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = test.data.feeding.controlled.model)
 plot(simulationOutput)
-```
-
-
-```{r, echo=FALSE, results=FALSE}
-## What if I look at just the shift in rewarding object preference frorm baseline to re-test and look for an effect of feeding count. 
-
-test.feeding.data.as.shift.variable = test.feeding.data %>% 
-  dplyr::select(id,trial,rewarding.object.colour,rewarding.object.preference,feeding.count) %>% 
-  pivot_wider(names_from = trial, values_from = rewarding.object.preference) %>%
-  rename(baseline = "0", retest = "21") %>% 
-  mutate(shift.rewarding.object.preference = (retest - baseline))
-
-
-test.data.feeding.controlled.model2 = 
-  lm(shift.rewarding.object.preference ~ feeding.count, 
-     data = test.feeding.data.as.shift.variable)
-
-summary(test.data.feeding.controlled.model2)
-
-# Nothing
-
 ```
 
 # Tools used and References
