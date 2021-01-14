@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="model-2-preference-for-the-rewarding-object-during-training.html"/>
-<link rel="next" href="model-4-preference-for-the-rewarded-object-during-training-based-on-feeding.html"/>
+<link rel="next" href="esm-model-1-preference-for-the-rewarded-object-during-training-based-on-feeding.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -114,11 +114,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.1" data-path="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#main-effects"><i class="fa fa-check"></i><b>4.1</b> Main effects</a></li>
 <li class="chapter" data-level="4.2" data-path="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#post-hoc-comparisons"><i class="fa fa-check"></i><b>4.2</b> Post-hoc Comparisons</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="model-4-preference-for-the-rewarded-object-during-training-based-on-feeding.html"><a href="model-4-preference-for-the-rewarded-object-during-training-based-on-feeding.html"><i class="fa fa-check"></i><b>5</b> Model 4 - Preference for the rewarded object during training based on feeding</a></li>
-<li class="chapter" data-level="6" data-path="model-5-is-there-a-difference-in-feeding-attempts-between-treatments.html"><a href="model-5-is-there-a-difference-in-feeding-attempts-between-treatments.html"><i class="fa fa-check"></i><b>6</b> Model 5 - Is there a difference in feeding attempts between treatments?</a></li>
-<li class="chapter" data-level="7" data-path="model-6-controlling-for-feeding-count.html"><a href="model-6-controlling-for-feeding-count.html"><i class="fa fa-check"></i><b>7</b> Model 6 - Controlling for feeding count</a><ul>
-<li class="chapter" data-level="7.1" data-path="model-6-controlling-for-feeding-count.html"><a href="model-6-controlling-for-feeding-count.html#model-6a---removing-individual-that-did-not-feed"><i class="fa fa-check"></i><b>7.1</b> Model 6a - Removing individual that did not feed</a></li>
-<li class="chapter" data-level="7.2" data-path="model-6-controlling-for-feeding-count.html"><a href="model-6-controlling-for-feeding-count.html#model-6b---including-feeding-counut-as-a-covariate"><i class="fa fa-check"></i><b>7.2</b> Model 6b - Including feeding counut as a covariate</a></li>
+<li class="chapter" data-level="5" data-path="esm-model-1-preference-for-the-rewarded-object-during-training-based-on-feeding.html"><a href="esm-model-1-preference-for-the-rewarded-object-during-training-based-on-feeding.html"><i class="fa fa-check"></i><b>5</b> ESM Model 1 - Preference for the rewarded object during training based on feeding</a></li>
+<li class="chapter" data-level="6" data-path="model-4-is-there-a-difference-in-feeding-attempts-between-treatments.html"><a href="model-4-is-there-a-difference-in-feeding-attempts-between-treatments.html"><i class="fa fa-check"></i><b>6</b> Model 4 - Is there a difference in feeding attempts between treatments?</a></li>
+<li class="chapter" data-level="7" data-path="esm-model-2-controlling-for-feeding-count.html"><a href="esm-model-2-controlling-for-feeding-count.html"><i class="fa fa-check"></i><b>7</b> ESM Model 2 - Controlling for feeding count</a><ul>
+<li class="chapter" data-level="7.1" data-path="esm-model-2-controlling-for-feeding-count.html"><a href="esm-model-2-controlling-for-feeding-count.html#esm-model-2a---removing-individual-that-did-not-feed"><i class="fa fa-check"></i><b>7.1</b> ESM Model 2a - Removing individual that did not feed</a></li>
+<li class="chapter" data-level="7.2" data-path="esm-model-2-controlling-for-feeding-count.html"><a href="esm-model-2-controlling-for-feeding-count.html#esm-model-2b---including-feeding-counut-as-a-covariate"><i class="fa fa-check"></i><b>7.2</b> ESM Model 2b - Including feeding counut as a covariate</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="tools-used-and-references.html"><a href="tools-used-and-references.html"><i class="fa fa-check"></i><b>8</b> Tools used and References</a></li>
 </ul>
@@ -143,7 +143,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="main-effects" class="section level2">
 <h2><span class="header-section-number">4.1</span> Main effects</h2>
 <p>For the main effects of <strong>training</strong> and <strong>rewarding object colour</strong> on rewarding object preference I initially fit a <strong>linear mixed effects model</strong> with <strong>fixed effects of trial</strong> and <strong>rewarding object colour</strong> and a random effect of <strong>individual id</strong>.</p>
-<p>Due to heterogeneity in the variance among groups however, I switched to a generalized linear mixed model with a gaussian distribution which also modelled the vaiances to account for variance heterogeneity. My third model asks whether the preference for the rewarding object changed between baseline and final test and looks for an interaction with rewarded object colour.</p>
+<p>Due to heterogeneity in the variance among groups however, I switched to a generalized linear mixed effects model with a gaussian distribution which also modelled the vaiances to account for variance heterogeneity using the package <a href="https://cran.r-project.org/web/packages/glmmTMB/index.html"><code>glmmTMB</code></a>. My third model asks whether the preference for the rewarding object changed between baseline and final test and looks for an interaction with rewarded object colour.</p>
 <p><strong>Variables</strong></p>
 <ul>
 <li><code>rewarding.object.preference</code> is the time (seconds) spent near the rewarding object subtracted by the time spent near the unrewarding object</li>
@@ -156,11 +156,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="st">  </span><span class="kw">lmer</span>(rewarding.object.preference <span class="op">~</span><span class="st"> </span>trial <span class="op">*</span><span class="st"> </span>rewarding.object.colour <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),
        <span class="dt">data =</span> test.data)
 
-test.data.model2 =<span class="st"> </span><span class="kw">glmmTMB</span>(
-  rewarding.object.preference <span class="op">~</span><span class="st">  </span>trial <span class="op">*</span><span class="st"> </span>rewarding.object.colour <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>id) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw">diag</span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>rewarding.object.colour <span class="op">*</span><span class="st"> </span>trial <span class="op">|</span>id), 
-  <span class="dt">data =</span> test.data, <span class="dt">family =</span> gaussian
-)</code></pre></div>
+test.data.model2 =<span class="st"> </span>
+<span class="st">  </span><span class="kw">glmmTMB</span>(rewarding.object.preference <span class="op">~</span><span class="st">  </span>trial <span class="op">*</span><span class="st"> </span>rewarding.object.colour <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>id) <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">diag</span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>rewarding.object.colour<span class="op">:</span>trial <span class="op">|</span>id), 
+  <span class="dt">data =</span> test.data, <span class="dt">family =</span> gaussian)</code></pre></div>
 <p><strong>Results</strong></p>
 <table>
 <thead>
@@ -175,28 +174,28 @@ test.data.model2 =<span class="st"> </span><span class="kw">glmmTMB</span>(
 <tbody>
 <tr class="odd">
 <td align="left">trial21</td>
-<td align="right">17.697370</td>
-<td align="right">10.011902</td>
-<td align="right">1.7676331</td>
+<td align="right">17.697362</td>
+<td align="right">10.016982</td>
+<td align="right">1.766736</td>
 <td align="left">0.077</td>
 </tr>
 <tr class="even">
 <td align="left">rewarding.object.colourgreen</td>
-<td align="right">1.645018</td>
-<td align="right">5.551534</td>
-<td align="right">0.2963177</td>
+<td align="right">1.644944</td>
+<td align="right">5.542077</td>
+<td align="right">0.296810</td>
 <td align="left">0.767</td>
 </tr>
 <tr class="odd">
 <td align="left">trial21:rewarding.object.colourgreen</td>
-<td align="right">65.350747</td>
-<td align="right">19.999728</td>
-<td align="right">3.2675818</td>
-<td align="left">0.001</td>
+<td align="right">65.350592</td>
+<td align="right">20.832230</td>
+<td align="right">3.136995</td>
+<td align="left">0.002</td>
 </tr>
 </tbody>
 </table>
-<p>I found a significant interaction effect between trial and rewarding object colour (p = 0.001). Guppies that had green rewarded had a final rewarded object preference that was 65.4 seconds stronger than the rewarded object preference of guppies trained to blue (Figure <a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#fig:test-data-pref-plot">4.1</a>).</p>
+<p>I found a significant interaction effect between trial and rewarding object colour (p = 0.002). Guppies that had green rewarded had a final rewarded object preference that was 65.4 seconds stronger than the rewarded object preference of guppies trained to blue (Figure <a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#fig:test-data-pref-plot">4.1</a>).</p>
 <center>
 <div class="figure"><span id="fig:test-data-pref-plot"></span>
 <img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/test-data-pref-plot-1.png" alt="The initial and final rewarding object preference. Dashed line represents the no preference value. Data are means +/- 95% CI. Bold line connects means across trials." width="672" />
@@ -208,12 +207,8 @@ Figure 4.1: The initial and final rewarding object preference. Dashed line repre
 <p></br></p>
 <p><strong>Model Residuals</strong></p>
 <p>Originally I fit a LMM but they variance among the groups was uneven producing the following residual plot.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">simulationOutput &lt;-<span class="st"> </span><span class="kw">simulateResiduals</span>(<span class="dt">fittedModel =</span> test.data.model, <span class="dt">n =</span> <span class="dv">1000</span>)
-<span class="kw">plot</span>(simulationOutput)</code></pre></div>
 <p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 <p>I therefore used glmmTMB to allow for the modelling of the variances and accounut for heterogeneous variance.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">simulationOutput &lt;-<span class="st"> </span><span class="kw">simulateResiduals</span>(<span class="dt">fittedModel =</span> test.data.model2, <span class="dt">n =</span> <span class="dv">1000</span>)
-<span class="kw">plot</span>(simulationOutput)</code></pre></div>
 <p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 <p></br></p>
 </div>
@@ -236,7 +231,7 @@ custom.contrasts =<span class="st"> </span><span class="kw">contrast</span>(test
                                           <span class="st">&quot;0 green - 0 blue&quot;</span> =<span class="st"> </span>green0<span class="op">-</span><span class="st"> </span>blue0), 
                             <span class="dt">adjust =</span> <span class="st">&quot;mvt&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>(<span class="dt">infer =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p>Post-hoc comparisons investigating the differences between treatments based on whether guppies are untrained or trained reveals that initially there was no difference in the strength of preference for the rewarding object between the treatments (blue-trained guppies had a blue object preference of 1.8 seconds and green-trained guppies had a green object preference of 3.5 seconds, p &lt; .001).</p>
-<p>Comparing the shift in rewarding object preference between initial and final preference tests in blue-trained and green-trained guppies reveals that the shift in rewarding object preference is significant for green-trained guppies but not for blue-trained guppies. Green trained guppies increased their preference for the green object by 83 seconds (going from a green object preference of 3.5 seconds initially to 86.5 seconds at final test, p &lt; .001) whereas blue-trained guppies non-significantly increased their preference for the blue object by 17.7 seconds (going from a blue object preference 1.8 seconds initially to 19.5 seconds at final test, p = 0.252). For a full description of post-hoc comparisons see table <a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#tab:contrasts-table">4.1</a>.</p>
+<p>Comparing the shift in rewarding object preference between initial and final preference tests in blue-trained and green-trained guppies reveals that the shift in rewarding object preference is significant for green-trained guppies but not for blue-trained guppies. Green trained guppies increased their preference for the green object by 83 seconds (going from a green object preference of 3.5 seconds initially to 86.5 seconds at final test, p &lt; .001) whereas blue-trained guppies non-significantly increased their preference for the blue object by 17.7 seconds (going from a blue object preference 1.8 seconds initially to 19.5 seconds at final test, p = 0.251). For a full description of post-hoc comparisons see table <a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#tab:contrasts-table">4.1</a>.</p>
 <p><br /></p>
 <table>
 <caption><span id="tab:contrasts-table">Table 4.1: </span>Table of post-hoc tests with a multivariate-t adjustment for multiple comparisons of a selected set of means. The numbers represent the initial test trial (0) and the final test trial (21). The colour corressponds to the identity of the rewarding object (blue for blue-trained guppies, green for green-trained guppies). Values are all rounded to 3 decimal places. CL = confidence limit</caption>
@@ -254,32 +249,32 @@ custom.contrasts =<span class="st"> </span><span class="kw">contrast</span>(test
 <tr class="odd">
 <td align="left">21 blue - 0 blue</td>
 <td align="right">17.697</td>
-<td align="right">-7.960</td>
-<td align="right">43.355</td>
+<td align="right">-7.933</td>
+<td align="right">43.327</td>
 <td align="right">34</td>
-<td align="left">0.252</td>
+<td align="left">0.251</td>
 </tr>
 <tr class="even">
 <td align="left">21 green - 0 green</td>
 <td align="right">83.048</td>
-<td align="right">38.679</td>
-<td align="right">127.417</td>
+<td align="right">36.312</td>
+<td align="right">129.784</td>
 <td align="right">34</td>
 <td align="left">&lt; .001</td>
 </tr>
 <tr class="odd">
 <td align="left">21 green - 21 blue</td>
 <td align="right">66.996</td>
-<td align="right">15.874</td>
-<td align="right">118.118</td>
+<td align="right">15.614</td>
+<td align="right">118.377</td>
 <td align="right">34</td>
 <td align="left">0.007</td>
 </tr>
 <tr class="even">
 <td align="left">0 green - 0 blue</td>
 <td align="right">1.645</td>
-<td align="right">-12.582</td>
-<td align="right">15.872</td>
+<td align="right">-12.535</td>
+<td align="right">15.825</td>
 <td align="right">34</td>
 <td align="left">0.988</td>
 </tr>
@@ -293,7 +288,7 @@ custom.contrasts =<span class="st"> </span><span class="kw">contrast</span>(test
         </div>
       </div>
 <a href="model-2-preference-for-the-rewarding-object-during-training.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="model-4-preference-for-the-rewarded-object-during-training-based-on-feeding.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="esm-model-1-preference-for-the-rewarded-object-during-training-based-on-feeding.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

@@ -30,7 +30,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="model-6-controlling-for-feeding-count.html"/>
+<link rel="prev" href="esm-model-2-controlling-for-feeding-count.html"/>
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -114,11 +114,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.1" data-path="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#main-effects"><i class="fa fa-check"></i><b>4.1</b> Main effects</a></li>
 <li class="chapter" data-level="4.2" data-path="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#post-hoc-comparisons"><i class="fa fa-check"></i><b>4.2</b> Post-hoc Comparisons</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="model-4-preference-for-the-rewarded-object-during-training-based-on-feeding.html"><a href="model-4-preference-for-the-rewarded-object-during-training-based-on-feeding.html"><i class="fa fa-check"></i><b>5</b> Model 4 - Preference for the rewarded object during training based on feeding</a></li>
-<li class="chapter" data-level="6" data-path="model-5-is-there-a-difference-in-feeding-attempts-between-treatments.html"><a href="model-5-is-there-a-difference-in-feeding-attempts-between-treatments.html"><i class="fa fa-check"></i><b>6</b> Model 5 - Is there a difference in feeding attempts between treatments?</a></li>
-<li class="chapter" data-level="7" data-path="model-6-controlling-for-feeding-count.html"><a href="model-6-controlling-for-feeding-count.html"><i class="fa fa-check"></i><b>7</b> Model 6 - Controlling for feeding count</a><ul>
-<li class="chapter" data-level="7.1" data-path="model-6-controlling-for-feeding-count.html"><a href="model-6-controlling-for-feeding-count.html#model-6a---removing-individual-that-did-not-feed"><i class="fa fa-check"></i><b>7.1</b> Model 6a - Removing individual that did not feed</a></li>
-<li class="chapter" data-level="7.2" data-path="model-6-controlling-for-feeding-count.html"><a href="model-6-controlling-for-feeding-count.html#model-6b---including-feeding-counut-as-a-covariate"><i class="fa fa-check"></i><b>7.2</b> Model 6b - Including feeding counut as a covariate</a></li>
+<li class="chapter" data-level="5" data-path="esm-model-1-preference-for-the-rewarded-object-during-training-based-on-feeding.html"><a href="esm-model-1-preference-for-the-rewarded-object-during-training-based-on-feeding.html"><i class="fa fa-check"></i><b>5</b> ESM Model 1 - Preference for the rewarded object during training based on feeding</a></li>
+<li class="chapter" data-level="6" data-path="model-4-is-there-a-difference-in-feeding-attempts-between-treatments.html"><a href="model-4-is-there-a-difference-in-feeding-attempts-between-treatments.html"><i class="fa fa-check"></i><b>6</b> Model 4 - Is there a difference in feeding attempts between treatments?</a></li>
+<li class="chapter" data-level="7" data-path="esm-model-2-controlling-for-feeding-count.html"><a href="esm-model-2-controlling-for-feeding-count.html"><i class="fa fa-check"></i><b>7</b> ESM Model 2 - Controlling for feeding count</a><ul>
+<li class="chapter" data-level="7.1" data-path="esm-model-2-controlling-for-feeding-count.html"><a href="esm-model-2-controlling-for-feeding-count.html#esm-model-2a---removing-individual-that-did-not-feed"><i class="fa fa-check"></i><b>7.1</b> ESM Model 2a - Removing individual that did not feed</a></li>
+<li class="chapter" data-level="7.2" data-path="esm-model-2-controlling-for-feeding-count.html"><a href="esm-model-2-controlling-for-feeding-count.html#esm-model-2b---including-feeding-counut-as-a-covariate"><i class="fa fa-check"></i><b>7.2</b> ESM Model 2b - Including feeding counut as a covariate</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="tools-used-and-references.html"><a href="tools-used-and-references.html"><i class="fa fa-check"></i><b>8</b> Tools used and References</a></li>
 </ul>
@@ -261,21 +261,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <td align="left">R Core Team (2019). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL <a href="https://www.R-project.org/" class="uri">https://www.R-project.org/</a>.</td>
 </tr>
 <tr class="odd">
-<td align="left">RColorBrewer</td>
-<td align="left">1.1.2</td>
-<td align="left">Erich Neuwirth (2014). RColorBrewer: ColorBrewer Palettes. R package version 1.1-2. <a href="https://CRAN.R-project.org/package=RColorBrewer" class="uri">https://CRAN.R-project.org/package=RColorBrewer</a></td>
-</tr>
-<tr class="even">
 <td align="left">report</td>
 <td align="left">0.2.0</td>
 <td align="left">Makowski, D., Lüdecke, D., &amp; Ben-Shachar, M.S. (2020). Automated reporting as a practical tool to improve reproducibility and methodological best practices adoption. CRAN. Available from <a href="https://github.com/easystats/report" class="uri">https://github.com/easystats/report</a>. doi: .</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">survival</td>
 <td align="left">3.1.8</td>
 <td align="left">Therneau T (2015). <em>A Package for Survival Analysis in S</em>. version2.38, &lt;URL: <a href="https://CRAN.R-project.org/package=survival" class="uri">https://CRAN.R-project.org/package=survival</a>&gt;.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">tidyr</td>
 <td align="left">1.0.2</td>
 <td align="left">Hadley Wickham and Lionel Henry (2020). tidyr: Tidy Messy Data. R package version 1.0.2. <a href="https://CRAN.R-project.org/package=tidyr" class="uri">https://CRAN.R-project.org/package=tidyr</a></td>
@@ -289,7 +284,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           </div>
         </div>
       </div>
-<a href="model-6-controlling-for-feeding-count.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="esm-model-2-controlling-for-feeding-count.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
     </div>
   </div>

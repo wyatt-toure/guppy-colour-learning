@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies</title>
-  <meta name="description" content="Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies" />
+  <title>6 Model 4 - Is there a difference in feeding attempts between treatments? | Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies</title>
+  <meta name="description" content="6 Model 4 - Is there a difference in feeding attempts between treatments? | Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies" />
   <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies" />
+  <meta property="og:title" content="6 Model 4 - Is there a difference in feeding attempts between treatments? | Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies" />
+  <meta name="twitter:title" content="6 Model 4 - Is there a difference in feeding attempts between treatments? | Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies" />
   
   
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="model-1-preference-for-the-green-object-at-baseline.html"/>
+<link rel="prev" href="esm-model-1-preference-for-the-rewarded-object-during-training-based-on-feeding.html"/>
+<link rel="next" href="esm-model-2-controlling-for-feeding-count.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -138,23 +138,56 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies</h1>
-<p class="author"><em>Wyatt Toure</em></p>
-<p class="date"><em>Date of last update: 2021-01-14</em></p>
+<div id="model-4---is-there-a-difference-in-feeding-attempts-between-treatments" class="section level1">
+<h1><span class="header-section-number">6</span> Model 4 - Is there a difference in feeding attempts between treatments?</h1>
+<p>A discrepancy in reinforcement between treatments may influence performance on a final preference test. To see whether there was a difference in feeding between treatments I counted the number of trials in which an individual fish ate throughout all of training and compared the feeding counts between treatments. To do this I fit a generalized linear model with a negative binomial distribution. The response variable 'feeding count' is a sum of the number of trials in which a guppy ate.</p>
+<p><strong>Variables</strong></p>
+<ul>
+<li><code>feeding.count</code> is the number of trials in which an individual fish ate</li>
+<li><code>rewarding.object.colour</code> is the identity of the rewarding object (blue or green)</li>
+</ul>
+<p><strong>Model</strong></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">feeding.data.model =<span class="st"> </span>
+<span class="st">  </span><span class="kw">glm.nb</span>(feeding.count <span class="op">~</span><span class="st"> </span>rewarding.object.colour, 
+      <span class="dt">data =</span> my.feeding.data)</code></pre></div>
+<p><strong>Results</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="left">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">rewarding.object.colourgreen</td>
+<td align="right">0.0709929</td>
+<td align="right">0.2628925</td>
+<td align="right">0.2700452</td>
+<td align="left">0.787</td>
+</tr>
+</tbody>
+</table>
+<p>I found no significant difference in the amount of feeding done by individuals trained to green versus individuals trained to blue (Figure <a href="model-4-is-there-a-difference-in-feeding-attempts-between-treatments.html#fig:feeding-count-plot">6.1</a>, p = 0.787) which suggests that the observed group-level differences in final test performance between blue-trained guppies versus green-trained guppies cannot be explained by differences in performance during training.</p>
+<div class="figure"><span id="fig:feeding-count-plot"></span>
+<img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/feeding-count-plot-1.png" alt="Average number of trials in which a fish fed during training. Data are means +/- 95% confidence intervals" width="672" />
+<p class="caption">
+Figure 6.1: Average number of trials in which a fish fed during training. Data are means +/- 95% confidence intervals
+</p>
 </div>
-<div id="background" class="section level1">
-<h1><span class="header-section-number">1</span> Background</h1>
-<p>This site contains the code, model outputs, data tables, and residual diagnostics for the analyses demonstrated in the manuscript 'Bias in the shift of foraging preference for coloured objects in Trinidadian guppies, <em>Poecilia reticulata</em>'. The raw data used to conduct these analyses are available at the <a href="https://github.com/wyatt-toure/colour-learning-project-analysis/blob/main/experiment-2-master-sheet-clean.csv">github repository for this site</a>. The raw R code to produce the analysis is also available <a href="https://github.com/wyatt-toure/colour-learning-project-analysis/blob/main/03-project-1-results.Rmd">here</a>.</p>
-
+<p><strong>Model Residuals</strong></p>
+<p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="model-1-preference-for-the-green-object-at-baseline.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="esm-model-1-preference-for-the-rewarded-object-during-training-based-on-feeding.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="esm-model-2-controlling-for-feeding-count.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

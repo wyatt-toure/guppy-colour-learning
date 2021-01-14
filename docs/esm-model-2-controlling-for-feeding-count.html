@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies</title>
-  <meta name="description" content="Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies" />
+  <title>7 ESM Model 2 - Controlling for feeding count | Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies</title>
+  <meta name="description" content="7 ESM Model 2 - Controlling for feeding count | Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies" />
   <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies" />
+  <meta property="og:title" content="7 ESM Model 2 - Controlling for feeding count | Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies" />
+  <meta name="twitter:title" content="7 ESM Model 2 - Controlling for feeding count | Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies" />
   
   
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="model-1-preference-for-the-green-object-at-baseline.html"/>
+<link rel="prev" href="model-4-is-there-a-difference-in-feeding-attempts-between-treatments.html"/>
+<link rel="next" href="tools-used-and-references.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -138,23 +138,161 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies</h1>
-<p class="author"><em>Wyatt Toure</em></p>
-<p class="date"><em>Date of last update: 2021-01-14</em></p>
-</div>
-<div id="background" class="section level1">
-<h1><span class="header-section-number">1</span> Background</h1>
-<p>This site contains the code, model outputs, data tables, and residual diagnostics for the analyses demonstrated in the manuscript 'Bias in the shift of foraging preference for coloured objects in Trinidadian guppies, <em>Poecilia reticulata</em>'. The raw data used to conduct these analyses are available at the <a href="https://github.com/wyatt-toure/colour-learning-project-analysis/blob/main/experiment-2-master-sheet-clean.csv">github repository for this site</a>. The raw R code to produce the analysis is also available <a href="https://github.com/wyatt-toure/colour-learning-project-analysis/blob/main/03-project-1-results.Rmd">here</a>.</p>
+<div id="esm-model-2---controlling-for-feeding-count" class="section level1">
+<h1><span class="header-section-number">7</span> ESM Model 2 - Controlling for feeding count</h1>
+<p><strong>Variables</strong></p>
+<ul>
+<li><code>rewarding.object.preference</code> is the time (seconds) spent near the rewarding object subtracted by the time spent near the unrewarding object</li>
+<li><code>rewarding.object.colour</code> is the identity of the rewarding object (blue or green)</li>
+<li><code>trial</code> is the number of the training trial. In this model it is supplied as an integer</li>
+<li><code>id</code> is the identity of the individual fish</li>
+<li><code>feeding.count</code> is the number of trials in which an individual fish ate</li>
+</ul>
+<div id="esm-model-2a---removing-individual-that-did-not-feed" class="section level2">
+<h2><span class="header-section-number">7.1</span> ESM Model 2a - Removing individual that did not feed</h2>
+<p>There is a fish that did not eat during any trials, however removing this individual does not change the conclusions</p>
+<p><strong>Model</strong></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test.feeding.data.low.feeders.removed =<span class="st"> </span>test.feeding.data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(feeding.count <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)
 
+test.feeding.data.low.feeders.removed.model =<span class="st"> </span>
+<span class="st">  </span><span class="kw">glmmTMB</span>(rewarding.object.preference <span class="op">~</span><span class="st">  </span>trial <span class="op">*</span><span class="st"> </span>rewarding.object.colour <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>id) <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">diag</span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>rewarding.object.colour<span class="op">:</span>trial <span class="op">|</span>id),
+    <span class="dt">data =</span> test.feeding.data.low.feeders.removed, <span class="dt">family =</span> gaussian)</code></pre></div>
+<p><strong>Results</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="left">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">trial21</td>
+<td align="right">24.090287</td>
+<td align="right">9.694064</td>
+<td align="right">2.4850556</td>
+<td align="left">0.013</td>
+</tr>
+<tr class="even">
+<td align="left">rewarding.object.colourgreen</td>
+<td align="right">3.041878</td>
+<td align="right">5.538292</td>
+<td align="right">0.5492448</td>
+<td align="left">0.583</td>
+</tr>
+<tr class="odd">
+<td align="left">trial21:rewarding.object.colourgreen</td>
+<td align="right">58.957599</td>
+<td align="right">20.678839</td>
+<td align="right">2.8511079</td>
+<td align="left">0.004</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Model Residuals</strong></p>
+<p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+</div>
+<div id="esm-model-2b---including-feeding-counut-as-a-covariate" class="section level2">
+<h2><span class="header-section-number">7.2</span> ESM Model 2b - Including feeding counut as a covariate</h2>
+<p>Moreover, as I demonstrate in the next model including the amount of trials fed as a covariate in the model does not change the conclusions.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test.data.feeding.controlled.model =<span class="st"> </span>
+<span class="st">  </span><span class="kw">glmmTMB</span>(rewarding.object.preference <span class="op">~</span><span class="st">  </span>trial <span class="op">*</span><span class="st"> </span>rewarding.object.colour <span class="op">+</span><span class="st"> </span>feeding.count <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>id) <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">diag</span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>rewarding.object.colour<span class="op">*</span>trial <span class="op">|</span>id), 
+  <span class="dt">data =</span> test.feeding.data, <span class="dt">family =</span> gaussian)</code></pre></div>
+<p><strong>Results</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="left">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">trial21</td>
+<td align="right">17.6968896</td>
+<td align="right">9.5533254</td>
+<td align="right">1.8524324</td>
+<td align="left">0.064</td>
+</tr>
+<tr class="even">
+<td align="left">rewarding.object.colourgreen</td>
+<td align="right">1.2413021</td>
+<td align="right">5.5140983</td>
+<td align="right">0.2251142</td>
+<td align="left">0.822</td>
+</tr>
+<tr class="odd">
+<td align="left">feeding.count</td>
+<td align="right">0.4940784</td>
+<td align="right">0.5786047</td>
+<td align="right">0.8539136</td>
+<td align="left">0.393</td>
+</tr>
+<tr class="even">
+<td align="left">trial21:rewarding.object.colourgreen</td>
+<td align="right">65.3519392</td>
+<td align="right">19.8470755</td>
+<td align="right">3.2927743</td>
+<td align="left">&lt; .001</td>
+</tr>
+</tbody>
+</table>
+<p>The main results do not change if I control for feeding count. The above table is the output feeding controlled model. Below we have the output table for the non-feeding-count controlled model from <a href="https://wyatt-toure.github.io/colour-learning-project-analysis/model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html">model 3</a>.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">trial21</td>
+<td align="right">17.697362</td>
+<td align="right">10.016982</td>
+<td align="right">1.766736</td>
+<td align="right">0.0772725</td>
+</tr>
+<tr class="even">
+<td align="left">rewarding.object.colourgreen</td>
+<td align="right">1.644944</td>
+<td align="right">5.542077</td>
+<td align="right">0.296810</td>
+<td align="right">0.7666115</td>
+</tr>
+<tr class="odd">
+<td align="left">trial21:rewarding.object.colourgreen</td>
+<td align="right">65.350592</td>
+<td align="right">20.832230</td>
+<td align="right">3.136995</td>
+<td align="right">0.0017069</td>
+</tr>
+</tbody>
+</table>
+<p>In both models the p-values are similar. While the effect of feeding count is not significant (p = 0.393) the effect of feeding count trends in the expected direction in our feeding count controlled model. In the effect plot below to the left we see that as feeding count increases the preference for the rewarding object colour also increases.</p>
+<p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
+<p><strong>Model Residuals</strong></p>
+<p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="model-1-preference-for-the-green-object-at-baseline.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="model-4-is-there-a-difference-in-feeding-attempts-between-treatments.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="tools-used-and-references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

@@ -15,7 +15,6 @@ library(MASS)
 library(dplyr)
 library(Hmisc)
 library(effects)
-library(RColorBrewer)
 library(broom)
 library(broom.mixed)
 library(knitr)
@@ -207,7 +206,7 @@ plot(simulationOutput)
 
 For the main effects of **training** and **rewarding object colour** on rewarding object preference I initially fit a **linear mixed effects model** with **fixed effects of trial** and **rewarding object colour** and a random effect of **individual id**. 
 
-Due to heterogeneity in the variance among groups however, I switched to a generalized linear mixed model with a gaussian distribution which also modelled the vaiances to account for variance heterogeneity.  My third model asks whether the preference for the rewarding object changed between baseline and final test and looks for an interaction with rewarded object colour.
+Due to heterogeneity in the variance among groups however, I switched to a generalized linear mixed effects model with a gaussian distribution which also modelled the vaiances to account for variance heterogeneity using the package [`glmmTMB`](https://cran.r-project.org/web/packages/glmmTMB/index.html). My third model asks whether the preference for the rewarding object changed between baseline and final test and looks for an interaction with rewarded object colour.
 
 **Variables**
 
@@ -225,11 +224,10 @@ test.data.model =
   lmer(rewarding.object.preference ~ trial * rewarding.object.colour + (1 | id),
        data = test.data)
 
-test.data.model2 = glmmTMB(
-  rewarding.object.preference ~  trial * rewarding.object.colour + (1|id) + 
-    diag(0 + rewarding.object.colour * trial |id), 
-  data = test.data, family = gaussian
-)
+test.data.model2 = 
+  glmmTMB(rewarding.object.preference ~  trial * rewarding.object.colour + (1|id) + 
+    diag(0 + rewarding.object.colour:trial |id), 
+  data = test.data, family = gaussian)
 ```
 
 ```{r, echo=FALSE, results=FALSE}
@@ -265,19 +263,23 @@ formatted_p.test.data.model = ifelse(tidy_fit.test.data.model$p.value < .001, ##
                       "< .001",  ## if condition is true
                       paste("=", tidy_fit.test.data.model$p.value %>% round(3))) ## if condition is false
 
+
 # We see that there is a significant interaction effect. To see whether both blue-trained and green-trained guppies significantly shift their rewarded object preference
+
 # in response to training I will use the package emmeans to conduct pairwise comparisons of baseline and re-test data across treatments
 
 # Is the differencee in rewarding object preference between trials (baseline and re-test) significant in both object treatments (blue-trained and green-trained)?
 
 test.data.model.pairwise.comparisons = emmeans(test.data.model2, specs = ~ trial:rewarding.object.colour)
 
+test.data.model.pairwise.comparisons
+
 blue0 = c(1,0,0,0)
 blue21 = c(0,1,0,0)
 green0 = c(0,0,1,0)
 green21 = c(0,0,0,1)
 
-test.data.model.pairwise.comparisons
+
 
 custom.contrasts = contrast(test.data.model.pairwise.comparisons, 
                             method = list("21 blue - 0 blue" = blue21- blue0,
@@ -311,11 +313,6 @@ testing.data.x.axis.labels = c("Baseline", "Re-test")
 object.labels = c("Blue-trained", "Green-trained")
 names(object.labels) <- c("blue", "green")
 
-
-# dat <- data.frame(Group = c("0", "21", "0", "21"),
-#               Sub   = c("green", "green", "blue", "blue"),
-#               Value = c(3,5,7,8))  
-
 ggplot(test.data, 
             aes(x = trial, 
                 y = rewarding.object.preference, 
@@ -342,14 +339,14 @@ ggplot(test.data,
 
 Originally I fit a LMM but they variance among the groups was uneven producing the following residual plot. 
 
-```{r, include=TRUE}
+```{r, include=TRUE, echo=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = test.data.model, n = 1000)
 plot(simulationOutput)
 ```
 
 I therefore used glmmTMB to allow for the modelling of the variances and accounut for heterogeneous variance.
 
-```{r, include=TRUE}
+```{r, include=TRUE,echo=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = test.data.model2, n = 1000)
 plot(simulationOutput)
 ```
@@ -399,7 +396,7 @@ knitr::kable(pairwise.comparison.contrasts.table.show %>% dplyr::select(contrast
 
 
 
-# Model 4 - Preference for the rewarded object during training based on feeding
+# ESM Model 1 - Preference for the rewarded object during training based on feeding
 
 It might be the case that some fish behaved in a way that was not conducive to learning the association during training. My fourth model asks whether the time spent near the rewarding object during a training session is influenced by whether a fish ate or not. Here trial is a variable containing the training trials (1-20). It is supplied as a random effect along with individual ID in the model. 
 
@@ -507,7 +504,7 @@ my.feeding.data =  my.feeding.data %>% dplyr::select(id,feeding.count,rewarding.
 my.feeding.data
 ```
 
-# Model 5 - Is there a difference in feeding attempts between treatments?
+# Model 4 - Is there a difference in feeding attempts between treatments?
 
 A discrepancy in reinforcement between treatments may influence performance on a final preference test. To see whether there was a difference in feeding between treatments I counted the number of trials in which an individual fish ate throughout all of training and compared the feeding counts between treatments. To do this I fit a generalized linear model with a negative binomial distribution. The response variable 'feeding count' is a sum of the number of trials in which a guppy ate.
 
@@ -585,7 +582,7 @@ simulationOutput <- simulateResiduals(fittedModel = feeding.data.model)
 plot(simulationOutput)
 ```
 
-# Model 6 - Controlling for feeding count
+# ESM Model 2 - Controlling for feeding count
 
 **Variables**
 
@@ -596,7 +593,7 @@ plot(simulationOutput)
 - `feeding.count` is the number of trials in which an individual fish ate
 
 
-## Model 6a - Removing individual that did not feed
+## ESM Model 2a - Removing individual that did not feed
 
 ```{r, include=FALSE}
 test.feeding.data = left_join(test.data, feeding, by ="id")
@@ -615,7 +612,7 @@ test.feeding.data.low.feeders.removed = test.feeding.data %>% filter(feeding.cou
 
 test.feeding.data.low.feeders.removed.model = 
   glmmTMB(rewarding.object.preference ~  trial * rewarding.object.colour + (1|id) + 
-    diag(0 + rewarding.object.colour * trial |id),
+    diag(0 + rewarding.object.colour:trial |id),
     data = test.feeding.data.low.feeders.removed, family = gaussian)
 ```
 
@@ -640,14 +637,14 @@ simulationOutput <- simulateResiduals(fittedModel = test.feeding.data.low.feeder
 plot(simulationOutput)
 ```
 
-## Model 6b - Including feeding counut as a covariate
+## ESM Model 2b - Including feeding counut as a covariate
 
 Moreover, as I demonstrate in the next model including the amount of trials fed as a covariate in the model does not change the conclusions.
 
 ```{r, echo = TRUE}
 test.data.feeding.controlled.model = 
   glmmTMB(rewarding.object.preference ~  trial * rewarding.object.colour + feeding.count + (1|id) + 
-    diag(0 + rewarding.object.colour * trial |id), 
+    diag(0 + rewarding.object.colour*trial |id), 
   data = test.feeding.data, family = gaussian)
 ```
 
