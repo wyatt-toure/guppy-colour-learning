@@ -96,9 +96,6 @@ baseline.data.model.formatted_p = ifelse(baseline.data.model.tidy_fit$p.value < 
 
 **Result**
 
-
-At baseline, there was no significant preference for the green object across all guppies (p `r baseline.data.model.formatted_p[1]`).
-
 ```{r, echo=FALSE, results=FALSE}
 tidy_fit0 = broom.mixed::tidy(baseline.data.model)
 tidy_fit0$p.value = ifelse(tidy_fit0$p.value < .001, ## Condition
@@ -109,6 +106,26 @@ tidy_fit0
 
 ```{r,  results=TRUE, echo=FALSE}
 knitr::kable(tidy_fit0)
+```
+
+At baseline, there was no significant preference for the green object across all guppies (p `r baseline.data.model.formatted_p[1]`).
+
+
+```{r baseline-pref-plot, echo=FALSE, fig.cap="Preference for the green object relative to the blue object across all guppies at baseline. Negative values represent more time spent with the blue object, positive values indicate more time spent with the green object. Data are means +/- 95% CI", fig.id="baseline-pref-plot",  warning=FALSE, message=FALSE}
+###### Baseline green object preference plot ######
+baseline.data.x.axis.label = 'Baseline Trial'
+ggplot(baseline.data, 
+            aes(x = trial, 
+                y = green.object.preference)) + theme_classic() + ylab('Green object preference (sec)') + xlab("") + theme(legend.position = "none", axis.text=element_text(size=14), axis.title=element_text(size=14,face="bold"), 
+        plot.title = element_text(size=16, hjust=0.5)) + geom_hline(yintercept = 0, linetype = 'dashed', alpha = 0.5) + geom_jitter(width=0.04, alpha = 0.3) + stat_summary(
+    geom = 'point',
+    fun = 'mean',
+    size = 4.5,
+    shape = 15) +
+  stat_summary(geom = 'errorbar', 
+               fun.data = 'mean_ci', position = position_dodge(width=0), width = 0.1)  +
+  scale_x_discrete(labels = baseline.data.x.axis.label)
+
 ```
 
 
@@ -173,8 +190,6 @@ formatted_p = ifelse(tidy_fit$p.value < .001, ## Condition
                       "< .001",  ## if condition is true
                       paste("=", tidy_fit$p.value %>% round(3))) ## if condition is false
 ```
-
-
 
 Throughout training, over the 20 trials, guppies increased their relative preference for the rewarded object by `r tidy_fit$estimate[3] %>% round(3)` seconds each trial (Figure \@ref(fig:novel-pref-plot), p `r formatted_p[3]`).
 
