@@ -1,9 +1,9 @@
 bookdown::gitbook:
   include:
+    highlight: pygments
   css: style.css
   number_sections: false
   config:
-    highlight: pygments
     sharing:
       facebook: false
       twitter: false

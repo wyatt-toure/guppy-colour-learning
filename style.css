@@ -16,9 +16,10 @@ pre code {
 .book .book-body .page-wrapper .page-inner section.normal {
     display: block;
     background-color: #ffffff;
-    color: #242323;
+    color: #212121;
     padding: 5px 15px;
     word-wrap: break-word;
+    font-family: sans-serif;
     overflow: hidden;
     line-height: 1.7;
     text-size-adjust: 100%;
@@ -36,21 +37,52 @@ pre code {
   border-bottom-color: rgba(0, 0, 0, 0.07);
 }
 
-/* pack func and objclass colors initially come from hcl(seq(90,360, length.out=4), c=80, l=80); redone for contrast*/
-.pack {
-  color: #1f65b7; /* #990071 #AC9CFF #e41a1c*/
+/* nav/menu area */
+.book .book-summary ul.summary li a, .book .book-summary ul.summary li span {
+    display: block;
+    padding: 10px 25px;
+    border-bottom: none;
+    color: #242424; /**/
+    background: 0 0;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    font-family: sans-serif;
+    /* font-variant: small-caps; */
+}
+
+
+.book .book-summary ul.summary li a:hover, .book .book-summary ul.summary li.active>a {
+  color: #ffffff;  /*#6197D5*/
+  background-color: #153845;
+}
+
+/* so that before and after aren't treated the same as the toc, because why would they? */
+.book .book-summary ul.summary li.before a {
+  color: #153845;
+  text-decoration: none;
+  font-size: 125%;
+  font-variant: small-caps;
+  font-family: sans-serif;
   font-weight: 500;
 }
 
-.func {
-  color: #007020;   /*#007199 #00CBB6; #984ea3; can just use `` instead*/
-  font-weight: 500;
+
+.book .book-summary ul.summary li.before a:hover,
+.book .book-summary ul.summary li.before li.active>a {
+  color: #fffff8;  /*#6197D5*/
+    background-color: #153845;
+  text-decoration: none;
 }
 
-.objclass {
-  color:  #947100;  /*#AAB400 #4daf4a; #FFC5D0*/
-  font-weight: 500;
+.book .book-summary ul.summary li.after a, .book .book-summary ul.summary li.after a:hover {
+  background-color: transparent;
 }
 
+h1, h2, h3, h4, h5 {
+  color:#2e2e2e;
+  font-family: sans-serif;
+}
 
 
