@@ -12,3 +12,45 @@ pre {
 pre code {
   white-space: inherit;
 }
+
+.book .book-body .page-wrapper .page-inner section.normal {
+    display: block;
+    background-color: #ffffff;
+    color: #242323;
+    padding: 5px 15px;
+    word-wrap: break-word;
+    overflow: hidden;
+    line-height: 1.7;
+    text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+}
+
+/* Rather than resize the header, just get rid of line */
+.book.with-summary .book-header.fixed {
+  /*font-family: Stalemate Roboto Sans; ignored as all it is doing is taking from index title*/
+  border-bottom: 0 solid rgba(0,0,0,.07);  /*just remove it; this makes height in .book-header above moot*/
+  border-bottom-width: 0;
+  border-bottom-style: solid;
+  border-bottom-color: rgba(0, 0, 0, 0.07);
+}
+
+/* pack func and objclass colors initially come from hcl(seq(90,360, length.out=4), c=80, l=80); redone for contrast*/
+.pack {
+  color: #1f65b7; /* #990071 #AC9CFF #e41a1c*/
+  font-weight: 500;
+}
+
+.func {
+  color: #007020;   /*#007199 #00CBB6; #984ea3; can just use `` instead*/
+  font-weight: 500;
+}
+
+.objclass {
+  color:  #947100;  /*#AAB400 #4daf4a; #FFC5D0*/
+  font-weight: 500;
+}
+
+
+

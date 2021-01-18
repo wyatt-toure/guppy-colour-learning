@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>7 ESM Model 2 - Controlling for feeding count | Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies</title>
-  <meta name="description" content="7 ESM Model 2 - Controlling for feeding count | Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies" />
-  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+  <title>ESM Model 2 - Controlling for feeding count | Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies</title>
+  <meta name="description" content="ESM Model 2 - Controlling for feeding count | Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="7 ESM Model 2 - Controlling for feeding count | Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies" />
+  <meta property="og:title" content="ESM Model 2 - Controlling for feeding count | Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="7 ESM Model 2 - Controlling for feeding count | Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies" />
+  <meta name="twitter:title" content="ESM Model 2 - Controlling for feeding count | Analysis for Biases in learned foraging preferences for coloured objects in Trinidadian guppies" />
   
   
   
@@ -32,6 +32,7 @@
   
 <link rel="prev" href="model-4-is-there-a-difference-in-feeding-attempts-between-treatments.html"/>
 <link rel="next" href="tools-used-and-references.html"/>
+<script src="libs/header-attrs-2.6.4/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -49,46 +50,70 @@
 
 
 
-<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -107,20 +132,22 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="./">Colour learning analysis</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Background</a></li>
-<li class="chapter" data-level="2" data-path="model-1-preference-for-the-green-object-at-baseline.html"><a href="model-1-preference-for-the-green-object-at-baseline.html"><i class="fa fa-check"></i><b>2</b> Model 1 - Preference for the green object at baseline</a></li>
-<li class="chapter" data-level="3" data-path="model-2-preference-for-the-rewarding-object-during-training.html"><a href="model-2-preference-for-the-rewarding-object-during-training.html"><i class="fa fa-check"></i><b>3</b> Model 2 - Preference for the rewarding object during training</a></li>
-<li class="chapter" data-level="4" data-path="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><i class="fa fa-check"></i><b>4</b> Model 3 - Preference for the rewarded object during testing depending on treatment</a><ul>
-<li class="chapter" data-level="4.1" data-path="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#main-effects"><i class="fa fa-check"></i><b>4.1</b> Main effects</a></li>
-<li class="chapter" data-level="4.2" data-path="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#post-hoc-comparisons"><i class="fa fa-check"></i><b>4.2</b> Post-hoc Comparisons</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Background</a></li>
+<li class="chapter" data-level="" data-path="model-1-preference-for-the-green-object-at-baseline.html"><a href="model-1-preference-for-the-green-object-at-baseline.html"><i class="fa fa-check"></i>Model 1 - Preference for the green object at baseline</a></li>
+<li class="chapter" data-level="" data-path="model-2-preference-for-the-rewarding-object-during-training.html"><a href="model-2-preference-for-the-rewarding-object-during-training.html"><i class="fa fa-check"></i>Model 2 - Preference for the rewarding object during training</a></li>
+<li class="chapter" data-level="" data-path="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><i class="fa fa-check"></i>Model 3 - Preference for the rewarded object during testing depending on treatment</a>
+<ul>
+<li class="chapter" data-level="" data-path="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#main-effects"><i class="fa fa-check"></i>Main effects</a></li>
+<li class="chapter" data-level="" data-path="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#post-hoc-comparisons"><i class="fa fa-check"></i>Post-hoc Comparisons</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="esm-model-1-preference-for-the-rewarded-object-during-training-based-on-feeding.html"><a href="esm-model-1-preference-for-the-rewarded-object-during-training-based-on-feeding.html"><i class="fa fa-check"></i><b>5</b> ESM Model 1 - Preference for the rewarded object during training based on feeding</a></li>
-<li class="chapter" data-level="6" data-path="model-4-is-there-a-difference-in-feeding-attempts-between-treatments.html"><a href="model-4-is-there-a-difference-in-feeding-attempts-between-treatments.html"><i class="fa fa-check"></i><b>6</b> Model 4 - Is there a difference in feeding attempts between treatments?</a></li>
-<li class="chapter" data-level="7" data-path="esm-model-2-controlling-for-feeding-count.html"><a href="esm-model-2-controlling-for-feeding-count.html"><i class="fa fa-check"></i><b>7</b> ESM Model 2 - Controlling for feeding count</a><ul>
-<li class="chapter" data-level="7.1" data-path="esm-model-2-controlling-for-feeding-count.html"><a href="esm-model-2-controlling-for-feeding-count.html#esm-model-2a---removing-individual-that-did-not-feed"><i class="fa fa-check"></i><b>7.1</b> ESM Model 2a - Removing individual that did not feed</a></li>
-<li class="chapter" data-level="7.2" data-path="esm-model-2-controlling-for-feeding-count.html"><a href="esm-model-2-controlling-for-feeding-count.html#esm-model-2b---including-feeding-counut-as-a-covariate"><i class="fa fa-check"></i><b>7.2</b> ESM Model 2b - Including feeding counut as a covariate</a></li>
+<li class="chapter" data-level="" data-path="esm-model-1-preference-for-the-rewarded-object-during-training-based-on-feeding.html"><a href="esm-model-1-preference-for-the-rewarded-object-during-training-based-on-feeding.html"><i class="fa fa-check"></i>ESM Model 1 - Preference for the rewarded object during training based on feeding</a></li>
+<li class="chapter" data-level="" data-path="model-4-is-there-a-difference-in-feeding-attempts-between-treatments.html"><a href="model-4-is-there-a-difference-in-feeding-attempts-between-treatments.html"><i class="fa fa-check"></i>Model 4 - Is there a difference in feeding attempts between treatments?</a></li>
+<li class="chapter" data-level="" data-path="esm-model-2-controlling-for-feeding-count.html"><a href="esm-model-2-controlling-for-feeding-count.html"><i class="fa fa-check"></i>ESM Model 2 - Controlling for feeding count</a>
+<ul>
+<li class="chapter" data-level="" data-path="esm-model-2-controlling-for-feeding-count.html"><a href="esm-model-2-controlling-for-feeding-count.html#esm-model-2a---removing-individual-that-did-not-feed"><i class="fa fa-check"></i>ESM Model 2a - Removing individual that did not feed</a></li>
+<li class="chapter" data-level="" data-path="esm-model-2-controlling-for-feeding-count.html"><a href="esm-model-2-controlling-for-feeding-count.html#esm-model-2b---including-feeding-counut-as-a-covariate"><i class="fa fa-check"></i>ESM Model 2b - Including feeding counut as a covariate</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="tools-used-and-references.html"><a href="tools-used-and-references.html"><i class="fa fa-check"></i><b>8</b> Tools used and References</a></li>
+<li class="chapter" data-level="" data-path="tools-used-and-references.html"><a href="tools-used-and-references.html"><i class="fa fa-check"></i>Tools used and References</a></li>
 </ul>
 
       </nav>
@@ -139,7 +166,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
             <section class="normal" id="section-">
 <div id="esm-model-2---controlling-for-feeding-count" class="section level1">
-<h1><span class="header-section-number">7</span> ESM Model 2 - Controlling for feeding count</h1>
+<h1>ESM Model 2 - Controlling for feeding count</h1>
 <p><strong>Variables</strong></p>
 <ul>
 <li><code>rewarding.object.preference</code> is the time (seconds) spent near the rewarding object subtracted by the time spent near the unrewarding object</li>
@@ -149,15 +176,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><code>feeding.count</code> is the number of trials in which an individual fish ate</li>
 </ul>
 <div id="esm-model-2a---removing-individual-that-did-not-feed" class="section level2">
-<h2><span class="header-section-number">7.1</span> ESM Model 2a - Removing individual that did not feed</h2>
+<h2>ESM Model 2a - Removing individual that did not feed</h2>
 <p>There is a fish that did not eat during any trials, however removing this individual does not change the conclusions</p>
 <p><strong>Model</strong></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test.feeding.data.low.feeders.removed =<span class="st"> </span>test.feeding.data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(feeding.count <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)
-
-test.feeding.data.low.feeders.removed.model =<span class="st"> </span>
-<span class="st">  </span><span class="kw">glmmTMB</span>(rewarding.object.preference <span class="op">~</span><span class="st">  </span>trial <span class="op">*</span><span class="st"> </span>rewarding.object.colour <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>id) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw">diag</span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>rewarding.object.colour<span class="op">:</span>trial <span class="op">|</span>id),
-    <span class="dt">data =</span> test.feeding.data.low.feeders.removed, <span class="dt">family =</span> gaussian)</code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="esm-model-2-controlling-for-feeding-count.html#cb7-1" aria-hidden="true" tabindex="-1"></a>test.feeding.data.low.feeders.removed <span class="ot">=</span> test.feeding.data <span class="sc">%&gt;%</span> <span class="fu">filter</span>(feeding.count <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb7-2"><a href="esm-model-2-controlling-for-feeding-count.html#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="esm-model-2-controlling-for-feeding-count.html#cb7-3" aria-hidden="true" tabindex="-1"></a>test.feeding.data.low.feeders.removed.model <span class="ot">=</span> </span>
+<span id="cb7-4"><a href="esm-model-2-controlling-for-feeding-count.html#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glmmTMB</span>(rewarding.object.preference <span class="sc">~</span>  trial <span class="sc">*</span> rewarding.object.colour <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>id) <span class="sc">+</span> </span>
+<span id="cb7-5"><a href="esm-model-2-controlling-for-feeding-count.html#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">diag</span>(<span class="dv">0</span> <span class="sc">+</span> rewarding.object.colour<span class="sc">:</span>trial <span class="sc">|</span>id),</span>
+<span id="cb7-6"><a href="esm-model-2-controlling-for-feeding-count.html#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> test.feeding.data.low.feeders.removed, <span class="at">family =</span> gaussian)</span></code></pre></div>
 <p><strong>Results</strong></p>
 <table>
 <thead>
@@ -197,12 +224,12 @@ test.feeding.data.low.feeders.removed.model =<span class="st"> </span>
 <p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
 </div>
 <div id="esm-model-2b---including-feeding-counut-as-a-covariate" class="section level2">
-<h2><span class="header-section-number">7.2</span> ESM Model 2b - Including feeding counut as a covariate</h2>
+<h2>ESM Model 2b - Including feeding counut as a covariate</h2>
 <p>Moreover, as I demonstrate in the next model including the amount of trials fed as a covariate in the model does not change the conclusions.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test.data.feeding.controlled.model =<span class="st"> </span>
-<span class="st">  </span><span class="kw">glmmTMB</span>(rewarding.object.preference <span class="op">~</span><span class="st">  </span>trial <span class="op">*</span><span class="st"> </span>rewarding.object.colour <span class="op">+</span><span class="st"> </span>feeding.count <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>id) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw">diag</span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>rewarding.object.colour<span class="op">*</span>trial <span class="op">|</span>id), 
-  <span class="dt">data =</span> test.feeding.data, <span class="dt">family =</span> gaussian)</code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="esm-model-2-controlling-for-feeding-count.html#cb8-1" aria-hidden="true" tabindex="-1"></a>test.data.feeding.controlled.model <span class="ot">=</span> </span>
+<span id="cb8-2"><a href="esm-model-2-controlling-for-feeding-count.html#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glmmTMB</span>(rewarding.object.preference <span class="sc">~</span>  trial <span class="sc">*</span> rewarding.object.colour <span class="sc">+</span> feeding.count <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>id) <span class="sc">+</span> </span>
+<span id="cb8-3"><a href="esm-model-2-controlling-for-feeding-count.html#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">diag</span>(<span class="dv">0</span> <span class="sc">+</span> rewarding.object.colour<span class="sc">*</span>trial <span class="sc">|</span>id), </span>
+<span id="cb8-4"><a href="esm-model-2-controlling-for-feeding-count.html#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> test.feeding.data, <span class="at">family =</span> gaussian)</span></code></pre></div>
 <p><strong>Results</strong></p>
 <table>
 <thead>
@@ -337,7 +364,8 @@ gitbook.start({
 "download": ["Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies.epub"],
 "toc": {
 "collapse": "subsection"
-}
+},
+"highlight": "pygments"
 });
 });
 </script>

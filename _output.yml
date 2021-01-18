@@ -1,7 +1,9 @@
 bookdown::gitbook:
   include:
   css: style.css
+  number_sections: false
   config:
+    highlight: pygments
     sharing:
       facebook: false
       twitter: false
@@ -9,5 +11,5 @@ bookdown::gitbook:
       before: |
         <li><a href="./">Colour learning analysis</a></li>
 
-bookdown::epub_book: default
+
 
