@@ -372,7 +372,7 @@ plot(simulationOutput)
 
 ## Post-hoc Comparisons
 
-To determine whether the means of the final rewarding object preference for thw two treatments were different I conducted post-hoc comparisons with the package [`emmeans`](https://cran.r-project.org/package=emmeans). I comapred the following means:
+To determine whether the means of the final rewarding object preference for the two treatments were different I conducted post-hoc comparisons with the package [`emmeans`](https://cran.r-project.org/package=emmeans). I compared the following means:
 
 - Final test blue-trained and initial test blue-trained
 - Final test green-trained and initial test green-trained
