@@ -222,7 +222,7 @@ plot(simulationOutput)
 
 For the main effects of **training** and **rewarding object colour** on rewarding object preference I initially fit a **linear mixed effects model** with **fixed effects of trial** and **rewarding object colour** and a random effect of **individual id**. 
 
-Due to heterogeneity in the variance among groups however, I switched to a generalized linear mixed effects model with a gaussian distribution which also modelled the vaiances to account for variance heterogeneity using the package [`glmmTMB`](https://cran.r-project.org/web/packages/glmmTMB/index.html). My third model asks whether the preference for the rewarding object changed between baseline and final test and looks for an interaction with rewarded object colour.
+Due to heterogeneity in the variance among groups however, I switched to a generalized linear mixed effects model with a Gaussian distribution which also modeled the variances to account for variance heterogeneity using the package [`glmmTMB`](https://cran.r-project.org/web/packages/glmmTMB/index.html). My third model asks whether the preference for the rewarding object changed between baseline and final test and looks for an interaction with rewarded object colour.
 
 **Variables**
 
@@ -360,7 +360,7 @@ simulationOutput <- simulateResiduals(fittedModel = test.data.model, n = 1000)
 plot(simulationOutput)
 ```
 
-I therefore used glmmTMB to allow for the modelling of the variances and accounut for heterogeneous variance.
+I therefore used glmmTMB to allow for the modeling of the variances and account for heterogeneous variance.
 
 ```{r, include=TRUE,echo=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = test.data.model2, n = 1000)
