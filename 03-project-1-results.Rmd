@@ -137,7 +137,6 @@ simulationOutput <- simulateResiduals(fittedModel = baseline.data.model)
 plot(simulationOutput)
 ```
 
-
 # Model 2 -  Preference for the rewarding object during training
 
 To see whether fish were responsive during training our second model asks whether the preference for the rewarding object changes throughout training between the treatments.
@@ -215,12 +214,13 @@ simulationOutput <- simulateResiduals(fittedModel = training.data.model, n = 100
 plot(simulationOutput)
 ```
 
+There is a slight deviation in the upper quantile but no indication in the residual plot of a gross model misfit. 
 
 # Model 3 -  Preference for the rewarded object during testing depending on treatment
 
 ## Main effects
 
-For the main effects of **training** and **rewarding object colour** on rewarding object preference I initially fit a **linear mixed effects model** with **fixed effects of trial** and **rewarding object colour** and a random effect of **individual id**. 
+For the main effects of training and rewarding object colour on rewarding object preference I initially fit a linear mixed effects model with fixed effects of trial and rewarding object colour and a random effect of individual id. 
 
 Due to heterogeneity in the variance among groups however, I switched to a generalized linear mixed effects model with a Gaussian distribution which also modeled the variances to account for variance heterogeneity using the package [`glmmTMB`](https://cran.r-project.org/web/packages/glmmTMB/index.html). My third model asks whether the preference for the rewarding object changed between baseline and final test and looks for an interaction with rewarded object colour.
 
@@ -231,16 +231,16 @@ Due to heterogeneity in the variance among groups however, I switched to a gener
 - `trial` is the number of the training trial. In this model it is supplied as a factor where 0 is the baseline trial and 21 is the final trial
 - `id` is the identity of the individual fish 
 
-**Model**
-
-
-
-```{r model 3, echo=TRUE}
+```{r, include=FALSE}
 test.data.model = 
   lmer(rewarding.object.preference ~ trial * rewarding.object.colour + (1 | id),
        data = test.data)
+```
 
-test.data.model2 = 
+**Model**
+
+```{r model 3, echo=TRUE}
+test.data.model.glm = 
   glmmTMB(rewarding.object.preference ~  trial * rewarding.object.colour + (1|id) + 
     diag(0 + rewarding.object.colour:trial |id), 
   data = test.data, family = gaussian)
@@ -248,13 +248,16 @@ test.data.model2 =
 
 ```{r, echo=FALSE, results=FALSE}
 # Summary of model 3
-summary(test.data.model2)
+summary(test.data.model.glm)
 
-tidy_fit.test.data.model = broom.mixed::tidy(test.data.model2)
-tidy_fit.test.data.model
-tidy_fit.test.data.model$p.value = ifelse(tidy_fit.test.data.model$p.value < .001, ## Condition
+tidy_fit.test.data.model = broom.mixed::tidy(test.data.model.glm)
+
+# This formats the p-value depending on whether it is less than 0.001. If that is true
+# it will just report p < .001 otherwise it will give the exact value rounded to 3 decimal points
+
+formatted_p.test.data.model = ifelse(tidy_fit.test.data.model$p.value < .001, ## Condition
                       "< .001",  ## if condition is true
-                      paste(tidy_fit.test.data.model$p.value %>% round(3))) ## if condition is false
+                      paste("=", tidy_fit.test.data.model$p.value %>% round(3))) ## if condition is false
 
 tidy_fit.test.data.model[2:4,] %>% dplyr::select(-group, -effect, -component)
 ```
@@ -265,28 +268,16 @@ tidy_fit.test.data.model[2:4,] %>% dplyr::select(-group, -effect, -component)
 knitr::kable(tidy_fit.test.data.model[2:4,] %>% dplyr::select(-group, -effect, -component))
 ```
 
+I found a significant interaction effect between trial and rewarding object colour (p `r formatted_p.test.data.model[4]`). Guppies that had the green object rewarded had a final rewarded object preference that was `r tidy_fit.test.data.model$estimate[4] %>% round(1)` seconds stronger than the rewarded object preference of guppies trained to blue (Figure \@ref(fig:test-data-pref-plot)). 
 
 ```{r, include=FALSE}
-
-# This is needed to get the model output in a format that can be referenced later
-
-tidy_fit.test.data.model = broom.mixed::tidy(test.data.model2)
-
-# This formats the p-value depending on whether it is less than 0.001. If that is true
-# it will just report p < .001 otherwise it will give the exact value rounded to 3 decimal points
-
-formatted_p.test.data.model = ifelse(tidy_fit.test.data.model$p.value < .001, ## Condition
-                      "< .001",  ## if condition is true
-                      paste("=", tidy_fit.test.data.model$p.value %>% round(3))) ## if condition is false
-
-
 # We see that there is a significant interaction effect. To see whether both blue-trained and green-trained guppies significantly shift their rewarded object preference
 
 # in response to training I will use the package emmeans to conduct pairwise comparisons of baseline and re-test data across treatments
 
-# Is the differencee in rewarding object preference between trials (baseline and re-test) significant in both object treatments (blue-trained and green-trained)?
+# Is the difference in rewarding object preference between trials (baseline and re-test) significant in both object treatments (blue-trained and green-trained)?
 
-test.data.model.pairwise.comparisons = emmeans(test.data.model2, specs = ~ trial:rewarding.object.colour)
+test.data.model.pairwise.comparisons = emmeans(test.data.model.glm, specs = ~ trial:rewarding.object.colour)
 
 test.data.model.pairwise.comparisons
 
@@ -319,8 +310,6 @@ pairwise.comparison.contrasts.table$lower.CL = pairwise.comparison.contrasts.tab
 pairwise.comparison.contrasts.table$upper.CL = pairwise.comparison.contrasts.table$upper.CL %>% round(3)
 pairwise.comparison.contrasts.table$df = pairwise.comparison.contrasts.table$df %>% round(3)
 ```
-
-I found a significant interaction effect between trial and rewarding object colour (p `r formatted_p.test.data.model[4]`). Guppies that had green rewarded had a final rewarded object preference that was `r tidy_fit.test.data.model$estimate[4] %>% round(1)` seconds stronger than the rewarded object preference of guppies trained to blue (Figure \@ref(fig:test-data-pref-plot)). 
 
 <center>
 ```{r test-data-pref-plot, echo=FALSE, fig.cap="The initial and final rewarding object preference. Dashed line represents the no preference value. Data are means +/- 95% CI. Bold line connects means across trials.", fig.id="test-data-pref-plot", warning=FALSE, message=FALSE}
@@ -363,12 +352,9 @@ plot(simulationOutput)
 I therefore used glmmTMB to allow for the modeling of the variances and account for heterogeneous variance.
 
 ```{r, include=TRUE,echo=FALSE}
-simulationOutput <- simulateResiduals(fittedModel = test.data.model2, n = 1000)
+simulationOutput <- simulateResiduals(fittedModel = test.data.model.glm, n = 1000)
 plot(simulationOutput)
 ```
-
-
-</br>
 
 ## Post-hoc Comparisons
 
@@ -391,11 +377,7 @@ custom.contrasts = contrast(test.data.model.pairwise.comparisons,
                             adjust = "mvt") %>% summary(infer = TRUE)
 ```
 
-Post-hoc comparisons investigating the differences between treatments based on whether guppies are untrained or trained reveals that initially, when untrained, there was no difference in the strength of preference for the rewarding object between the treatments (blue-trained guppies had a blue object preference of `r pairwise.comparison.means.table$emmean[1] %>% round(1)` seconds and green-trained guppies had a green object preference of `r pairwise.comparison.means.table$emmean[3] %>% round(1)` seconds, p `r formatted_p.pairwise.comparison.contrasts.table[2]`). 
-
-Comparing the shift in rewarding object preference between initial and final preference tests in blue-trained and green-trained guppies reveals that the shift in rewarding object preference is significant for green-trained guppies but not for blue-trained guppies. Green trained guppies increased their preference for the green object by `r abs(pairwise.comparison.contrasts.table$estimate[2] %>% round(1))` seconds (going from a green object preference of `r pairwise.comparison.means.table$emmean[3] %>% round(1)` seconds initially to `r pairwise.comparison.means.table$emmean[4] %>% round(1)` seconds at final test, p `r formatted_p.pairwise.comparison.contrasts.table[2]`) whereas blue-trained guppies non-significantly increased their preference for the blue object by `r abs(pairwise.comparison.contrasts.table$estimate[1] %>% round(1))` seconds (going from a blue object preference `r pairwise.comparison.means.table$emmean[1] %>% round(1)` seconds initially to `r (pairwise.comparison.means.table$emmean[2]) %>% round(1)` seconds at final test, p `r formatted_p.pairwise.comparison.contrasts.table[1]`). For a full description of post-hoc comparisons see table \@ref(tab:contrasts-table).
-
-<br />
+**Results**
 
 ```{r contrasts-table, echo=FALSE, fig.id="contrasts-table", warning=FALSE}
 pairwise.comparison.contrasts.table.show = pairwise.comparison.contrasts.table
@@ -409,6 +391,12 @@ knitr::kable(pairwise.comparison.contrasts.table.show %>% dplyr::select(contrast
              caption = "Table of post-hoc tests with a multivariate-t adjustment for multiple comparisons of a selected set of means. The numbers represent the initial test trial (0) and the final test trial (21). The colour corressponds to the identity of the rewarding object (blue for blue-trained guppies, green for green-trained guppies). Values are all rounded to 3 decimal places. CL = confidence limit")
 
 ```
+
+Post-hoc comparisons investigating the differences between treatments based on whether guppies are untrained or trained reveals that initially, when untrained, there was no difference in the strength of preference for the rewarding object between the treatments (blue-trained guppies had a blue object preference of `r pairwise.comparison.means.table$emmean[1] %>% round(1)` seconds and green-trained guppies had a green object preference of `r pairwise.comparison.means.table$emmean[3] %>% round(1)` seconds, p `r formatted_p.pairwise.comparison.contrasts.table[2]`). 
+
+Comparing the shift in rewarding object preference between initial and final preference tests in blue-trained and green-trained guppies reveals that the shift in rewarding object preference is significant for green-trained guppies but not for blue-trained guppies. Green trained guppies increased their preference for the green object by `r abs(pairwise.comparison.contrasts.table$estimate[2] %>% round(1))` seconds (going from a green object preference of `r pairwise.comparison.means.table$emmean[3] %>% round(1)` seconds initially to `r pairwise.comparison.means.table$emmean[4] %>% round(1)` seconds at final test, p `r formatted_p.pairwise.comparison.contrasts.table[2]`) whereas blue-trained guppies non-significantly increased their preference for the blue object by `r abs(pairwise.comparison.contrasts.table$estimate[1] %>% round(1))` seconds (going from a blue object preference `r pairwise.comparison.means.table$emmean[1] %>% round(1)` seconds initially to `r (pairwise.comparison.means.table$emmean[2]) %>% round(1)` seconds at final test, p `r formatted_p.pairwise.comparison.contrasts.table[1]`). For a full description of post-hoc comparisons see table \@ref(tab:contrasts-table).
+
+
 
 
 
