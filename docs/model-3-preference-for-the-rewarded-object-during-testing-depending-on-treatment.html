@@ -186,35 +186,75 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><strong>Results</strong></p>
 <table>
 <thead>
-<tr class="header">
-<th align="left">term</th>
-<th align="right">estimate</th>
-<th align="right">std.error</th>
-<th align="right">statistic</th>
-<th align="right">p.value</th>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">trial21</td>
-<td align="right">17.697362</td>
-<td align="right">10.016982</td>
-<td align="right">1.766736</td>
-<td align="right">0.0772725</td>
+<tr>
+<td style="text-align:left;">
+trial21
+</td>
+<td style="text-align:right;">
+17.697
+</td>
+<td style="text-align:right;">
+10.017
+</td>
+<td style="text-align:right;">
+1.767
+</td>
+<td style="text-align:right;">
+0.077
+</td>
 </tr>
-<tr class="even">
-<td align="left">rewarding.object.colourgreen</td>
-<td align="right">1.644944</td>
-<td align="right">5.542077</td>
-<td align="right">0.296810</td>
-<td align="right">0.7666115</td>
+<tr>
+<td style="text-align:left;">
+rewarding.object.colourgreen
+</td>
+<td style="text-align:right;">
+1.645
+</td>
+<td style="text-align:right;">
+5.542
+</td>
+<td style="text-align:right;">
+0.297
+</td>
+<td style="text-align:right;">
+0.767
+</td>
 </tr>
-<tr class="odd">
-<td align="left">trial21:rewarding.object.colourgreen</td>
-<td align="right">65.350592</td>
-<td align="right">20.832230</td>
-<td align="right">3.136995</td>
-<td align="right">0.0017069</td>
+<tr>
+<td style="text-align:left;">
+trial21:rewarding.object.colourgreen
+</td>
+<td style="text-align:right;">
+65.351
+</td>
+<td style="text-align:right;">
+20.832
+</td>
+<td style="text-align:right;">
+3.137
+</td>
+<td style="text-align:right;">
+0.002
+</td>
 </tr>
 </tbody>
 </table>
@@ -254,54 +294,116 @@ Figure 3: The initial and final rewarding object preference. Dashed line represe
 <span id="cb4-9"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#cb4-9" aria-hidden="true" tabindex="-1"></a>                            <span class="at">adjust =</span> <span class="st">&quot;mvt&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">summary</span>(<span class="at">infer =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p><strong>Results</strong></p>
 <table>
-<caption><span id="tab:contrasts-table">Table 1: </span>Table of post-hoc tests with a multivariate-t adjustment for multiple comparisons of a selected set of means. The numbers represent the initial test trial (0) and the final test trial (21). The colour corressponds to the identity of the rewarding object (blue for blue-trained guppies, green for green-trained guppies). Values are all rounded to 3 decimal places. CL = confidence limit</caption>
+<caption>
+<span id="tab:contrasts-table">Table 1: </span>Table of post-hoc tests with a multivariate-t adjustment for multiple comparisons of a selected set of means. The numbers represent the initial test trial (0) and the final test trial (21). The colour corressponds to the identity of the rewarding object (blue for blue-trained guppies, green for green-trained guppies). Values are all rounded to 3 decimal places. CL = confidence limit
+</caption>
 <thead>
-<tr class="header">
-<th align="left">contrast</th>
-<th align="right">estimate</th>
-<th align="right">lower.CL</th>
-<th align="right">upper.CL</th>
-<th align="right">df</th>
-<th align="left">p.value</th>
+<tr>
+<th style="text-align:left;">
+contrast
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+lower.CL
+</th>
+<th style="text-align:right;">
+upper.CL
+</th>
+<th style="text-align:right;">
+df
+</th>
+<th style="text-align:left;">
+p.value
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">21 blue - 0 blue</td>
-<td align="right">17.697</td>
-<td align="right">-7.957</td>
-<td align="right">43.352</td>
-<td align="right">34</td>
-<td align="left">0.251</td>
+<tr>
+<td style="text-align:left;">
+21 blue - 0 blue
+</td>
+<td style="text-align:right;">
+17.697
+</td>
+<td style="text-align:right;">
+-7.954
+</td>
+<td style="text-align:right;">
+43.349
+</td>
+<td style="text-align:right;">
+34
+</td>
+<td style="text-align:left;">
+0.252
+</td>
 </tr>
-<tr class="even">
-<td align="left">21 green - 0 green</td>
-<td align="right">83.048</td>
-<td align="right">36.268</td>
-<td align="right">129.828</td>
-<td align="right">34</td>
-<td align="left">&lt; .001</td>
+<tr>
+<td style="text-align:left;">
+21 green - 0 green
+</td>
+<td style="text-align:right;">
+83.048
+</td>
+<td style="text-align:right;">
+36.273
+</td>
+<td style="text-align:right;">
+129.823
+</td>
+<td style="text-align:right;">
+34
+</td>
+<td style="text-align:left;">
+&lt; .001
+</td>
 </tr>
-<tr class="odd">
-<td align="left">21 green - 21 blue</td>
-<td align="right">66.996</td>
-<td align="right">15.565</td>
-<td align="right">118.426</td>
-<td align="right">34</td>
-<td align="left">0.007</td>
+<tr>
+<td style="text-align:left;">
+21 green - 21 blue
+</td>
+<td style="text-align:right;">
+66.996
+</td>
+<td style="text-align:right;">
+15.571
+</td>
+<td style="text-align:right;">
+118.420
+</td>
+<td style="text-align:right;">
+34
+</td>
+<td style="text-align:left;">
+0.007
+</td>
 </tr>
-<tr class="even">
-<td align="left">0 green - 0 blue</td>
-<td align="right">1.645</td>
-<td align="right">-12.549</td>
-<td align="right">15.839</td>
-<td align="right">34</td>
-<td align="left">0.988</td>
+<tr>
+<td style="text-align:left;">
+0 green - 0 blue
+</td>
+<td style="text-align:right;">
+1.645
+</td>
+<td style="text-align:right;">
+-12.547
+</td>
+<td style="text-align:right;">
+15.837
+</td>
+<td style="text-align:right;">
+34
+</td>
+<td style="text-align:left;">
+0.988
+</td>
 </tr>
 </tbody>
 </table>
 <p>Post-hoc comparisons investigating the differences between treatments based on whether guppies are untrained or trained reveals that initially, when untrained, there was no difference in the strength of preference for the rewarding object between the treatments (blue-trained guppies had a blue object preference of 1.8 seconds and green-trained guppies had a green object preference of 3.5 seconds, p &lt; .001).</p>
-<p>Comparing the shift in rewarding object preference between initial and final preference tests in blue-trained and green-trained guppies reveals that the shift in rewarding object preference is significant for green-trained guppies but not for blue-trained guppies. Green trained guppies increased their preference for the green object by 83 seconds (going from a green object preference of 3.5 seconds initially to 86.5 seconds at final test, p &lt; .001) whereas blue-trained guppies non-significantly increased their preference for the blue object by 17.7 seconds (going from a blue object preference 1.8 seconds initially to 19.5 seconds at final test, p = 0.251). For a full description of post-hoc comparisons see table <a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#tab:contrasts-table">1</a>.</p>
+<p>Comparing the shift in rewarding object preference between initial and final preference tests in blue-trained and green-trained guppies reveals that the shift in rewarding object preference is significant for green-trained guppies but not for blue-trained guppies. Green trained guppies increased their preference for the green object by 83 seconds (going from a green object preference of 3.5 seconds initially to 86.5 seconds at final test, p &lt; .001) whereas blue-trained guppies non-significantly increased their preference for the blue object by 17.7 seconds (going from a blue object preference 1.8 seconds initially to 19.5 seconds at final test, p = 0.252). For a full description of post-hoc comparisons see table <a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#tab:contrasts-table">1</a>.</p>
 </div>
 </div>
             </section>

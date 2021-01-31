@@ -23,6 +23,7 @@ library(emmeans)
 library(pbkrtest)
 library(report)
 library(glmmTMB)
+library(cowplot)
 #### Reading in Data 
 my.data = read.csv('experiment-2-master-sheet-clean.csv')
 
@@ -106,7 +107,7 @@ tidy_fit0
 ```
 
 ```{r,  results=TRUE, echo=FALSE}
-knitr::kable(tidy_fit0)
+knitr::kable(tidy_fit0%>% mutate_if(is.numeric, round, digits = 3), format = "html")
 ```
 
 At baseline, there was no significant preference for the green object across all guppies (p `r baseline.data.model.formatted_p[1]`).
@@ -169,7 +170,7 @@ tidy_fit[2:4,] %>% dplyr::select(-group, -effect)
 **Results**
 
 ```{r,  results=TRUE, echo=FALSE}
-knitr::kable(tidy_fit[2:4,] %>% dplyr::select(-group, -effect))
+knitr::kable(tidy_fit[2:4,] %>% dplyr::select(-group, -effect)%>% mutate_if(is.numeric, round, digits = 3), format = "html")
 ```
 
 
@@ -265,7 +266,7 @@ tidy_fit.test.data.model[2:4,] %>% dplyr::select(-group, -effect, -component)
 **Results**
 
 ```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy_fit.test.data.model[2:4,] %>% dplyr::select(-group, -effect, -component))
+knitr::kable(tidy_fit.test.data.model[2:4,] %>% dplyr::select(-group, -effect, -component) %>% mutate_if(is.numeric, round, digits = 3), format = "html")
 ```
 
 I found a significant interaction effect between trial and rewarding object colour (p `r formatted_p.test.data.model[4]`). Guppies that had the green object rewarded had a final rewarded object preference that was `r tidy_fit.test.data.model$estimate[4] %>% round(1)` seconds stronger than the rewarded object preference of guppies trained to blue (Figure \@ref(fig:test-data-pref-plot)). 
@@ -313,7 +314,7 @@ pairwise.comparison.contrasts.table$df = pairwise.comparison.contrasts.table$df 
 
 <center>
 ```{r test-data-pref-plot, echo=FALSE, fig.cap="The initial and final rewarding object preference. Dashed line represents the no preference value. Data are means +/- 95% CI. Bold line connects means across trials.", fig.id="test-data-pref-plot", warning=FALSE, message=FALSE}
-###### Time with rewarding object plot during training [gaussian] ######
+###### Time with rewarding object plot during training ######
 testing.data.x.axis.labels = c("Baseline", "Re-test")
 object.labels = c("Blue-trained", "Green-trained")
 names(object.labels) <- c("blue", "green")
@@ -321,7 +322,7 @@ names(object.labels) <- c("blue", "green")
 ggplot(test.data, 
             aes(x = trial, 
                 y = rewarding.object.preference, 
-                color = rewarding.object.colour)) + theme_classic() + geom_jitter(width=0, alpha = 0.3) + stat_summary(
+                color = rewarding.object.colour)) + theme_cowplot() + geom_jitter(width=0, alpha = 0.3) + stat_summary(
     geom = 'point',
     fun = 'mean',
     size = 4.5,
@@ -387,8 +388,7 @@ pairwise.comparison.contrasts.table.show$p.value =
             (pairwise.comparison.contrasts.table.show$p.value < .05 & pairwise.comparison.contrasts.table.show$p.value >= .001) ~ paste(as.character(pairwise.comparison.contrasts.table.show$p.value %>% round(3))),
             pairwise.comparison.contrasts.table.show$p.value >= .05 ~ paste(pairwise.comparison.contrasts.table.show$p.value %>% round(3)))
 
-knitr::kable(pairwise.comparison.contrasts.table.show %>% dplyr::select(contrast, estimate,lower.CL,upper.CL, df,p.value),
-             caption = "Table of post-hoc tests with a multivariate-t adjustment for multiple comparisons of a selected set of means. The numbers represent the initial test trial (0) and the final test trial (21). The colour corressponds to the identity of the rewarding object (blue for blue-trained guppies, green for green-trained guppies). Values are all rounded to 3 decimal places. CL = confidence limit")
+knitr::kable(pairwise.comparison.contrasts.table.show %>% dplyr::select(contrast, estimate,lower.CL,upper.CL, df,p.value), format = "html", caption = "Table of post-hoc tests with a multivariate-t adjustment for multiple comparisons of a selected set of means. The numbers represent the initial test trial (0) and the final test trial (21). The colour corressponds to the identity of the rewarding object (blue for blue-trained guppies, green for green-trained guppies). Values are all rounded to 3 decimal places. CL = confidence limit")
 
 ```
 
@@ -431,7 +431,7 @@ tidy_fit.rewarding.object[2:2,] %>% dplyr::select(-group, -effect)
 **Results**
 
 ```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy_fit.rewarding.object[2:2,] %>% dplyr::select(-group, -effect))
+knitr::kable(tidy_fit.rewarding.object[2:2,] %>% dplyr::select(-group, -effect)%>% mutate_if(is.numeric, round, digits = 3), format = "html")
 ```
 
 
@@ -539,7 +539,7 @@ tidy_fit.feeding.data.model[2:2,]
 **Results**
 
 ```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy_fit.feeding.data.model[2:2,])
+knitr::kable(tidy_fit.feeding.data.model[2:2,]%>% mutate_if(is.numeric, round, digits = 3), format = "html")
 ```
 
 
@@ -562,22 +562,23 @@ formatted_p.feeding.data.model = ifelse(tidy_fit.feeding.data.model$p.value < .0
 
 I found no significant difference in the amount of feeding done by individuals trained to green versus individuals trained to blue (Figure \@ref(fig:feeding-count-plot), p `r formatted_p.feeding.data.model[2]`) which suggests that the observed group-level differences in final test performance between blue-trained guppies versus green-trained guppies  cannot be explained by differences in performance during training.  
 
-```{r feeding-count-plot, echo=FALSE, fig.cap="Average number of trials in which a fish fed during training. Data are means +/- 95% confidence intervals", fig.id="training-data-ate-plot", warning=FALSE}
-###### Time with rewarding object plot during training [gaussian] ######
-ggplot(my.feeding.data, 
-            aes(x = rewarding.object.colour, 
-                y = feeding.count, 
-                color = rewarding.object.colour)) + theme_classic() + geom_jitter(width=0.1, alpha = 0.8) + stat_summary(
-    geom = 'point',
-    fun = 'mean',
-    size = 4.5,
-    shape = 15) +
-  stat_summary(geom = 'errorbar', 
-               fun.data = 'mean_ci', position = position_dodge(width=0), width = 0.1) + ylab('Number of trials fed') + xlab("Rewarding object colour") + labs(col = "Rewarding object colour") +
-  theme(legend.position = "none", axis.text=element_text(size=14), axis.title=element_text(size=14,face="bold"), 
-        plot.title = element_text(size=16, hjust=0.5)) + scale_color_manual(values=c("#2980b9", "#27ae60"))
+```{r feeding-count-plot, echo=FALSE, fig.cap="Average number of trials in which a fish fed during training. Data are means +/- 95% confidence intervals with probability density functions of the data to the right of the raw data.", fig.id="training-data-ate-plot", warning=FALSE}
+source("https://gist.githubusercontent.com/benmarwick/2a1bb0133ff568cbe28d/raw/fb53bd97121f7f9ce947837ef1a4c65a73bffb3f/geom_flat_violin.R")
+ggplot(my.feeding.data,
+             aes(x=rewarding.object.colour,
+                 y=feeding.count, 
+                 fill = rewarding.object.colour, 
+                 colour = rewarding.object.colour)) +
+  geom_point(position = position_jitter(width = 0.05), alpha = 0.8) +
+  geom_flat_violin(aes(fill = rewarding.object.colour),position = position_nudge(x = .25, y = 0),adjust = 0.7, alpha = 0.4, trim = FALSE, color=NA) + 
+  stat_summary(geom = 'point', fun = 'mean', size = 4.5, shape = 15) +
+  stat_summary(geom = 'errorbar', fun.data = 'mean_ci', position = position_dodge(width=0), width = 0.1) + ylim(-3,23) +
+  ylab('Rewarding object preference')+xlab('Trial') + theme_cowplot()+ guides(fill = FALSE, colour = FALSE) + ylab('Rewarding object preference (sec)') + xlab("Rewarding object colour") + labs(col = "Rewarding object colour") +
+  theme(legend.position = "top", axis.text=element_text(size=14), axis.title=element_text(size=14,face="bold"), 
+        plot.title = element_text(size=16, hjust=0.5)) +
+  scale_color_manual(values=c("#2980b9", "#27ae60"))+
+  scale_fill_manual(values=c("#2980b9", "#27ae60"))
 ```
-
 
 **Model Residuals**
 
@@ -631,7 +632,7 @@ tidy_fit.test.feeding.data.low.feeders.removed
 **Results**
 
 ```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy_fit.test.feeding.data.low.feeders.removed[2:4,] %>% dplyr::select(-group, -effect, -component))
+knitr::kable(tidy_fit.test.feeding.data.low.feeders.removed[2:4,] %>% dplyr::select(-group, -effect, -component)%>% mutate_if(is.numeric, round, digits = 3), format = "html")
 ```
 
 **Model Residuals**
@@ -665,14 +666,14 @@ tidy_fit.test.data.feeding.controlled.model[2:5,]
 **Results** 
 
 ```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy_fit.test.data.feeding.controlled.model[2:5,]%>% dplyr::select(-group, -effect, -component))
+knitr::kable(tidy_fit.test.data.feeding.controlled.model[2:5,]%>% dplyr::select(-group, -effect, -component)%>% mutate_if(is.numeric, round, digits = 3), format = "html")
 ```
 
 
 The main results do not change if I control for feeding count. The above table is the output feeding controlled model. Below we have the output table for the non-feeding-count controlled model from [model 3](https://wyatt-toure.github.io/colour-learning-project-analysis/model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html).
 
 ```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy_fit.test.data.model[2:4,] %>% dplyr::select(-group, -effect,-component))
+knitr::kable(tidy_fit.test.data.model[2:4,] %>% dplyr::select(-group, -effect,-component)%>% mutate_if(is.numeric, round, digits = 3))
 ```
 
 In both models the p-values are similar. While the effect of feeding count is not significant (p = `r tidy_fit.test.data.feeding.controlled.model$p.value[4]`) the effect of feeding count trends in the expected direction in our feeding count controlled model. In the effect plot below to the left we see that as feeding count increases the preference for the rewarding object colour also increases.
