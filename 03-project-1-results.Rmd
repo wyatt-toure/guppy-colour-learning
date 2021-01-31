@@ -453,8 +453,9 @@ formatted_p.rewarding.object = ifelse(tidy_fit.rewarding.object$p.value < .001, 
 ```
 
 Throughout all of training, fish that ate during a session spent on average `r tidy_fit.rewarding.object$estimate[2] %>% round(1)` more seconds near the rewarded object compared to fish that did not eat (Figure, \@ref(fig:training-data-ate-plot), p `r formatted_p.rewarding.object[2]`). Fish that spent more trials eating may therefore have received more reinforcement for the object-food association. This led me to perform my next test which investigated whether there was a difference in food reinforcement between the two treatments. 
+</br>
 
-```{r training-data-ate-plot, echo=FALSE, fig.cap="Preference for the rewarding object during training based on whether an individual ate during a trial or not. Dashed line represents the no preference value. In panel A, Data are means +/- 95% CI. In panel B, the data consist of all the feeding choices of all individuals across all training trials. Data are means +/- 95% CI with probability density functions above the raw data.", fig.id="training-data-ate-plot", warning=FALSE}
+```{r training-data-ate-plot, echo=FALSE, fig.cap="Preference for the rewarding object during training based on whether an individual ate during a trial or not. Dashed line represents the no preference value. In panel A, Data are means +/- 95% CI. In panel B, the data consist of all the feeding choices of all individuals across all training trials. Data are means +/- 95% CI with probability density functions to the right of the raw data.", fig.id="training-data-ate-plot", warning=FALSE}
 ###### Time with rewarding object plot during training [gaussian] ######
 source("https://gist.githubusercontent.com/benmarwick/2a1bb0133ff568cbe28d/raw/fb53bd97121f7f9ce947837ef1a4c65a73bffb3f/geom_flat_violin.R")
 
@@ -473,19 +474,20 @@ p1 = ggplot(training.data,
   geom_hline(yintercept = 0, linetype = 'dashed') + ylim(-310,310)
 
 p2 = ggplot(training.data, 
-            aes(x = ate, 
+            aes(x = trial.type, 
                 y = rewarding.object.preference, 
                 color = ate)) + theme_cowplot() + geom_jitter(width=0.05, alpha = 0.1) +
   geom_flat_violin(aes(fill = ate),position = position_nudge(x = .25, y = 0),adjust = 1, alpha = 0.6, trim = TRUE, color=NA) + stat_summary(
     geom = 'point',
     fun = 'mean',
-    size = 3.5,
+    size = 3,
     shape = 15) +
   stat_summary(geom = 'errorbar', 
-               fun.data = 'mean_ci', position = position_dodge(width=0), width = 0.2) + xlab("Ate?") + ylab("Rewarding object preference (sec)")+
+               fun.data = 'mean_ci', position = position_dodge(width=0), width = 0.15) + xlab("") + ylab("Rewarding object preference (sec)")+
   theme(legend.position = "none", axis.text=element_text(size=14), axis.title=element_text(size=12.5,face="bold"), 
-        plot.title = element_text(size=16, hjust=0.5), axis.line.y = element_blank(), axis.line.x = element_blank(), axis.text.y = element_blank(), axis.ticks.y =  element_blank(), axis.title.y = element_blank(),panel.border = element_rect(colour = "black", fill=NA, size=1)) + scale_color_manual(values=c('#dd4124','#0f85a0')) + scale_fill_manual(values=c('#dd4124','#0f85a0')) + 
-  geom_hline(yintercept = 0, linetype = 'dashed') + ylim(-310,310)
+        plot.title = element_text(size=16, hjust=0.5), axis.ticks.x = element_blank(), axis.line.y = element_blank(), axis.line.x = element_blank(), axis.text.y = element_blank(), axis.ticks.y =  element_blank(), axis.title.y = element_blank(),panel.border = element_rect(colour = "black", fill=NA, size=1)) + scale_color_manual(values=c('#dd4124','#0f85a0')) + scale_fill_manual(values=c('#dd4124','#0f85a0')) + 
+  geom_hline(yintercept = 0, linetype = 'dashed') + ylim(-310,310) +
+  scale_x_discrete(labels = "")
 
 ggarrange(p1,p2, widths = c(1.5,1),
           labels = "AUTO",
