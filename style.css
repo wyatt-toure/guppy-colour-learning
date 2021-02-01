@@ -1,5 +1,5 @@
 p.caption {
-  color: #777;
+  color: #616161;
   margin-top: 10px;
 }
 p code {
@@ -16,7 +16,7 @@ pre code {
 .book .book-body .page-wrapper .page-inner section.normal {
     display: block;
     background-color: #ffffff;
-    color: #212121;
+    color: #2b2b2b;
     padding: 5px 15px;
     word-wrap: break-word;
     font-family: sans-serif;
