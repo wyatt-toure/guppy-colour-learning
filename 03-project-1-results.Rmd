@@ -598,7 +598,7 @@ ggplot(my.feeding.data,
   geom_flat_violin(aes(fill = rewarding.object.colour),position = position_nudge(x = .25, y = 0),adjust = 0.7, alpha = 0.4, trim = FALSE, color=NA) + 
   stat_summary(geom = 'point', fun = 'mean', size = 4.5, shape = 15) +
   stat_summary(geom = 'errorbar', fun.data = 'mean_ci', position = position_dodge(width=0), width = 0.1) + ylim(-3,23) +
-  ylab('Rewarding object preference')+xlab('Trial') + theme_cowplot()+ guides(fill = FALSE, colour = FALSE) + ylab('Rewarding object preference (sec)') + xlab("Rewarding object colour") + labs(col = "Rewarding object colour") +
+  ylab('Rewarding object preference')+xlab('Trial') + theme_cowplot()+ guides(fill = FALSE, colour = FALSE) + ylab('Number of trials fed') + xlab("Rewarding object colour") + labs(col = "Rewarding object colour") +
   theme(legend.position = "top", axis.text=element_text(size=14), axis.title=element_text(size=14,face="bold"), 
         plot.title = element_text(size=16, hjust=0.5)) +
   scale_color_manual(values=c("#2980b9", "#27ae60"))+
