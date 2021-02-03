@@ -1,4 +1,4 @@
-# Analysis for ‘Bias in the shift of foraging preference for coloured objects in Trinidadian guppies, *Poecilia reticulata*’
+#### Analysis for ‘Bias in the shift of foraging preference for coloured objects in Trinidadian guppies, *Poecilia reticulata*’
 
 ![](docs/images/training-data-animation.gif)
 
