@@ -269,7 +269,7 @@ Figure 3: The initial and final rewarding object preference. Dashed line represe
 </center>
 <p></br></p>
 <p><strong>Model Residuals</strong></p>
-<p>Originally I fit a LMM but they variance among the groups was uneven producing the following residual plot.</p>
+<p>Originally I fit a LMM but the variance among groups was uneven producing the residual plot below.</p>
 <p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 <p>I therefore used glmmTMB to allow for the modeling of the variances and account for heterogeneous variance.</p>
 <p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
@@ -284,7 +284,7 @@ Figure 3: The initial and final rewarding object preference. Dashed line represe
 <li>Initial test green-trained and initial test blue-trained</li>
 </ul>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#cb4-1" aria-hidden="true" tabindex="-1"></a>test.data.model.pairwise.comparisons <span class="ot">=</span> </span>
-<span id="cb4-2"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">emmeans</span>(test.data.model2, <span class="at">specs =</span> <span class="sc">~</span> trial<span class="sc">:</span>rewarding.object.colour)</span>
+<span id="cb4-2"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">emmeans</span>(test.data.model.glm, <span class="at">specs =</span> <span class="sc">~</span> trial<span class="sc">:</span>rewarding.object.colour)</span>
 <span id="cb4-3"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-4"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#cb4-4" aria-hidden="true" tabindex="-1"></a>custom.contrasts <span class="ot">=</span> <span class="fu">contrast</span>(test.data.model.pairwise.comparisons, </span>
 <span id="cb4-5"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#cb4-5" aria-hidden="true" tabindex="-1"></a>                            <span class="at">method =</span> <span class="fu">list</span>(<span class="st">&quot;21 blue - 0 blue&quot;</span> <span class="ot">=</span> blue21<span class="sc">-</span> blue0,</span>
@@ -328,10 +328,10 @@ p.value
 17.697
 </td>
 <td style="text-align:right;">
--7.957
+-7.933
 </td>
 <td style="text-align:right;">
-43.352
+43.328
 </td>
 <td style="text-align:right;">
 34
@@ -348,10 +348,10 @@ p.value
 83.048
 </td>
 <td style="text-align:right;">
-36.267
+36.312
 </td>
 <td style="text-align:right;">
-129.829
+129.784
 </td>
 <td style="text-align:right;">
 34
@@ -368,10 +368,10 @@ p.value
 66.996
 </td>
 <td style="text-align:right;">
-15.565
+15.614
 </td>
 <td style="text-align:right;">
-118.426
+118.378
 </td>
 <td style="text-align:right;">
 34
@@ -388,10 +388,10 @@ p.value
 1.645
 </td>
 <td style="text-align:right;">
--12.549
+-12.535
 </td>
 <td style="text-align:right;">
-15.839
+15.825
 </td>
 <td style="text-align:right;">
 34

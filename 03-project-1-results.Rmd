@@ -343,7 +343,7 @@ ggplot(test.data,
 
 **Model Residuals**
 
-Originally I fit a LMM but they variance among the groups was uneven producing the following residual plot. 
+Originally I fit a LMM but the variance among groups was uneven producing the residual plot below.
 
 ```{r, include=TRUE, echo=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = test.data.model, n = 1000)
@@ -368,7 +368,7 @@ To determine whether the means of the final rewarding object preference for the 
 
 ```{r, echo=TRUE, eval=FALSE}
 test.data.model.pairwise.comparisons = 
-  emmeans(test.data.model2, specs = ~ trial:rewarding.object.colour)
+  emmeans(test.data.model.glm, specs = ~ trial:rewarding.object.colour)
 
 custom.contrasts = contrast(test.data.model.pairwise.comparisons, 
                             method = list("21 blue - 0 blue" = blue21- blue0,
