@@ -28,6 +28,12 @@ pre code {
     -moz-text-size-adjust: 100%;
 }
 
+.book .book-body .page-wrapper .page-inner {
+    max-width: 825px;
+    margin: 0 auto;
+    padding: 20px 0 40px;
+}
+
 /* Rather than resize the header, just get rid of line */
 .book.with-summary .book-header.fixed {
   /*font-family: Stalemate Roboto Sans; ignored as all it is doing is taking from index title*/
@@ -84,5 +90,6 @@ h1, h2, h3, h4, h5 {
   color:#2e2e2e;
   font-family: sans-serif;
 }
+
 
 
