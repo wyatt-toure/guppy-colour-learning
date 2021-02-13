@@ -667,7 +667,7 @@ simulationOutput <- simulateResiduals(fittedModel = test.feeding.data.low.feeder
 plot(simulationOutput)
 ```
 
-## ESM Model 2b - Including feeding counut as a covariate
+## ESM Model 2b - Including feeding count as a covariate
 
 Moreover, as I demonstrate in the next model including the amount of trials fed as a covariate in the model does not change the conclusions.
 
