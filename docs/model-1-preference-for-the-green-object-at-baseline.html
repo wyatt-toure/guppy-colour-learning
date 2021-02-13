@@ -168,13 +168,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="model-1---preference-for-the-green-object-at-baseline" class="section level1">
 <h1>Model 1 - Preference for the green object at baseline</h1>
 <p>This first model contains the data for all individual guppies. I looked at the green object preference of all guppies in an intercept only model to see if the green object preference at baseline was significantly different from zero.</p>
-<p><strong>Variables</strong></p>
+<div id="variables" class="section level5">
+<h5>Variables</h5>
 <p><code>green.object.preference</code> is the time spent near the green object subtracted by the time spent near the blue object</p>
-<p><strong>Model</strong></p>
+</div>
+<div id="model" class="section level5">
+<h5>Model</h5>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="model-1-preference-for-the-green-object-at-baseline.html#cb1-1" aria-hidden="true" tabindex="-1"></a>baseline.data.model <span class="ot">=</span> </span>
 <span id="cb1-2"><a href="model-1-preference-for-the-green-object-at-baseline.html#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(green.object.preference <span class="sc">~</span> <span class="dv">1</span>,</span>
 <span id="cb1-3"><a href="model-1-preference-for-the-green-object-at-baseline.html#cb1-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">data =</span> baseline.data)</span></code></pre></div>
-<p><strong>Result</strong></p>
+</div>
+<div id="result" class="section level5">
+<h5>Result</h5>
 <table>
 <thead>
 <tr>
@@ -222,8 +227,11 @@ p.value
 Figure 1: Preference for the green object relative to the blue object across all guppies at baseline. Negative values represent more time spent with the blue object, positive values indicate more time spent with the green object. Data are means +/- 95% CI
 </p>
 </div>
-<p><strong>Model Residuals</strong></p>
+</div>
+<div id="model-residuals" class="section level5">
+<h5>Model Residuals</h5>
 <p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
 </div>
             </section>
 

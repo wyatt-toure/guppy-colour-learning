@@ -66,11 +66,11 @@ baseline.data$trial = as.factor(baseline.data$trial)
 
 This first model contains the data for all individual guppies. I looked at the green object preference of all guppies in an intercept only model to see if the green object preference at baseline was significantly different from zero.
 
-**Variables**
+##### Variables
 
 `green.object.preference` is the time spent near the green object subtracted by the time spent near the blue object
 
-**Model**
+##### Model
 
 ```{r model 1, echo=TRUE}
 baseline.data.model = 
@@ -96,7 +96,7 @@ baseline.data.model.formatted_p = ifelse(baseline.data.model.tidy_fit$p.value < 
                       paste("=", baseline.data.model.tidy_fit$p.value %>% round(3))) ## if condition is false
 ```
 
-**Result**
+##### Result
 
 ```{r, echo=FALSE, results=FALSE}
 tidy_fit0 = broom.mixed::tidy(baseline.data.model)
@@ -131,7 +131,7 @@ ggplot(baseline.data,
 ```
 
 
-**Model Residuals**
+##### Model Residuals
 
 ```{r, echo=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = baseline.data.model)
@@ -142,14 +142,14 @@ plot(simulationOutput)
 
 To see whether fish were responsive during training our second model asks whether the preference for the rewarding object changes throughout training between the treatments. 
 
-**Variables**
+##### Variables
 
 - `rewarding.object.preference` is the time (seconds) spent near the rewarding object subtracted by the time spent near the unrewarding object 
 - `rewarding.object.colour` is the identity of the rewarding object (blue or green)
 - `trial` is the number of the training trial. In this model it is supplied as an integer
 - `id` is the identity of the individual fish 
 
-**Model**
+##### Model
 
 ```{r model 2, echo=TRUE}
 training.data.model = 
@@ -167,7 +167,7 @@ tidy_fit[2:4,] %>% dplyr::select(-group, -effect)
 
 ```
 
-**Results**
+##### Results
 
 ```{r,  results=TRUE, echo=FALSE}
 knitr::kable(tidy_fit[2:4,] %>% dplyr::select(-group, -effect)%>% mutate_if(is.numeric, round, digits = 3), format = "html")
@@ -208,7 +208,7 @@ ggplot(training.data,
 
 ```
 
-**Model Residuals**
+##### Model Residuals
 
 ```{r, echo=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = training.data.model, n = 1000)
@@ -225,7 +225,7 @@ For the main effects of training and rewarding object colour on rewarding object
 
 Due to heterogeneity in the variance among groups however, I switched to a generalized linear mixed effects model with a Gaussian distribution which also modeled the variances to account for variance heterogeneity using the package [`glmmTMB`](https://cran.r-project.org/web/packages/glmmTMB/index.html). My third model asks whether the preference for the rewarding object changed between baseline and final test and looks for an interaction with rewarded object colour.
 
-**Variables**
+##### Variables
 
 - `rewarding.object.preference` is the time (seconds) spent near the rewarding object subtracted by the time spent near the unrewarding object 
 - `rewarding.object.colour` is the identity of the rewarding object (blue or green)
@@ -238,7 +238,7 @@ test.data.model =
        data = test.data)
 ```
 
-**Model**
+##### Model
 
 ```{r model 3, echo=TRUE}
 test.data.model.glm = 
@@ -263,7 +263,7 @@ formatted_p.test.data.model = ifelse(tidy_fit.test.data.model$p.value < .001, ##
 tidy_fit.test.data.model[2:4,] %>% dplyr::select(-group, -effect, -component)
 ```
 
-**Results**
+##### Results
 
 ```{r, results=TRUE, echo=FALSE}
 knitr::kable(tidy_fit.test.data.model[2:4,] %>% dplyr::select(-group, -effect, -component) %>% mutate_if(is.numeric, round, digits = 3), format = "html")
@@ -341,7 +341,7 @@ ggplot(test.data,
 
 </br>
 
-**Model Residuals**
+##### Model Residuals
 
 Originally I fit a LMM but the variance among groups was uneven producing the residual plot below.
 
@@ -378,7 +378,7 @@ custom.contrasts = contrast(test.data.model.pairwise.comparisons,
                             adjust = "mvt") %>% summary(infer = TRUE)
 ```
 
-**Results**
+##### Results
 
 ```{r contrasts-table, echo=FALSE, fig.id="contrasts-table", warning=FALSE}
 pairwise.comparison.contrasts.table.show = pairwise.comparison.contrasts.table
@@ -404,14 +404,14 @@ Comparing the shift in rewarding object preference between initial and final pre
 
 It might be the case that some fish behaved in a way that was not conducive to learning the association during training. My fourth model asks whether the time spent near the rewarding object during a training session is influenced by whether a fish ate or not. Here trial is a variable containing the training trials (1-20). It is supplied as a random effect along with individual ID in the model. 
 
-**Variables**
+##### Variables
 
 - `rewarding.object.preference` is the time (seconds) spent near the rewarding object subtracted by the time spent near the unrewarding object 
 - `ate` is a binary factor (Yes or No) and corresponds to whether the fish ate in a given trial
 - `trial` is the number of the training trial. In this model it is supplied as an integer
 - `id` is the identity of the individual fish 
 
-**Model**
+##### Model
 
 ```{r model 4, echo=TRUE}
 training.data.model.rewarding.object = 
@@ -428,7 +428,7 @@ tidy_fit.rewarding.object$p.value = ifelse(tidy_fit.rewarding.object$p.value < .
 tidy_fit.rewarding.object[2:2,] %>% dplyr::select(-group, -effect)
 ```
 
-**Results**
+##### Results
 
 ```{r, results=TRUE, echo=FALSE}
 knitr::kable(tidy_fit.rewarding.object[2:2,] %>% dplyr::select(-group, -effect)%>% mutate_if(is.numeric, round, digits = 3), format = "html")
@@ -497,7 +497,7 @@ ggarrange(p1,p2, widths = c(1.5,1),
           common.legend = TRUE)
 ```
 
-**Model Residuals**
+##### Model Residuals
 
 ```{r, echo=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = training.data.model.rewarding.object, n = 1000)
@@ -537,12 +537,12 @@ my.feeding.data
 
 A discrepancy in reinforcement between treatments may influence performance on a final preference test. To see whether there was a difference in feeding between treatments I counted the number of trials in which an individual fish ate throughout all of training and compared the feeding counts between treatments. To do this I fit a generalized linear model with a negative binomial distribution. The response variable 'feeding count' is a sum of the number of trials in which a guppy ate.
 
-**Variables**
+##### Variables
 
 - `feeding.count` is the number of trials in which an individual fish ate
 - `rewarding.object.colour` is the identity of the rewarding object (blue or green)
 
-**Model**
+##### Model
 
 ```{r model 5, echo=TRUE}
 feeding.data.model = 
@@ -561,7 +561,7 @@ tidy_fit.feeding.data.model$p.value = ifelse(tidy_fit.feeding.data.model$p.value
 tidy_fit.feeding.data.model[2:2,]
 ```
 
-**Results**
+##### Results
 
 ```{r, results=TRUE, echo=FALSE}
 knitr::kable(tidy_fit.feeding.data.model[2:2,]%>% mutate_if(is.numeric, round, digits = 3), format = "html")
@@ -605,7 +605,7 @@ ggplot(my.feeding.data,
   scale_fill_manual(values=c("#2980b9", "#27ae60"))
 ```
 
-**Model Residuals**
+##### Model Residuals
 
 ```{r, echo=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = feeding.data.model)
@@ -614,7 +614,7 @@ plot(simulationOutput)
 
 # ESM Model 2 - Controlling for feeding count
 
-**Variables**
+##### Variables
 
 - `rewarding.object.preference` is the time (seconds) spent near the rewarding object subtracted by the time spent near the unrewarding object 
 - `rewarding.object.colour` is the identity of the rewarding object (blue or green)
@@ -635,7 +635,7 @@ retest.feeding.data = retest.feeding.data %>% mutate(time.with.both.objects = ti
 
 There is a fish that did not eat during any trials, however removing this individual does not change the conclusions 
 
-**Model**
+##### Model
 
 ```{r, echo=TRUE}
 test.feeding.data.low.feeders.removed = test.feeding.data %>% filter(feeding.count > 0)
@@ -654,13 +654,13 @@ tidy_fit.test.feeding.data.low.feeders.removed$p.value = ifelse(tidy_fit.test.fe
 tidy_fit.test.feeding.data.low.feeders.removed
 ```
 
-**Results**
+##### Results
 
 ```{r, results=TRUE, echo=FALSE}
 knitr::kable(tidy_fit.test.feeding.data.low.feeders.removed[2:4,] %>% dplyr::select(-group, -effect, -component)%>% mutate_if(is.numeric, round, digits = 3), format = "html")
 ```
 
-**Model Residuals**
+##### Model Residuals
 
 ```{r, echo=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = test.feeding.data.low.feeders.removed.model)
@@ -688,7 +688,7 @@ tidy_fit.test.data.feeding.controlled.model$p.value = ifelse(tidy_fit.test.data.
 tidy_fit.test.data.feeding.controlled.model[2:5,]
 ```
 
-**Results** 
+##### Results
 
 ```{r, results=TRUE, echo=FALSE}
 knitr::kable(tidy_fit.test.data.feeding.controlled.model[2:5,]%>% dplyr::select(-group, -effect, -component)%>% mutate_if(is.numeric, round, digits = 3), format = "html")
@@ -707,7 +707,7 @@ In both models the p-values are similar. While the effect of feeding count is no
 plot(allEffects(test.data.feeding.controlled.model)[1])
 ```
 
-**Model Residuals**
+##### Model Residuals
 
 ```{r, echo=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = test.data.feeding.controlled.model)

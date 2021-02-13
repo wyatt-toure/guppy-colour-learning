@@ -168,16 +168,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="model-4---is-there-a-difference-in-feeding-attempts-between-treatments" class="section level1">
 <h1>Model 4 - Is there a difference in feeding attempts between treatments?</h1>
 <p>A discrepancy in reinforcement between treatments may influence performance on a final preference test. To see whether there was a difference in feeding between treatments I counted the number of trials in which an individual fish ate throughout all of training and compared the feeding counts between treatments. To do this I fit a generalized linear model with a negative binomial distribution. The response variable ‘feeding count’ is a sum of the number of trials in which a guppy ate.</p>
-<p><strong>Variables</strong></p>
+<div id="variables-4" class="section level5">
+<h5>Variables</h5>
 <ul>
 <li><code>feeding.count</code> is the number of trials in which an individual fish ate</li>
 <li><code>rewarding.object.colour</code> is the identity of the rewarding object (blue or green)</li>
 </ul>
-<p><strong>Model</strong></p>
+</div>
+<div id="model-4" class="section level5">
+<h5>Model</h5>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="model-4-is-there-a-difference-in-feeding-attempts-between-treatments.html#cb6-1" aria-hidden="true" tabindex="-1"></a>feeding.data.model <span class="ot">=</span> </span>
 <span id="cb6-2"><a href="model-4-is-there-a-difference-in-feeding-attempts-between-treatments.html#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glm.nb</span>(feeding.count <span class="sc">~</span> rewarding.object.colour, </span>
 <span id="cb6-3"><a href="model-4-is-there-a-difference-in-feeding-attempts-between-treatments.html#cb6-3" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> my.feeding.data)</span></code></pre></div>
-<p><strong>Results</strong></p>
+</div>
+<div id="results-4" class="section level5">
+<h5>Results</h5>
 <table>
 <thead>
 <tr>
@@ -225,8 +230,11 @@ rewarding.object.colourgreen
 Figure 5: Average number of trials in which a fish fed during training. Data are means +/- 95% confidence intervals with probability density functions of the data to the right of the raw data.
 </p>
 </div>
-<p><strong>Model Residuals</strong></p>
+</div>
+<div id="model-residuals-4" class="section level5">
+<h5>Model Residuals</h5>
 <p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+</div>
 </div>
             </section>
 

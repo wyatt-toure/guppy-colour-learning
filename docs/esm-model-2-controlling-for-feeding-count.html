@@ -167,7 +167,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="esm-model-2---controlling-for-feeding-count" class="section level1">
 <h1>ESM Model 2 - Controlling for feeding count</h1>
-<p><strong>Variables</strong></p>
+<div id="variables-5" class="section level5">
+<h5>Variables</h5>
 <ul>
 <li><code>rewarding.object.preference</code> is the time (seconds) spent near the rewarding object subtracted by the time spent near the unrewarding object</li>
 <li><code>rewarding.object.colour</code> is the identity of the rewarding object (blue or green)</li>
@@ -175,17 +176,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><code>id</code> is the identity of the individual fish</li>
 <li><code>feeding.count</code> is the number of trials in which an individual fish ate</li>
 </ul>
+</div>
 <div id="esm-model-2a---removing-individual-that-did-not-feed" class="section level2">
 <h2>ESM Model 2a - Removing individual that did not feed</h2>
 <p>There is a fish that did not eat during any trials, however removing this individual does not change the conclusions</p>
-<p><strong>Model</strong></p>
+<div id="model-5" class="section level5">
+<h5>Model</h5>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="esm-model-2-controlling-for-feeding-count.html#cb7-1" aria-hidden="true" tabindex="-1"></a>test.feeding.data.low.feeders.removed <span class="ot">=</span> test.feeding.data <span class="sc">%&gt;%</span> <span class="fu">filter</span>(feeding.count <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
 <span id="cb7-2"><a href="esm-model-2-controlling-for-feeding-count.html#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="esm-model-2-controlling-for-feeding-count.html#cb7-3" aria-hidden="true" tabindex="-1"></a>test.feeding.data.low.feeders.removed.model <span class="ot">=</span> </span>
 <span id="cb7-4"><a href="esm-model-2-controlling-for-feeding-count.html#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glmmTMB</span>(rewarding.object.preference <span class="sc">~</span>  trial <span class="sc">*</span> rewarding.object.colour <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>id) <span class="sc">+</span> </span>
 <span id="cb7-5"><a href="esm-model-2-controlling-for-feeding-count.html#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">diag</span>(<span class="dv">0</span> <span class="sc">+</span> rewarding.object.colour<span class="sc">:</span>trial <span class="sc">|</span>id),</span>
 <span id="cb7-6"><a href="esm-model-2-controlling-for-feeding-count.html#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> test.feeding.data.low.feeders.removed, <span class="at">family =</span> gaussian)</span></code></pre></div>
-<p><strong>Results</strong></p>
+</div>
+<div id="results-5" class="section level5">
+<h5>Results</h5>
 <table>
 <thead>
 <tr>
@@ -260,8 +265,11 @@ trial21:rewarding.object.colourgreen
 </tr>
 </tbody>
 </table>
-<p><strong>Model Residuals</strong></p>
+</div>
+<div id="model-residuals-5" class="section level5">
+<h5>Model Residuals</h5>
 <p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+</div>
 </div>
 <div id="esm-model-2b---including-feeding-counut-as-a-covariate" class="section level2">
 <h2>ESM Model 2b - Including feeding counut as a covariate</h2>
@@ -270,7 +278,8 @@ trial21:rewarding.object.colourgreen
 <span id="cb8-2"><a href="esm-model-2-controlling-for-feeding-count.html#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glmmTMB</span>(rewarding.object.preference <span class="sc">~</span>  trial <span class="sc">*</span> rewarding.object.colour <span class="sc">+</span> feeding.count <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>id) <span class="sc">+</span> </span>
 <span id="cb8-3"><a href="esm-model-2-controlling-for-feeding-count.html#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">diag</span>(<span class="dv">0</span> <span class="sc">+</span> rewarding.object.colour<span class="sc">*</span>trial <span class="sc">|</span>id), </span>
 <span id="cb8-4"><a href="esm-model-2-controlling-for-feeding-count.html#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> test.feeding.data, <span class="at">family =</span> gaussian)</span></code></pre></div>
-<p><strong>Results</strong></p>
+<div id="results-6" class="section level5">
+<h5>Results</h5>
 <table>
 <thead>
 <tr>
@@ -399,8 +408,11 @@ trial21:rewarding.object.colourgreen
 </table>
 <p>In both models the p-values are similar. While the effect of feeding count is not significant (p = 0.393) the effect of feeding count trends in the expected direction in our feeding count controlled model. In the effect plot below to the left we see that as feeding count increases the preference for the rewarding object colour also increases.</p>
 <p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
-<p><strong>Model Residuals</strong></p>
+</div>
+<div id="model-residuals-6" class="section level5">
+<h5>Model Residuals</h5>
 <p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
+</div>
 </div>
 </div>
             </section>

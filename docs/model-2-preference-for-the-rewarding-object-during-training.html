@@ -168,18 +168,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="model-2---preference-for-the-rewarding-object-during-training" class="section level1">
 <h1>Model 2 - Preference for the rewarding object during training</h1>
 <p>To see whether fish were responsive during training our second model asks whether the preference for the rewarding object changes throughout training between the treatments.</p>
-<p><strong>Variables</strong></p>
+<div id="variables-1" class="section level5">
+<h5>Variables</h5>
 <ul>
 <li><code>rewarding.object.preference</code> is the time (seconds) spent near the rewarding object subtracted by the time spent near the unrewarding object</li>
 <li><code>rewarding.object.colour</code> is the identity of the rewarding object (blue or green)</li>
 <li><code>trial</code> is the number of the training trial. In this model it is supplied as an integer</li>
 <li><code>id</code> is the identity of the individual fish</li>
 </ul>
-<p><strong>Model</strong></p>
+</div>
+<div id="model-1" class="section level5">
+<h5>Model</h5>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="model-2-preference-for-the-rewarding-object-during-training.html#cb2-1" aria-hidden="true" tabindex="-1"></a>training.data.model <span class="ot">=</span> </span>
 <span id="cb2-2"><a href="model-2-preference-for-the-rewarding-object-during-training.html#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lmer</span>(rewarding.object.preference <span class="sc">~</span> rewarding.object.colour <span class="sc">*</span> trial <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> id), </span>
 <span id="cb2-3"><a href="model-2-preference-for-the-rewarding-object-during-training.html#cb2-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">data =</span> training.data)</span></code></pre></div>
-<p><strong>Results</strong></p>
+</div>
+<div id="results" class="section level5">
+<h5>Results</h5>
 <table>
 <thead>
 <tr>
@@ -273,9 +278,12 @@ rewarding.object.colourgreen:trial
 Figure 2: Preference for the green object in both treatments. Negative values represent more time spent with the blue object, positive values indicate more time spent with the green object. Faded lines connect individuals across trials and solid lines represents a linear fit with 95% CI (grey shading).
 </p>
 </div>
-<p><strong>Model Residuals</strong></p>
+</div>
+<div id="model-residuals-1" class="section level5">
+<h5>Model Residuals</h5>
 <p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <p>There is a slight deviation in the upper quantile but no indication in the residual plot of a gross model misfit.</p>
+</div>
 </div>
             </section>
 

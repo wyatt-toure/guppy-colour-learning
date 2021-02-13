@@ -171,19 +171,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2>Main effects</h2>
 <p>For the main effects of training and rewarding object colour on rewarding object preference I initially fit a linear mixed effects model with fixed effects of trial and rewarding object colour and a random effect of individual id.</p>
 <p>Due to heterogeneity in the variance among groups however, I switched to a generalized linear mixed effects model with a Gaussian distribution which also modeled the variances to account for variance heterogeneity using the package <a href="https://cran.r-project.org/web/packages/glmmTMB/index.html"><code>glmmTMB</code></a>. My third model asks whether the preference for the rewarding object changed between baseline and final test and looks for an interaction with rewarded object colour.</p>
-<p><strong>Variables</strong></p>
+<div id="variables-2" class="section level5">
+<h5>Variables</h5>
 <ul>
 <li><code>rewarding.object.preference</code> is the time (seconds) spent near the rewarding object subtracted by the time spent near the unrewarding object</li>
 <li><code>rewarding.object.colour</code> is the identity of the rewarding object (blue or green)</li>
 <li><code>trial</code> is the number of the training trial. In this model it is supplied as a factor where 0 is the baseline trial and 21 is the final trial</li>
 <li><code>id</code> is the identity of the individual fish</li>
 </ul>
-<p><strong>Model</strong></p>
+</div>
+<div id="model-2" class="section level5">
+<h5>Model</h5>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#cb3-1" aria-hidden="true" tabindex="-1"></a>test.data.model.glm <span class="ot">=</span> </span>
 <span id="cb3-2"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glmmTMB</span>(rewarding.object.preference <span class="sc">~</span>  trial <span class="sc">*</span> rewarding.object.colour <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>id) <span class="sc">+</span> </span>
 <span id="cb3-3"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">diag</span>(<span class="dv">0</span> <span class="sc">+</span> rewarding.object.colour<span class="sc">:</span>trial <span class="sc">|</span>id), </span>
 <span id="cb3-4"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> test.data, <span class="at">family =</span> gaussian)</span></code></pre></div>
-<p><strong>Results</strong></p>
+</div>
+<div id="results-1" class="section level5">
+<h5>Results</h5>
 <table>
 <thead>
 <tr>
@@ -268,11 +273,14 @@ Figure 3: The initial and final rewarding object preference. Dashed line represe
 </div>
 </center>
 <p></br></p>
-<p><strong>Model Residuals</strong></p>
+</div>
+<div id="model-residuals-2" class="section level5">
+<h5>Model Residuals</h5>
 <p>Originally I fit a LMM but the variance among groups was uneven producing the residual plot below.</p>
 <p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 <p>I therefore used glmmTMB to allow for the modeling of the variances and account for heterogeneous variance.</p>
 <p><img src="Analysis-for-Bias-in-the-shift-of-foraging-preference-for-coloured-objects-in-Trinidadian-guppies_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+</div>
 </div>
 <div id="post-hoc-comparisons" class="section level2">
 <h2>Post-hoc Comparisons</h2>
@@ -292,7 +300,8 @@ Figure 3: The initial and final rewarding object preference. Dashed line represe
 <span id="cb4-7"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#cb4-7" aria-hidden="true" tabindex="-1"></a>                                          <span class="st">&quot;21 green - 21 blue&quot;</span> <span class="ot">=</span> green21 <span class="sc">-</span> blue21,</span>
 <span id="cb4-8"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#cb4-8" aria-hidden="true" tabindex="-1"></a>                                          <span class="st">&quot;0 green - 0 blue&quot;</span> <span class="ot">=</span> green0<span class="sc">-</span> blue0), </span>
 <span id="cb4-9"><a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#cb4-9" aria-hidden="true" tabindex="-1"></a>                            <span class="at">adjust =</span> <span class="st">&quot;mvt&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">summary</span>(<span class="at">infer =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
-<p><strong>Results</strong></p>
+<div id="results-2" class="section level5">
+<h5>Results</h5>
 <table>
 <caption>
 <span id="tab:contrasts-table">Table 1: </span>Table of post-hoc tests with a multivariate-t adjustment for multiple comparisons of a selected set of means. The numbers represent the initial test trial (0) and the final test trial (21). The colour corressponds to the identity of the rewarding object (blue for blue-trained guppies, green for green-trained guppies). Values are all rounded to 3 decimal places. CL = confidence limit
@@ -328,10 +337,10 @@ p.value
 17.697
 </td>
 <td style="text-align:right;">
--7.936
+-7.950
 </td>
 <td style="text-align:right;">
-43.330
+43.345
 </td>
 <td style="text-align:right;">
 34
@@ -348,10 +357,10 @@ p.value
 83.048
 </td>
 <td style="text-align:right;">
-36.307
+36.280
 </td>
 <td style="text-align:right;">
-129.789
+129.816
 </td>
 <td style="text-align:right;">
 34
@@ -368,10 +377,10 @@ p.value
 66.996
 </td>
 <td style="text-align:right;">
-15.608
+15.579
 </td>
 <td style="text-align:right;">
-118.383
+118.413
 </td>
 <td style="text-align:right;">
 34
@@ -388,10 +397,10 @@ p.value
 1.645
 </td>
 <td style="text-align:right;">
--12.537
+-12.545
 </td>
 <td style="text-align:right;">
-15.827
+15.835
 </td>
 <td style="text-align:right;">
 34
@@ -404,6 +413,7 @@ p.value
 </table>
 <p>Post-hoc comparisons investigating the differences between treatments based on whether guppies are untrained or trained reveals that initially, when untrained, there was no difference in the strength of preference for the rewarding object between the treatments (blue-trained guppies had a blue object preference of 1.8 seconds and green-trained guppies had a green object preference of 3.5 seconds, p &lt; .001).</p>
 <p>Comparing the shift in rewarding object preference between initial and final preference tests in blue-trained and green-trained guppies reveals that the shift in rewarding object preference is significant for green-trained guppies but not for blue-trained guppies. Green trained guppies increased their preference for the green object by 83 seconds (going from a green object preference of 3.5 seconds initially to 86.5 seconds at final test, p &lt; .001) whereas blue-trained guppies non-significantly increased their preference for the blue object by 17.7 seconds (going from a blue object preference 1.8 seconds initially to 19.5 seconds at final test, p = 0.251). For a full description of post-hoc comparisons see table <a href="model-3-preference-for-the-rewarded-object-during-testing-depending-on-treatment.html#tab:contrasts-table">1</a>.</p>
+</div>
 </div>
 </div>
             </section>
