@@ -140,7 +140,7 @@ plot(simulationOutput)
 
 # Model 2 -  Preference for the rewarding object during training
 
-To see whether fish were responsive during training our second model asks whether the preference for the rewarding object changes throughout training between the treatments.
+To see whether fish were responsive during training our second model asks whether the preference for the rewarding object changes throughout training between the treatments. 
 
 **Variables**
 
@@ -192,7 +192,7 @@ formatted_p = ifelse(tidy_fit$p.value < .001, ## Condition
                       paste("=", tidy_fit$p.value %>% round(3))) ## if condition is false
 ```
 
-Throughout training, over the 20 trials, guppies increased their relative preference for the rewarded object by `r tidy_fit$estimate[3] %>% round(3)` seconds each trial (Figure \@ref(fig:novel-pref-plot), p `r formatted_p[3]`).
+Throughout training, over the 20 trials, guppies increased their relative preference for the rewarded object by `r tidy_fit$estimate[3] %>% round(3)` seconds each trial (Figure \@ref(fig:novel-pref-plot), p `r formatted_p[3]`). There was also a significant effect of rewarding object colour (p `r formatted_p[2]`). During training green-rewarded guppies expressed a stronger preference for their rewarded object (the green object) than blue-rewarded guppies did for the blue object However, there was no interaction effect between rewarding object colour and trial (p `r formatted_p[4]`) suggesting there was no different in the rate of learning between the treatments
 
 ```{r novel-pref-plot, echo=FALSE, fig.cap="Preference for the green object in both treatments. Negative values represent more time spent with the blue object, positive values indicate more time spent with the green object. Faded lines connect individuals across trials and solid lines represents a linear fit with 95% CI (grey shading).", fig.id="novel-pref-plot",  warning=FALSE, message=FALSE}
 ###### Time with rewarding object plot during training ######
