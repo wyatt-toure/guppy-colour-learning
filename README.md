@@ -1,7 +1,5 @@
 # Analysis for ‘Bias in the shift of foraging preference for coloured objects in Trinidadian guppies, *Poecilia reticulata*’
 
-![](docs/images/training-data-animation.gif)
-
 ## Website
 
 https://wyatt-toure.github.io/colour-learning-project-analysis
