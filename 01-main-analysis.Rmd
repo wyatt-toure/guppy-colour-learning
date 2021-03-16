@@ -26,7 +26,7 @@ library(glmmTMB)
 library(magick)
 library(cowplot)
 #### Reading in Data 
-my.data = read.csv('experiment-2-master-sheet-clean.csv')
+my.data = read.csv('data/experiment-2-master-sheet-clean.csv')
 
 # Crerating new variables 
 my.data = my.data %>% group_by(id) %>% mutate(rewarding.object.preference = (time.with.trained.object-time.with.untrained.object))
