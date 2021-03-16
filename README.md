@@ -4,7 +4,7 @@ This is the GitHub repository containing the data and code for the analysis cond
 
 The website which walks through each of the models in the main text as well as a few supplementary models is available at https://wyatt-toure.github.io/colour-learning-project-analysis/index.html. Furthermore, this repository contains all the code to produce the analyses and figures in the manuscript as well as supplementary results and figures. 
 
-The raw R code can be found in [02-main-analysis.Rmd](https://github.com/wyatt-toure/colour-learning-project-analysis/blob/main/02-main-analysis.Rmd)
+The raw R code can be found in [01-main-analysis.Rmd](https://github.com/wyatt-toure/colour-learning-project-analysis/blob/main/01-main-analysis.Rmd)
 
 ## Website
 
@@ -12,7 +12,7 @@ https://wyatt-toure.github.io/colour-learning-project-analysis
 
 ## Metadata
 
-Data: [experiment-2-master-sheet-clean.csv](https://github.com/wyatt-toure/colour-learning-project-analysis/blob/main/experiment-2-master-sheet-clean.csv)
+Data: [experiment-2-master-sheet-clean.csv](https://github.com/wyatt-toure/colour-learning-project-analysis/blob/main/data/experiment-2-master-sheet-clean.csv)
 
 | Variable                    | Description                                                                                                                  |
 |-----------------------------|------------------------------------------------------------------------------------------------------------------------------|
