@@ -50,7 +50,6 @@ Data: [experiment-2-master-sheet-clean.csv](https://github.com/wyatt-toure/colou
 
 ## Required tools and references
 <div id="tools-used-and-references" class="section level1">
-<p>A complete list of the tools used to produce the analysis and website, as well as their versions and references, is produced below.</p>
 <table>
 <colgroup>
 <col width="3%" />
