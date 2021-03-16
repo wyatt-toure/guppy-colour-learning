@@ -1,6 +1,10 @@
+<p align="center">
+<img src="https://github.com/wyatt-toure/colour-learning-project-analysis/blob/main/docs/images/training-data-animation.gif" style="display:block; margin: 0 auto;"   width = '50%'>
+</p>
+
 ## Summary
 
-This is the GitHub repository containing the data and code for the analysis conducted in the manuscript ‘Bias in the shift of foraging preference for coloured objects in Trinidadian guppies, *Poecilia reticulata*’. 
+This is the GitHub repository containing the data and code for the analysis conducted in the manuscript <span style="text-decoration:underline">‘Bias in the shift of foraging preference for coloured objects in Trinidadian guppies, *Poecilia reticulata*’</span>. 
 
 A website which walks through each of the models in the main text as well as a few supplementary models is available at https://wyatt-toure.github.io/colour-learning-project-analysis. Furthermore, this repository contains all the code to produce the analyses and figures in the manuscript as well as supplementary results and figures. 
 
