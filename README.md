@@ -6,9 +6,9 @@ A website which walks through each of the models in the main text as well as a f
 
 The raw R code can be found in [01-main-analysis.Rmd](https://github.com/wyatt-toure/colour-learning-project-analysis/blob/main/01-main-analysis.Rmd)
 
-Below I additionally present the metadata for the dataset and the packages used to conduct the analyses and construct the as well as their versions, and citations. 
+Below I additionally present the [metadata](#metadata) for the dataset and the [packages required](#required-tools-and-references) to conduct the analyses and construct the as well as their versions, and citations. 
 
-## Websitewebsites
+## Website
 
 https://wyatt-toure.github.io/colour-learning-project-analysis
 
@@ -48,8 +48,8 @@ Data: [experiment-2-master-sheet-clean.csv](https://github.com/wyatt-toure/colou
 | ate                         | Whether a guppy ate during the trial or not                                                                                  |
 | trial.type                  | The type of trial (training or testing)                                                                                      |
 
+## Required tools and references
 <div id="tools-used-and-references" class="section level1">
-<h1>Required tools and references</h1>
 <p>A complete list of the tools used to produce the analysis and website, as well as their versions and references, is produced below.</p>
 <table>
 <colgroup>
