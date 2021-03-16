@@ -6,7 +6,7 @@ A website which walks through each of the models in the main text as well as a f
 
 The raw R code can be found in [01-main-analysis.Rmd](https://github.com/wyatt-toure/colour-learning-project-analysis/blob/main/01-main-analysis.Rmd)
 
-Below I additionally present the [metadata](#metadata) for the dataset and the [packages required](#required-tools-and-references) to conduct the analyses and construct the as well as their versions, and citations. 
+Below I additionally present the [metadata](#metadata) for the dataset and the [packages required](#required-tools-and-references) to conduct the analyses and construct the website as well as their versions and citations. 
 
 ## Website
 
