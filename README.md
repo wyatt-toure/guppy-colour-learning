@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://github.com/wyatt-toure/colour-learning-project-analysis/blob/main/docs/images/training-data-animation.gif" style="display:block; margin: 0 auto;"   width = '50%'>
+<img src="https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/images/training-data-animation.gif" style="display:block; margin: 0 auto;"   width = '50%'>
 </p>
 
 ## Summary
@@ -14,7 +14,7 @@ Below I additionally present the [metadata](#metadata) for the dataset and the [
 
 ## Website
 
-https://wyatt-toure.github.io/colour-learning-project-analysis
+https://wyatt-toure.github.io/guppy-colour-learning-project/
 
 ## Metadata
 
