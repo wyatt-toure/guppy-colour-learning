@@ -1,6 +1,0 @@
-fig:baseline-pref-plot
-fig:novel-pref-plot
-fig:test-data-pref-plot
-tab:contrasts-table
-fig:training-data-ate-plot
-fig:feeding-count-plot

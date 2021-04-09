@@ -1,0 +1,194 @@
+/* Change header to flatter black */
+h1, h2, h3, h4, h5 {
+  color:#333;
+  padding-top: 65px; 
+  margin-top: -65px;
+}
+
+h2 {
+    font-size: 25px;
+}
+
+h3 {
+    font-size: 20px;
+}
+
+
+/* Change link colours */
+a:link {
+  color: #4C84C1;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+
+/* TOC stuff */
+#TOC {
+    margin: 30px 0px 25px 0px;
+}
+
+.tocify {
+    width: 25%;
+    max-height: 90%;
+    margin-left: 2%;
+    position: fixed;
+    border: 0px solid #222;
+    border-radius: 0px;
+}
+
+.tocify .list-group-item {
+    border-radius: 0px;
+}
+
+.tocify-subheader .tocify-item {
+    font-size: 0.90em;
+    text-overflow: ellipsis;
+    padding-left: 20px;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+}
+/* Change active highlight */
+.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+    z-index: 2;
+    color: #fff;
+    background-color: #2d333b;
+    border-color: #2d333b;
+}
+
+/* Change toc padding */
+
+.tocify .tocify-item a, .tocify .list-group-item {
+    padding: 5px;
+}
+
+/* TOP NAV BAR */
+
+   /* Add a black background color to the top navigation */
+.topnav {
+  background-color: #2d333b;
+  overflow: auto;
+    position: fixed;
+    top: 0px;
+    z-index: 6;
+	  left: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    max-width: 100vw;
+    right: 50%;
+    width: 100vw;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  z-index: 6;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: #2d333b;
+  color: white;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+  background-color: #2d333b;
+  color: white;
+}
+
+/* MAIN CONTAINER */
+
+.main-container {
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 6%;
+}
+
+@media only screen and (min-width: 992px) {
+.col-md-9 {
+    width: 65%;
+}  
+}
+
+
+
+
+/* Changing tabset pill colour */
+.nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
+    color: #fff;
+    background-color: #2d333b;
+}
+
+/* Changing figure caption size */
+p.caption {
+  font-size: 0.95em;
+  color: #555;
+}
+
+caption {
+    color: #555;
+    font-size: 0.95em;
+}
+
+
+/*Title size */
+h1.title {
+    font-size: 25px;
+}
+
+/*Author name */
+p.author-name {
+    font-size: 18px;
+    font-weight: 500;
+    text-align: left;
+}
+
+/* Affiliation number */
+.sidenote-number, .affil-mark {
+    position: relative;
+    vertical-align: super;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: normal;
+}
+
+/* Affiliation */
+p.author-affil {
+    font-weight: 450;
+    text-align: left;
+}
+
+/* Button colours */
+.btn-primary {
+    color: #fff;
+    background-color: #2d333b;
+    border-color: #2d333b;
+}
+
+.btn-primary:hover {
+    color: #fff;
+    background-color: #24292e;
+    border-color: #24292e;
+}
+
+.btn-primary:active {
+    color: #fff;
+    background-color: #24292e;
+    border-color: #24292e;
+}
+
+.btn-primary.focus, .btn-primary:focus {
+    color: #fff;
+    background-color: #24292e;
+    border-color: #24292e;
+    outline-color: #333333;
+}
+
+

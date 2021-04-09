@@ -1,26 +1,40 @@
---- 
-title: "Analysis for 'Biases in learned foraging preferences for coloured objects in Trinidadian guppies'"
-author: "Wyatt Toure"
-date: "Date of last update: `r Sys.Date()`"
-site: bookdown::bookdown_site
-documentclass: book 
-bibliography: [book.bib, packages.bib]
-biblio-style: apalike
-link-citations: yes
-description: ""
+---
+title: "Guppy Colour Learning Project Homepage"
+output:
+  bookdown::html_document2:
+    include:
+      highlight: pygments
+    css: styles.css
+    
+knit: (function(input, ...) {
+    rmarkdown::render(
+      input,
+      output_file = 'docs/index')
+  })
 ---
 
-# Background
+<div class="topnav">
+  <a class="active" href="index.html">Home</a>
+  <a href="methods.html">Methods</a>
+    <a href="analysis.html">Analysis</a>
+    <a href="https://www.github.com/wyatt-toure">GitHub</a>
+</div>
 
-This site contains the code, model outputs, data tables, and residual diagnostics for the analyses demonstrated in the manuscript <span style="text-decoration:underline">'Bias in the shift of foraging preference for coloured objects in Trinidadian guppies, *Poecilia reticulata*'</span>. 
 
+<p class="author-name">M. Wyatt Toure<span class="affil-mark">1*</span>, Simon M. Reader<span class="affil-mark">1</span></p>
+<p class="author-affil"><span class="affil-mark">1</span>McGill University, Department of Biology, 1205 Docteur Penfield, Montreal, Quebec H3A 1B1, Canada</p>
+<p><span class="affil-mark">*</span>Corresponding Author: <br>M. Wyatt Toure<br> e-mail: `m_wyatt.toure@mail.mcgill.ca`<br></p>
 
-The raw data used to conduct these analyses are available at the [github repository for this site](https://github.com/wyatt-toure/colour-learning-project-analysis/blob/main/data/experiment-2-master-sheet-clean.csv). 
+***
+
+Welcome to the project site for the experiment described in the paper <span style="text-decoration:underline">'Bias in the shift of foraging preference for coloured objects in Trinidadian guppies, *Poecilia reticulata*'</span>. This site contains the code, model outputs, data tables, and residual diagnostics for the analyses demonstrated in the manuscript. 
+
+The raw data used to conduct these analyses are available at the [github repository for this site](). 
 
 The raw R code to produce the analysis is
-available [here](https://github.com/wyatt-toure/colour-learning-project-analysis/blob/main/01-main-analysis.Rmd).
+available [here]().
 
-![](docs/images/training-data-animation.gif)
+![](images/training-data-animation.gif)
 
 
 
