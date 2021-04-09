@@ -34,7 +34,7 @@ The raw data used to conduct these analyses are available at the [github reposit
 The raw R code to produce the analysis is
 available [here]().
 
-![](images/training-data-animation.gif)
+<img src="images/training-data-animation.gif" alt="animation of training data" width="500" style="display: block; margin-left: auto; margin-right: auto;"/>
 
 
 
