@@ -6,9 +6,9 @@
 
 This is the GitHub repository containing the data and code for the analysis conducted in the manuscript <span style="text-decoration:underline">‘Bias in the shift of foraging preference for coloured objects in Trinidadian guppies, *Poecilia reticulata*’</span>. 
 
-A website which walks through each of the models in the main text as well as a few supplementary models is available at https://wyatt-toure.github.io/colour-learning-project-analysis. Furthermore, this repository contains all the code to produce the analyses and figures in the manuscript as well as supplementary results and figures. 
+A website which walks through each of the models in the main text as well as a few supplementary models is available at https://wyatt-toure.github.io/guppy-colour-learning-project/. Furthermore, this repository contains all the code to produce the analyses and figures in the manuscript as well as supplementary results and figures. 
 
-The raw R code can be found in [01-main-analysis.Rmd](https://github.com/wyatt-toure/colour-learning-project-analysis/blob/main/01-main-analysis.Rmd)
+The raw R code can be found in [analysis-script-colour-project.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/analysis-script-colour-project.Rmd)
 
 Below I additionally present the [metadata](#metadata) for the dataset and the [packages required](#required-tools-and-references) to conduct the analyses and construct the website as well as their versions and citations. 
 
@@ -18,7 +18,7 @@ https://wyatt-toure.github.io/guppy-colour-learning-project/
 
 ## Metadata
 
-Data: [experiment-2-master-sheet-clean.csv](https://github.com/wyatt-toure/colour-learning-project-analysis/blob/main/data/experiment-2-master-sheet-clean.csv)
+Data: [colour-learning-project-data.csv](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/data/colour-learning-project-data.csv)
 
 | Variable                    | Description                                                                                                                  |
 |-----------------------------|------------------------------------------------------------------------------------------------------------------------------|
