@@ -36,6 +36,10 @@ Date of last update: `r format(Sys.Date(), '%b %d %Y')`
 
 ***
 
+## Brief Overview
+
+This page reports the analyses for the experiment described in<span style="text-decoration:underline">'Bias in the shift of foraging preference for coloured objects in Trinidadian guppies, *Poecilia reticulata*'</span>. The raw data used to conduct these analyses are available in the [colour-learning-project-data.csv](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/data/colour-learning-project-data.csv) file. Descriptions of the variables found in the dataset are given in the metadata section of the [README](https://github.com/wyatt-toure/guppy-colour-learning-project#metadata) file. The R script to reproduce the analysis and this site are in the [analysis-script-colour-project.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/analysis-script-colour-project.Rmd) file.
+
 ```{r library-prep, include=FALSE}
 library(lme4)
 library(tidyr)
@@ -58,7 +62,7 @@ library(MASS)
 
 ```{r data-prep, include=FALSE}
 #### Reading in Data 
-my.data = read.csv('data/experiment-2-master-sheet-clean.csv')
+my.data = read.csv('data/colour-learning-project-data.csv')
 
 # Crerating new variables 
 my.data = my.data %>% group_by(id) %>% mutate(rewarding.object.preference = (time.with.trained.object-time.with.untrained.object))
@@ -95,7 +99,9 @@ baseline.data$trial = as.factor(baseline.data$trial)
 
 ## Models
 
-We analysed the data from our using linear mixed effect and generalized linear mixed effect models with the `lmer()` and `glmer()` functions from `lme4` package. P-values and effective degrees of freedom were obtained using the `lmerTest` package. Model residuals were checked they met distributional assumptions with the `DHARMa` package, you can click the 'See Model Residuals' button below the model formulas to see the residual diagnostic plots produced by `DHARMa` for that particular model. 
+We analysed the data from our experiment using linear mixed effect and generalized linear mixed effect models with the `lmer()` and `glmer()` functions from the `lme4` package. P-values and effective degrees of freedom were obtained using the `lmerTest` package. Model residuals were checked they met distributional assumptions with the `DHARMa` package, you can click the 'See Model Residuals' button below the model formulas to see the residual diagnostic plots produced by `DHARMa` for that particular model. 
+
+</br>
 
 ### Model 1 -  Preference for the green object at baseline
 
@@ -163,14 +169,13 @@ ggplot(baseline.data,
 
 ### Model 2 -  Preference for the rewarding object during training
 
-To see whether fish were responsive during training our second model asks whether the preference for the rewarding object changes throughout training between the treatments. 
+To see whether fish were responsive during training our second model asks whether the preference for the rewarding object changes throughout training and whether the change in rewarding object preference is different between the treatments.  
 
-##### Variables
 
-- `rewarding.object.preference` is the time (seconds) spent near the rewarding object subtracted by the time spent near the unrewarding object 
-- `rewarding.object.colour` is the identity of the rewarding object (blue or green)
-- `trial` is the number of the training trial. In this model it is supplied as an integer
-- `id` is the identity of the individual fish 
+- **Response variable:** `rewarding.object.preference` is the time (seconds) spent near the rewarding object subtracted by the time spent near the unrewarding object 
+- **Fixed effect:** `rewarding.object.colour` is the identity of the rewarding object (blue or green)
+- **Fixed effect:** `trial` is the number of the training trial. In this model it is supplied as an integer
+- **Random effect:** `id` is the identity of the individual fish 
 
 ```{r model 2, echo=TRUE}
 training.data.model = 
@@ -222,7 +227,7 @@ knitr::kable(tidy_training.data.model[1:4,] %>% dplyr::select(-group, -effect)%>
 
 Throughout training, over the 20 trials, guppies increased their relative preference for the rewarded object by `r tidy_training.data.model$Estimate[3] %>% round(3)` seconds each trial (Figure \@ref(fig:novel-pref-plot), p = `r tidy_training.data.model$'P value'[3]`). There was also a significant effect of rewarding object colour (p = `r tidy_training.data.model$'P value'[2]`). During training green-rewarded guppies expressed a stronger preference for their rewarded object (the green object) than blue-rewarded guppies did for the blue object However, there was no interaction effect between rewarding object colour and trial (p = `r tidy_training.data.model$'P value'[4]`) suggesting there was no difference in the rate of learning between the treatments
 
-```{r novel-pref-plot, echo=FALSE, fig.cap="Preference for the green object in both treatments. Negative values represent more time spent with the blue object, positive values indicate more time spent with the green object. Faded lines connect individuals across trials and solid lines represents a linear fit with 95% CI (grey shading).", fig.id="novel-pref-plot",  warning=FALSE, message=FALSE}
+```{r novel-pref-plot, echo=FALSE, fig.cap="Relative preference for the green object in both treatments during training trials (trials 1-20). Negative values represent more time spent with the blue object, positive values indicate more time spent with the green object. Light lines connect individuals across trials and bold lines represents a linear fit with 95% CI (grey shading). Subjects were consistently rewarded for approaching the blue object (dashed lines) or the green object (solid lines).", fig.id="novel-pref-plot",  warning=FALSE, message=FALSE}
 ###### Time with rewarding object plot during training ######
 ggplot(training.data, 
             aes(x = trial, 
@@ -252,18 +257,12 @@ ggplot(training.data,
 
 ### Model 3 -  Preference for the rewarded object during testing depending on treatment {#model-3}
 
-#### Main effects
+For the main effects of training and rewarding object colour on rewarding object preference I fit a generalized linear mixed effects model with a Gaussian distribution which modeled the variances to account for variance heterogeneity using the package [`glmmTMB`](https://cran.r-project.org/web/packages/glmmTMB/index.html). My third model asks whether the preference for the rewarding object changed between baseline and final test and looks for an interaction with rewarded object colour.
 
-For the main effects of training and rewarding object colour on rewarding object preference I initially fit a linear mixed effects model with fixed effects of trial and rewarding object colour and a random effect of individual id. 
-
-Due to heterogeneity in the variance among groups however, I switched to a generalized linear mixed effects model with a Gaussian distribution which also modeled the variances to account for variance heterogeneity using the package [`glmmTMB`](https://cran.r-project.org/web/packages/glmmTMB/index.html). My third model asks whether the preference for the rewarding object changed between baseline and final test and looks for an interaction with rewarded object colour.
-
-##### Variables
-
-- `rewarding.object.preference` is the time (seconds) spent near the rewarding object subtracted by the time spent near the unrewarding object 
-- `rewarding.object.colour` is the identity of the rewarding object (blue or green)
-- `trial` is the number of the training trial. In this model it is supplied as a factor where 0 is the baseline trial and 21 is the final trial
-- `id` is the identity of the individual fish 
+- **Response variable:** `rewarding.object.preference` is the time (seconds) spent near the rewarding object subtracted by the time spent near the unrewarding object 
+- **Fixed effect:** `rewarding.object.colour` is the identity of the rewarding object (blue or green)
+- **Fixed effect:** `trial` is the number of the training trial. In this model it is supplied as a factor where 0 is the baseline trial and 21 is the final trial
+- **Random effect:** `id` is the identity of the individual fish 
 
 ```{r, include=FALSE}
 test.data.model = 
@@ -274,9 +273,12 @@ test.data.model =
 
 ```{r model 3, echo=TRUE}
 test.data.model.glm = 
-  glmmTMB(rewarding.object.preference ~  trial * rewarding.object.colour + (1|id) + 
+  glmmTMB(rewarding.object.preference ~  
+            trial * rewarding.object.colour + (1|id) + 
     diag(0 + rewarding.object.colour:trial |id), 
-  data = test.data, family = gaussian)
+  data = test.data, 
+  family = gaussian
+  )
 ```
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName3"> See Model 3 Residuals </button>  
@@ -293,7 +295,7 @@ plot(simulationOutput)
 
 ```{r tidying-model-3, echo=FALSE, message=FALSE}
 # Setting table row names
-test.model.table.row.name.vec = c("Intercept", "Test type", "Treatment", "Treatment X Test type")
+test.model.table.row.name.vec = c("Intercept", "Test type", "Rewarding object colour", "Rewarding object colour X Test type")
                        
 # Converting data frame to tibble
 tidy_test.data.model = broom.mixed::tidy(test.data.model)
@@ -318,7 +320,7 @@ tidy_test.data.model[1:4,3] <- test.model.table.row.name.vec
 ##### Results
 
 ```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy_test.data.model[1:4,] %>% dplyr::select(-group, -effect) %>% mutate_if(is.numeric, round, digits = 3))
+knitr::kable(tidy_test.data.model[1:4,] %>% dplyr::select(-group, -effect) %>% mutate_if(is.numeric, round, digits = 3), caption = "Table of post-hoc tests with a multivariate-t adjustment for multiple comparisons of a selected set of means. The numbers represent the initial test (‘Initial’) and the final test (‘Final’). The colour corresponds to the identity of the rewarding object (blue for blue-rewarded guppies, green for green-rewarded guppies). Values are all rounded to 3 decimal places. Significant p-values are bolded. CL = confidence limit.")
 ```
 
 I found a significant interaction effect between test type and rewarding object colour (p = `r tidy_test.data.model$'P value'[4]`). Guppies that had the green object rewarded had an increase in rewarded object preference at final test that was `r tidy_test.data.model$Estimate[4] %>% round(1)` seconds stronger than the increase in the rewarded object preference of guppies trained to blue (Figure \@ref(fig:test-data-pref-plot)). 
@@ -365,7 +367,7 @@ pairwise.comparison.contrasts.table$df = pairwise.comparison.contrasts.table$df 
 ```
 
 
-```{r test-data-pref-plot, echo=FALSE, fig.cap="The initial and final rewarding object preference. Dashed line represents the no preference value. Data are means +/- 95% CI. Bold line connects means across trials.", fig.id="test-data-pref-plot", warning=FALSE, message=FALSE}
+```{r test-data-pref-plot, echo=FALSE, fig.cap="Changes in object preference from an initial test before training to a final test after training. During training, fish were rewarded for approaching the blue object (blue squares and lines) or the green object (green squares and lines). At test, no food reward was present. Dashed line represents an equal preference for either object. Data are means ± 95% CI; lighter points and lines are data for each individual. The final preference for green-rewarded fish is stronger than that of fish that has been rewarded for approaching the blue object, but both sets of subjects increased their preference for the rewarded object compared to the initial test preference.", fig.id="test-data-pref-plot", warning=FALSE, message=FALSE}
 ###### Time with rewarding object plot during training ######
 testing.data.x.axis.labels = c("Baseline", "Re-test")
 object.labels = c("Blue-trained", "Green-trained")
@@ -472,10 +474,8 @@ my.feeding.data
 
 A discrepancy in reinforcement between treatments may influence performance on a final preference test. To see whether there was a difference in feeding between treatments I counted the number of trials in which an individual fish ate throughout all of training and compared the feeding counts between treatments. To do this I fit a generalized linear model with a negative binomial distribution. The response variable 'feeding count' is a sum of the number of trials in which a guppy ate.
 
-##### Variables
-
-- `feeding.count` is the number of trials in which an individual fish ate
-- `rewarding.object.colour` is the identity of the rewarding object (blue or green)
+- **Response variable:** `feeding.count` is the number of trials in which an individual fish ate
+- **Fixed effect:** `rewarding.object.colour` is the identity of the rewarding object (blue or green)
 
 ##### Model
 
@@ -520,9 +520,9 @@ tidy_feeding.data.model[1:2,1] <- feeding.model.table.row.name.vec
 knitr::kable(tidy_feeding.data.model[1:2,]%>% mutate_if(is.numeric, round, digits = 3))
 ```
 
-I found no significant difference in the amount of feeding done by individuals trained to green versus individuals trained to blue (Figure \@ref(fig:feeding-count-plot), p = `r tidy_feeding.data.model$'P value'[2]`) which suggests that the observed group-level differences in final test performance between blue-trained guppies versus green-trained guppies  cannot be explained by differences in performance during training.  
+I found no significant difference in the amount of feeding done by individuals trained to green versus individuals trained to blue (Figure \@ref(fig:feeding-count-plot), p = `r tidy_feeding.data.model$'P value'[2] %>% round(3)`) which suggests that the observed group-level differences in final test performance between blue-trained guppies versus green-trained guppies  cannot be explained by differences in performance during training.  
 
-```{r feeding-count-plot, echo=FALSE, fig.cap="Average number of trials in which a fish fed during training. Data are means +/- 95% confidence intervals with probability density functions of the data to the right of the raw data.", fig.id="training-data-ate-plot", warning=FALSE}
+```{r feeding-count-plot, echo=FALSE, fig.cap="Average number of trials in which a fish fed during training. Data are means ± 95% confidence intervals with probability density functions of the data (showing the negative binomial distribution) to the right of the raw data.", fig.id="training-data-ate-plot", warning=FALSE}
 source("https://gist.githubusercontent.com/benmarwick/2a1bb0133ff568cbe28d/raw/fb53bd97121f7f9ce947837ef1a4c65a73bffb3f/geom_flat_violin.R")
 ggplot(my.feeding.data,
              aes(x=rewarding.object.colour,
@@ -540,19 +540,140 @@ ggplot(my.feeding.data,
   scale_fill_manual(values=c("#2980b9", "#27ae60"))
 ```
 
+***
+
 
 ## ESM Models
 
-### ESM Model 1 - Preference for the rewarded object during training based on feeding
+In this section we describe models not included in the main text.
 
-It might be the case that some fish behaved in a way that was not conducive to learning the association during training. My fourth model asks whether the time spent near the rewarding object during a training session is influenced by whether a fish ate or not. Here trial is a variable containing the training trials (1-20). It is supplied as a random effect along with individual ID in the model. 
 
-##### Variables
+### Addressing feeding count
 
-- `rewarding.object.preference` is the time (seconds) spent near the rewarding object subtracted by the time spent near the unrewarding object 
-- `ate` is a binary factor (Yes or No) and corresponds to whether the fish ate in a given trial
-- `trial` is the number of the training trial. In this model it is supplied as an integer
-- `id` is the identity of the individual fish 
+The models described in this section were run to address the potential role of feeding count on test performance. The concern was that the results may be explained by differential levels of reinforcement between the groups or between individuals during training. To ensure our results were robust to matters arising from feeding count variation we: 
+
+1) Removed an individual that did not feed and re-ran the analysis in [Model 3](#model-3)
+2) Included feeding count as a co-variate and re-ran the analyysis in [Model 3](#model-3)
+
+- **Response variable:** `rewarding.object.preference` is the time (seconds) spent near the rewarding object subtracted by the time spent near the unrewarding object 
+- **Fixed effect:** `rewarding.object.colour` is the identity of the rewarding object (blue or green)
+- **Fixed effect:** `trial` is the number of the training trial. In this model it is supplied as an integer
+- **Random effect:** `id` is the identity of the individual fish 
+- **Covariate:** `feeding.count` is the number of trials in which an individual fish ate
+
+
+#### ESM Model 1 - Removing individual that did not feed
+
+```{r, include=FALSE}
+test.feeding.data = left_join(test.data, feeding, by ="id")
+test.feeding.data = test.feeding.data %>% replace_na(list(n = 0))
+test.feeding.data = rename(test.feeding.data, feeding.count = n)
+retest.feeding.data = test.feeding.data %>% filter(trial == "21")
+retest.feeding.data = retest.feeding.data %>% mutate(time.with.both.objects = time.with.trained.object+time.with.untrained.object)
+```
+
+There is a fish that did not eat during any trials, however removing this individual does not change the conclusions 
+
+##### Model
+
+```{r, echo=TRUE}
+test.feeding.data.low.feeders.removed = 
+  test.feeding.data %>% filter(feeding.count > 0)
+
+test.feeding.data.low.feeders.removed.model = 
+  glmmTMB(rewarding.object.preference ~  
+            trial * rewarding.object.colour + (1|id) + 
+    diag(0 + rewarding.object.colour:trial |id),
+    data = test.feeding.data.low.feeders.removed, 
+    family = gaussian
+    )
+```
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName6"> See ESM Model 1 Residuals </button>  
+<div id="BlockName6" class="collapse">  
+
+```{r, echo=FALSE}
+simulationOutput <- simulateResiduals(fittedModel = test.feeding.data.low.feeders.removed.model)
+plot(simulationOutput)
+```
+
+</div>
+
+</br>
+
+```{r, echo=FALSE, results=FALSE}
+tidy_fit.test.feeding.data.low.feeders.removed = broom.mixed::tidy(test.feeding.data.low.feeders.removed.model)
+tidy_fit.test.feeding.data.low.feeders.removed$p.value = ifelse(tidy_fit.test.feeding.data.low.feeders.removed$p.value < .001, ## Condition
+                      "< .001",  ## if condition is true
+                      paste(tidy_fit.test.feeding.data.low.feeders.removed$p.value %>% round(3))) ## if condition is false
+tidy_fit.test.feeding.data.low.feeders.removed
+```
+
+##### Results
+
+```{r, results=TRUE, echo=FALSE}
+knitr::kable(tidy_fit.test.feeding.data.low.feeders.removed[2:4,] %>% dplyr::select(-group, -effect, -component)%>% mutate_if(is.numeric, round, digits = 3))
+```
+
+
+
+#### ESM Model 2 - Including feeding count as a covariate
+
+Moreover, as I demonstrate in the next model including the amount of trials fed as a covariate in the model does not change the conclusions.
+
+```{r, echo = TRUE}
+test.data.feeding.controlled.model = 
+  glmmTMB(rewarding.object.preference ~  
+            trial * rewarding.object.colour + feeding.count + (1|id) + 
+    diag(0 + rewarding.object.colour*trial |id), 
+  data = test.feeding.data, family = gaussian)
+```
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName7"> See ESM Model 2 Residuals </button>  
+<div id="BlockName7" class="collapse">  
+
+```{r, echo=FALSE}
+simulationOutput <- simulateResiduals(fittedModel = test.data.feeding.controlled.model)
+plot(simulationOutput)
+```
+
+</div>
+
+</br>
+```{r, echo=FALSE, results=FALSE}
+# Summary of model 6
+tidy_fit.test.data.feeding.controlled.model = broom.mixed::tidy(test.data.feeding.controlled.model)
+tidy_fit.test.data.feeding.controlled.model$p.value = ifelse(tidy_fit.test.data.feeding.controlled.model$p.value < .001, ## Condition
+                      "< .001",  ## if condition is true
+                      paste(tidy_fit.test.data.feeding.controlled.model$p.value %>% round(3))) ## if condition is false
+tidy_fit.test.data.feeding.controlled.model[2:5,]
+```
+
+##### Results
+
+```{r, results=TRUE, echo=FALSE}
+knitr::kable(tidy_fit.test.data.feeding.controlled.model[2:5,]%>% dplyr::select(-group, -effect, -component)%>% mutate_if(is.numeric, round, digits = 3))
+```
+
+
+The main results do not change if I control for feeding count. The above table is the output feeding controlled model. Below we have the output table for the non-feeding-count controlled model from [Model 3](#model-3).
+
+```{r, results=TRUE, echo=FALSE}
+knitr::kable(tidy_test.data.model[1:4,] %>% dplyr::select(-group, -effect) %>% mutate_if(is.numeric, round, digits = 3))
+```
+
+In both models the p-values are similar. While the effect of feeding count is not significant (p = `r tidy_fit.test.data.feeding.controlled.model$p.value[4]`) the effect of feeding count trends in the expected direction in our feeding count controlled model. As feeding count increases the preference for the rewarding object colour also increases.
+
+### Feeding and object preferences
+
+#### ESM Model 3 - Preference for the rewarded object during training based on feeding
+
+This is a model I (Wyatt) ran just because I was curious. This model asks whether the time spent near the rewarding object during a training session is influenced by whether a fish ate or not. Here trial is a variable containing the training trials (1-20). It is supplied as a random effect along with individual ID in the model. 
+
+- **Responsible variable:** `rewarding.object.preference` is the time (seconds) spent near the rewarding object subtracted by the time spent near the unrewarding object 
+- **Fixed effect:** `ate` is a binary factor (Yes or No) and corresponds to whether the fish ate in a given trial
+- **Fixed effect:** `trial` is the number of the training trial. In this model it is supplied as an integer
+- **Random effect:** `id` is the identity of the individual fish 
 
 ##### Model
 
@@ -562,7 +683,7 @@ training.data.model.rewarding.object =
        data = training.data)
 ```
 
-<button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName5"> See ESM Model 1 Residuals </button>  
+<button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName5"> See ESM Model 3 Residuals </button>  
 <div id="BlockName5" class="collapse">  
 
 ```{r, echo=FALSE}
@@ -612,7 +733,7 @@ formatted_p.rewarding.object = ifelse(tidy_fit.rewarding.object$p.value < .001, 
 Throughout all of training, fish that ate during a session spent on average `r tidy_fit.rewarding.object$estimate[2] %>% round(1)` more seconds near the rewarded object compared to fish that did not eat (Figure, \@ref(fig:training-data-ate-plot), p `r formatted_p.rewarding.object[2]`). Fish that spent more trials eating may therefore have received more reinforcement for the object-food association. This result is what led me to investigate whether there was a difference in food reinforcement between the two treatments in [Model 4](#model-4). 
 </br>
 
-```{r training-data-ate-plot, echo=FALSE, fig.cap="Preference for the rewarding object during training based on whether an individual ate during a trial or not. Dashed line represents the no preference value. In panel A, Data are means +/- 95% CI. In panel B, the data consist of all the feeding choices of all individuals across all training trials. Data are means +/- 95% CI with probability density functions to the right of the raw data.", fig.id="training-data-ate-plot", warning=FALSE}
+```{r training-data-ate-plot, echo=FALSE, fig.cap="Preference for the rewarding object during training based on whether an individual ate during a trial or not. Dashed line represents the no preference value. In panel A, Data are means ± 95% CI. In panel B, the data consist of all the feeding choices of all individuals across all training trials. Data are means ± 95% CI with probability density functions to the right of the raw data.", fig.id="training-data-ate-plot", warning=FALSE}
 ###### Time with rewarding object plot during training [gaussian] ######
 source("https://gist.githubusercontent.com/benmarwick/2a1bb0133ff568cbe28d/raw/fb53bd97121f7f9ce947837ef1a4c65a73bffb3f/geom_flat_violin.R")
 
@@ -655,125 +776,16 @@ ggarrange(p1,p2, widths = c(1.5,1),
 ```
 
 
-
-### ESM Model 2 - Controlling for feeding count
-
-##### Variables
-
-- `rewarding.object.preference` is the time (seconds) spent near the rewarding object subtracted by the time spent near the unrewarding object 
-- `rewarding.object.colour` is the identity of the rewarding object (blue or green)
-- `trial` is the number of the training trial. In this model it is supplied as an integer
-- `id` is the identity of the individual fish 
-- `feeding.count` is the number of trials in which an individual fish ate
-
-
-#### ESM Model 2a - Removing individual that did not feed
-
-```{r, include=FALSE}
-test.feeding.data = left_join(test.data, feeding, by ="id")
-test.feeding.data = test.feeding.data %>% replace_na(list(n = 0))
-test.feeding.data = rename(test.feeding.data, feeding.count = n)
-retest.feeding.data = test.feeding.data %>% filter(trial == "21")
-retest.feeding.data = retest.feeding.data %>% mutate(time.with.both.objects = time.with.trained.object+time.with.untrained.object)
-```
-
-There is a fish that did not eat during any trials, however removing this individual does not change the conclusions 
-
-##### Model
-
-```{r, echo=TRUE}
-test.feeding.data.low.feeders.removed = test.feeding.data %>% filter(feeding.count > 0)
-
-test.feeding.data.low.feeders.removed.model = 
-  glmmTMB(rewarding.object.preference ~  trial * rewarding.object.colour + (1|id) + 
-    diag(0 + rewarding.object.colour:trial |id),
-    data = test.feeding.data.low.feeders.removed, family = gaussian)
-```
-
-<button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName6"> See ESM Model 2a Residuals </button>  
-<div id="BlockName6" class="collapse">  
-
-```{r, echo=FALSE}
-simulationOutput <- simulateResiduals(fittedModel = test.feeding.data.low.feeders.removed.model)
-plot(simulationOutput)
-```
-
-</div>
-
-</br>
-
-```{r, echo=FALSE, results=FALSE}
-tidy_fit.test.feeding.data.low.feeders.removed = broom.mixed::tidy(test.feeding.data.low.feeders.removed.model)
-tidy_fit.test.feeding.data.low.feeders.removed$p.value = ifelse(tidy_fit.test.feeding.data.low.feeders.removed$p.value < .001, ## Condition
-                      "< .001",  ## if condition is true
-                      paste(tidy_fit.test.feeding.data.low.feeders.removed$p.value %>% round(3))) ## if condition is false
-tidy_fit.test.feeding.data.low.feeders.removed
-```
-
-##### Results
-
-```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy_fit.test.feeding.data.low.feeders.removed[2:4,] %>% dplyr::select(-group, -effect, -component)%>% mutate_if(is.numeric, round, digits = 3))
-```
-
-
-
-#### ESM Model 2b - Including feeding count as a covariate
-
-Moreover, as I demonstrate in the next model including the amount of trials fed as a covariate in the model does not change the conclusions.
-
-```{r, echo = TRUE}
-test.data.feeding.controlled.model = 
-  glmmTMB(rewarding.object.preference ~  trial * rewarding.object.colour + feeding.count + (1|id) + 
-    diag(0 + rewarding.object.colour*trial |id), 
-  data = test.feeding.data, family = gaussian)
-```
-
-<button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName7"> See ESM Model 2b Residuals </button>  
-<div id="BlockName7" class="collapse">  
-
-```{r, echo=FALSE}
-simulationOutput <- simulateResiduals(fittedModel = test.data.feeding.controlled.model)
-plot(simulationOutput)
-```
-
-</div>
-
-</br>
-```{r, echo=FALSE, results=FALSE}
-# Summary of model 6
-tidy_fit.test.data.feeding.controlled.model = broom.mixed::tidy(test.data.feeding.controlled.model)
-tidy_fit.test.data.feeding.controlled.model$p.value = ifelse(tidy_fit.test.data.feeding.controlled.model$p.value < .001, ## Condition
-                      "< .001",  ## if condition is true
-                      paste(tidy_fit.test.data.feeding.controlled.model$p.value %>% round(3))) ## if condition is false
-tidy_fit.test.data.feeding.controlled.model[2:5,]
-```
-
-##### Results
-
-```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy_fit.test.data.feeding.controlled.model[2:5,]%>% dplyr::select(-group, -effect, -component)%>% mutate_if(is.numeric, round, digits = 3))
-```
-
-
-The main results do not change if I control for feeding count. The above table is the output feeding controlled model. Below we have the output table for the non-feeding-count controlled model from [Model 3](#model-3).
-
-```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy_test.data.model[2:4,] %>% dplyr::select(-group, -effect)%>% mutate_if(is.numeric, round, digits = 3))
-```
-
-In both models the p-values are similar. While the effect of feeding count is not significant (p = `r tidy_fit.test.data.feeding.controlled.model$p.value[4]`) the effect of feeding count trends in the expected direction in our feeding count controlled model. As feeding count increases the preference for the rewarding object colour also increases.
-
 ***
 
 </br>
 
 ## Tools used and References
 
-A complete list of the tools used is produced below:
+A complete list of the tools used is produced below
 
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, warning=FALSE}
 knitr::kable(as.data.frame(report(sessionInfo())))
 ```
 
