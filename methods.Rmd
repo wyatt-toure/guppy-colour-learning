@@ -20,11 +20,11 @@ knit: (function(input, ...) {
 ---
 
 <div class="topnav">
-  <a href="index.html">Home</a>
-  <a class="active" href="methods.html">Methods</a>
-    <a href="analysis.html">Analysis</a>
-    <a href="https://www.github.com/wyatt-toure">GitHub</a>
-    <a style = "float: right;" href="index.html">Guppy colour learning project site</a>
+  <a href="index.html">Guppy colour learning project site</a>
+    <a href="https://github.com/wyatt-toure/guppy-colour-learning-project" style = "float: right;">GitHub</a>
+    <a href="analysis.html" style = "float: right;">Analysis</a>
+    <a class="active" href="methods.html" style = "float: right;">Methods</a>
+    <a href="index.html" style = "float: right;">Home</a>
 </div>
 
 ***
