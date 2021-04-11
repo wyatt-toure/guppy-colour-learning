@@ -1,5 +1,5 @@
 ---
-title: "Analysis for 'Biased colour learning in Trinidadian guppies'"
+title: "Analysis for 'Biases in learned foraging preferences for coloured objects in Trinidadian guppies, Poecilia reticulata'"
 output:
   bookdown::html_document2:
     include:
@@ -25,6 +25,7 @@ knit: (function(input, ...) {
   <a href="methods.html">Methods</a>
     <a class="active" href="analysis.html">Analysis</a>
     <a href="https://www.github.com/wyatt-toure">GitHub</a>
+    <a style = "float: right;" href="index.html">Guppy colour learning project site</a>
 </div>
 
 <p class="author-name">M. Wyatt Toure<span class="affil-mark">1*</span>, Simon M. Reader<span class="affil-mark">1</span></p>
