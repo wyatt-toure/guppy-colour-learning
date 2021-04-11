@@ -295,7 +295,7 @@ plot(simulationOutput)
 
 ```{r tidying-model-3, echo=FALSE, message=FALSE}
 # Setting table row names
-test.model.table.row.name.vec = c("Intercept", "Test type", "Rewarding object colour", "Rewarding object colour X Test type")
+test.model.table.row.name.vec = c("Intercept", "Trial", "Rewarding object colour", "Rewarding object colour X Trial")
                        
 # Converting data frame to tibble
 tidy_test.data.model = broom.mixed::tidy(test.data.model)
@@ -320,10 +320,10 @@ tidy_test.data.model[1:4,3] <- test.model.table.row.name.vec
 ##### Results
 
 ```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy_test.data.model[1:4,] %>% dplyr::select(-group, -effect) %>% mutate_if(is.numeric, round, digits = 3), caption = "Table of post-hoc tests with a multivariate-t adjustment for multiple comparisons of a selected set of means. The numbers represent the initial test (‘Initial’) and the final test (‘Final’). The colour corresponds to the identity of the rewarding object (blue for blue-rewarded guppies, green for green-rewarded guppies). Values are all rounded to 3 decimal places. Significant p-values are bolded. CL = confidence limit.")
+knitr::kable(tidy_test.data.model[1:4,] %>% dplyr::select(-group, -effect) %>% mutate_if(is.numeric, round, digits = 3), caption = "Summary table for Model 3. Estimates ± standard error (SE) of the effects of trial and rewarding object colour on the rewarding object preference from the generalized linear mixed effect model containing the effects Trial, Rewarding object colour, and their interaction effect (Trial X Rewarding object colour).")
 ```
 
-I found a significant interaction effect between test type and rewarding object colour (p = `r tidy_test.data.model$'P value'[4]`). Guppies that had the green object rewarded had an increase in rewarded object preference at final test that was `r tidy_test.data.model$Estimate[4] %>% round(1)` seconds stronger than the increase in the rewarded object preference of guppies trained to blue (Figure \@ref(fig:test-data-pref-plot)). 
+I found a significant interaction effect between trial and rewarding object colour (p = `r tidy_test.data.model$'P value'[4]`). Guppies that had the green object rewarded had an increase in rewarded object preference at final test that was `r tidy_test.data.model$Estimate[4] %>% round(1)` seconds stronger than the increase in the rewarded object preference of guppies trained to blue (Figure \@ref(fig:test-data-pref-plot)). 
 
 ```{r, include=FALSE}
 # We see that there is a significant interaction effect. To see whether both blue-trained and green-trained guppies significantly shift their rewarded object preference
@@ -436,7 +436,7 @@ pairwise.comparison.contrasts.table.show$p.value =
             (pairwise.comparison.contrasts.table.show$p.value < .05 & pairwise.comparison.contrasts.table.show$p.value >= .001) ~ paste(as.character(pairwise.comparison.contrasts.table.show$p.value %>% round(3))),
             pairwise.comparison.contrasts.table.show$p.value >= .05 ~ paste(pairwise.comparison.contrasts.table.show$p.value %>% round(3)))
 
-knitr::kable(pairwise.comparison.contrasts.table.show %>% dplyr::select(contrast, estimate,lower.CL,upper.CL, df,p.value), caption = "Table of post-hoc tests with a multivariate-t adjustment for multiple comparisons of a selected set of means. The numbers represent the initial test trial (0) and the final test trial (21). The colour corressponds to the identity of the rewarding object (blue for blue-trained guppies, green for green-trained guppies). Values are all rounded to 3 decimal places. CL = confidence limit")
+knitr::kable(pairwise.comparison.contrasts.table.show %>% dplyr::select(contrast, estimate,lower.CL,upper.CL, df,p.value), caption = "Table of post-hoc tests with a multivariate-t adjustment for multiple comparisons of a selected set of means. The numbers represent the initial test (‘Initial’) and the final test (‘Final’). The colour corresponds to the identity of the rewarding object (blue for blue-rewarded guppies, green for green-rewarded guppies). Values are all rounded to 3 decimal places. CL = confidence limit.")
 
 ```
 
@@ -555,6 +555,7 @@ The models described in this section were run to address the potential role of f
 1) Removed an individual that did not feed and re-ran the analysis in [Model 3](#model-3)
 2) Included feeding count as a co-variate and re-ran the analyysis in [Model 3](#model-3)
 
+</br>
 
 #### ESM Model 1 - Removing individual that did not feed
 
@@ -599,17 +600,26 @@ plot(simulationOutput)
 </br>
 
 ```{r, echo=FALSE, results=FALSE}
+# Setting table row names
+feeding.data.low.feeders.removed.model.table.row.name.vec = c("Intercept", "Trial", "Rewarding object colour", "Rewarding object colour X Trial")
+
 tidy_fit.test.feeding.data.low.feeders.removed = broom.mixed::tidy(test.feeding.data.low.feeders.removed.model)
+
+# format p value 
 tidy_fit.test.feeding.data.low.feeders.removed$p.value = ifelse(tidy_fit.test.feeding.data.low.feeders.removed$p.value < .001, ## Condition
                       "< .001",  ## if condition is true
-                      paste(tidy_fit.test.feeding.data.low.feeders.removed$p.value %>% round(3))) ## if condition is false
-tidy_fit.test.feeding.data.low.feeders.removed
+                    paste(tidy_fit.test.feeding.data.low.feeders.removed$p.value %>% round(3))) ## if condition is false
+
+# Changing tibble header names 
+tidy_fit.test.feeding.data.low.feeders.removed = rename(tidy_fit.test.feeding.data.low.feeders.removed, "Factor" = term, "Estimate" = estimate, "Std. Error" = std.error, "T statistic" = statistic, "P value" = p.value)
+
+tidy_fit.test.feeding.data.low.feeders.removed[1:4,4] <- feeding.data.low.feeders.removed.model.table.row.name.vec
 ```
 
 ##### Results
 
 ```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy_fit.test.feeding.data.low.feeders.removed[2:4,] %>% dplyr::select(-group, -effect, -component)%>% mutate_if(is.numeric, round, digits = 3))
+knitr::kable(tidy_fit.test.feeding.data.low.feeders.removed[1:4,] %>% dplyr::select(-group, -effect, -component)%>% mutate_if(is.numeric, round, digits = 3))
 ```
 
 ***
@@ -644,18 +654,26 @@ plot(simulationOutput)
 
 </br>
 ```{r, echo=FALSE, results=FALSE}
-# Summary of model 6
+# Setting table row names
+test.data.feeding.controlled.model.table.row.name.vec = c("Intercept", "Trial", "Rewarding object colour", "Feeding count", "Rewarding object colour X Trial")
+
 tidy_fit.test.data.feeding.controlled.model = broom.mixed::tidy(test.data.feeding.controlled.model)
+
+# formatted p value 
 tidy_fit.test.data.feeding.controlled.model$p.value = ifelse(tidy_fit.test.data.feeding.controlled.model$p.value < .001, ## Condition
                       "< .001",  ## if condition is true
                       paste(tidy_fit.test.data.feeding.controlled.model$p.value %>% round(3))) ## if condition is false
-tidy_fit.test.data.feeding.controlled.model[2:5,]
+
+# Changing tibble header names 
+tidy_fit.test.data.feeding.controlled.model = rename(tidy_fit.test.data.feeding.controlled.model, "Factor" = term, "Estimate" = estimate, "Std. Error" = std.error, "T statistic" = statistic, "P value" = p.value)
+
+tidy_fit.test.data.feeding.controlled.model[1:5,4] <- test.data.feeding.controlled.model.table.row.name.vec
 ```
 
 ##### Results
 
 ```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy_fit.test.data.feeding.controlled.model[2:5,]%>% dplyr::select(-group, -effect, -component)%>% mutate_if(is.numeric, round, digits = 3))
+knitr::kable(tidy_fit.test.data.feeding.controlled.model[1:5,]%>% dplyr::select(-group, -effect, -component)%>% mutate_if(is.numeric, round, digits = 3), caption = "Summary table for a modification of Model 3. This model is the same as that described in Table S1 except it includes feeding count as a covariate. Estimates ± standard error (SE) of the effects of trial and rewarding object colour of the rewarding object colour from the generalized linear mixed effect model containing the effects (Trial, Rewarding object colour, and their interaction effect).")
 ```
 
 
@@ -665,7 +683,7 @@ The main results do not change if I control for feeding count. The above table i
 knitr::kable(tidy_test.data.model[1:4,] %>% dplyr::select(-group, -effect) %>% mutate_if(is.numeric, round, digits = 3))
 ```
 
-In both models the p-values are similar. While the effect of feeding count is not significant (p = `r tidy_fit.test.data.feeding.controlled.model$p.value[4]`) the effect of feeding count trends in the expected direction in our feeding count controlled model. As feeding count increases the preference for the rewarding object colour also increases.
+In both models the p-values are similar. While the effect of feeding count is not significant (p = `r tidy_fit.test.data.feeding.controlled.model$'P value'[4]`) the effect of feeding count trends in the expected direction in our feeding count controlled model. As feeding count increases the preference for the rewarding object colour also increases.
 
 ***
 
@@ -705,18 +723,25 @@ There is a significant deviation from uniformity as indicated by the significant
 </br>
 
 ```{r, echo=FALSE, results=FALSE}
-# Summary ofesm model 1
+# Setting table row names
+training.data.model.rewarding.object.table.row.name.vec = c("Intercept", "Ate")
+
+# Summary of esm model 3
 tidy_fit.rewarding.object = broom.mixed::tidy(training.data.model.rewarding.object)
 tidy_fit.rewarding.object$p.value = ifelse(tidy_fit.rewarding.object$p.value < .001, ## Condition
                       "< .001",  ## if condition is true
                       paste(tidy_fit.rewarding.object$p.value %>% round(3))) ## if condition is false
-tidy_fit.rewarding.object[2:2,] %>% dplyr::select(-group, -effect)
+
+# Changing tibble header names 
+tidy_fit.rewarding.object = rename(tidy_fit.rewarding.object, "Factor" = term, "Estimate" = estimate, "Std. Error" = std.error, "T statistic" = statistic, "P value" = p.value)
+
+tidy_fit.rewarding.object[1:2,3] <- training.data.model.rewarding.object.table.row.name.vec
 ```
 
 ##### Results
 
 ```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy_fit.rewarding.object[2:2,] %>% dplyr::select(-group, -effect)%>% mutate_if(is.numeric, round, digits = 3))
+knitr::kable(tidy_fit.rewarding.object[1:2,] %>% dplyr::select(-group, -effect)%>% mutate_if(is.numeric, round, digits = 3))
 ```
 
 
