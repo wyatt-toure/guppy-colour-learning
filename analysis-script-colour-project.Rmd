@@ -555,12 +555,6 @@ The models described in this section were run to address the potential role of f
 1) Removed an individual that did not feed and re-ran the analysis in [Model 3](#model-3)
 2) Included feeding count as a co-variate and re-ran the analyysis in [Model 3](#model-3)
 
-- **Response variable:** `rewarding.object.preference` is the time (seconds) spent near the rewarding object subtracted by the time spent near the unrewarding object 
-- **Fixed effect:** `rewarding.object.colour` is the identity of the rewarding object (blue or green)
-- **Fixed effect:** `trial` is the number of the training trial. In this model it is supplied as an integer
-- **Random effect:** `id` is the identity of the individual fish 
-- **Covariate:** `feeding.count` is the number of trials in which an individual fish ate
-
 
 #### ESM Model 1 - Removing individual that did not feed
 
@@ -574,12 +568,15 @@ retest.feeding.data = retest.feeding.data %>% mutate(time.with.both.objects = ti
 
 There is a fish that did not eat during any trials, however removing this individual does not change the conclusions 
 
-##### Model
-
 ```{r, echo=TRUE}
 test.feeding.data.low.feeders.removed = 
   test.feeding.data %>% filter(feeding.count > 0)
+```
 
+
+##### Model
+
+```{r, echo=TRUE}
 test.feeding.data.low.feeders.removed.model = 
   glmmTMB(rewarding.object.preference ~  
             trial * rewarding.object.colour + (1|id) + 
@@ -615,11 +612,17 @@ tidy_fit.test.feeding.data.low.feeders.removed
 knitr::kable(tidy_fit.test.feeding.data.low.feeders.removed[2:4,] %>% dplyr::select(-group, -effect, -component)%>% mutate_if(is.numeric, round, digits = 3))
 ```
 
-
+***
 
 #### ESM Model 2 - Including feeding count as a covariate
 
-Moreover, as I demonstrate in the next model including the amount of trials fed as a covariate in the model does not change the conclusions.
+With this next model I look to see whether including the amount of trials an individual fed as a covariate in the model changes the conclusions. 
+
+- **Response variable:** `rewarding.object.preference` is the time (seconds) spent near the rewarding object subtracted by the time spent near the unrewarding object 
+- **Fixed effect:** `rewarding.object.colour` is the identity of the rewarding object (blue or green)
+- **Fixed effect:** `trial` is the number of the training trial. In this model it is supplied as an integer
+- **Random effect:** `id` is the identity of the individual fish 
+- **Covariate:** `feeding.count` is the number of trials in which an individual fish ate
 
 ```{r, echo = TRUE}
 test.data.feeding.controlled.model = 
@@ -664,11 +667,15 @@ knitr::kable(tidy_test.data.model[1:4,] %>% dplyr::select(-group, -effect) %>% m
 
 In both models the p-values are similar. While the effect of feeding count is not significant (p = `r tidy_fit.test.data.feeding.controlled.model$p.value[4]`) the effect of feeding count trends in the expected direction in our feeding count controlled model. As feeding count increases the preference for the rewarding object colour also increases.
 
+***
+
 ### Feeding and object preferences
+
+This is a model I (Wyatt) ran just because I was curious. 
 
 #### ESM Model 3 - Preference for the rewarded object during training based on feeding
 
-This is a model I (Wyatt) ran just because I was curious. This model asks whether the time spent near the rewarding object during a training session is influenced by whether a fish ate or not. Here trial is a variable containing the training trials (1-20). It is supplied as a random effect along with individual ID in the model. 
+This model asks whether the time spent near the rewarding object during a training session is influenced by whether a fish ate or not. Here trial is a variable containing the training trials (1-20). It is supplied as a random effect along with individual ID in the model. 
 
 - **Responsible variable:** `rewarding.object.preference` is the time (seconds) spent near the rewarding object subtracted by the time spent near the unrewarding object 
 - **Fixed effect:** `ate` is a binary factor (Yes or No) and corresponds to whether the fish ate in a given trial
