@@ -4,21 +4,31 @@
 
 ## Summary
 
-This is the GitHub repository containing the data and code for the analysis conducted in the manuscript <span style="text-decoration:underline">‘Bias in the shift of foraging preference for coloured objects in Trinidadian guppies, *Poecilia reticulata*’</span>. 
-
-A website which walks through each of the models in the main text as well as a few supplementary models is available at https://wyatt-toure.github.io/guppy-colour-learning-project/. Furthermore, this repository contains all the code to produce the analyses and figures in the manuscript as well as supplementary results and figures. 
-
-The raw R code can be found in [analysis-script-colour-project.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/analysis-script-colour-project.Rmd)
-
-Below I additionally present the [metadata](#metadata) for the dataset and the [packages required](#required-tools-and-references) to conduct the analyses and construct the website as well as their versions and citations. 
+This is the GitHub repository containing all the code to produce the analyses and figures in the manuscript <span style="text-decoration:underline">‘Colour biases in learned foraging preferences
+in Trinidadian guppies’</span>. 
 
 ## Website
 
-https://wyatt-toure.github.io/guppy-colour-learning-project/
+A reader-friendly website which walks through each of the models in the manuscript is available at https://wyatt-toure.github.io/guppy-colour-learning-project/.
+
+## Directory structure
+
+- `data/` contains the raw data used to conduct the analyses
+- `docs/` contains the reader-friendly html write-up of the analyses, the GitHub pages site is built from this folder
+- `figs/` contains the individual files for the figures and residual diagnostic plots produced by the analysis script 
+- `images/` contains relevant images and videos of the experiment
+
+The root directory contains all the Rmd scripts used to conduct the analyses and render the website. 
+
+The R code for the analysis can be found in [analysis-script-colour-project.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/analysis-script-colour-project.Rmd). 
+
+The methods page is built from the [methods.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/methods.Rmd) file and the home page is built from the [index.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/index.Rmd) file.
 
 ## Metadata
 
-Data: [colour-learning-project-data.csv](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/data/colour-learning-project-data.csv)
+Data are available in the [colour-learning-project-data.csv](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/data/colour-learning-project-data.csv) file.
+
+Below I  present the [metadata](#metadata) for the dataset and the [packages required](#required-tools-and-references) to conduct the analyses and construct the website as well as their versions and citations. 
 
 | Variable                    | Description                                                                                                                  |
 |-----------------------------|------------------------------------------------------------------------------------------------------------------------------|
