@@ -122,6 +122,9 @@ baseline.data.model =
 ```{r, echo=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = baseline.data.model)
 plot(simulationOutput)
+
+# Saving plot to figs directory 
+ggsave(filename = 'model-1-residual-plot.png', plot = (plot(simulationOutput)), path = 'figs/residual-plots/', device='png', dpi=300)
 ```
 
 </div>
@@ -166,6 +169,7 @@ ggplot(baseline.data,
                fun.data = 'mean_ci', position = position_dodge(width=0), width = 0.1)  +
   scale_x_discrete(labels = baseline.data.x.axis.label)
 
+ggsave(filename = 'model-1-baseline-data-plot.png', path = 'figs/', device='png', dpi=300)
 ```
 
 ***
@@ -192,6 +196,9 @@ training.data.model =
 ```{r, echo=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = training.data.model, n = 1000)
 plot(simulationOutput)
+
+# Saving plot to figs directory 
+ggsave(filename = 'model-2-residual-plot.png', plot = (plot(simulationOutput)), path = 'figs/residual-plots/', device='png', dpi=300)
 ```
 
 There is a slight deviation in the upper quantile but no indication in the residual plot of a gross model misfit.
@@ -228,9 +235,9 @@ tidy_training.data.model[1:4,3] <- training.model.table.row.name.vec
 knitr::kable(tidy_training.data.model[1:4,] %>% dplyr::select(-group, -effect)%>% mutate_if(is.numeric, round, digits = 3))
 ```
 
-Throughout training, over the 20 trials, guppies increased their relative preference for the rewarded object by `r tidy_training.data.model$Estimate[3] %>% round(3)` seconds each trial (Figure \@ref(fig:novel-pref-plot), p = `r tidy_training.data.model$'P value'[3]`). There was also a significant effect of rewarding object colour (p = `r tidy_training.data.model$'P value'[2]`). During training green-rewarded guppies expressed a stronger preference for their rewarded object (the green object) than blue-rewarded guppies did for the blue object However, there was no interaction effect between rewarding object colour and trial (p = `r tidy_training.data.model$'P value'[4]`) suggesting there was no difference in the rate of learning between the treatments
+Throughout training, over the 20 trials, guppies increased their relative preference for the rewarded object by `r tidy_training.data.model$Estimate[3] %>% round(3)` seconds each trial (Figure \@ref(fig:colour-pref-training-plot), p = `r tidy_training.data.model$'P value'[3]`). There was also a significant effect of rewarding object colour (p = `r tidy_training.data.model$'P value'[2]`). During training green-rewarded guppies expressed a stronger preference for their rewarded object (the green object) than blue-rewarded guppies did for the blue object However, there was no interaction effect between rewarding object colour and trial (p = `r tidy_training.data.model$'P value'[4]`) suggesting there was no difference in the rate of learning between the treatments
 
-```{r novel-pref-plot, echo=FALSE, fig.cap="Relative preference for the green object in both treatments during training trials (trials 1-20). Negative values represent more time spent with the blue object, positive values indicate more time spent with the green object. Light lines connect individuals across trials and bold lines represents a linear fit with 95% CI (grey shading). Subjects were consistently rewarded for approaching the blue object (dashed lines) or the green object (solid lines).", fig.id="novel-pref-plot",  warning=FALSE, message=FALSE}
+```{r colour-pref-training-plot, echo=FALSE, fig.cap="Relative preference for the green object in both treatments during training trials (trials 1-20). Negative values represent more time spent with the blue object, positive values indicate more time spent with the green object. Light lines connect individuals across trials and bold lines represents a linear fit with 95% CI (grey shading). Subjects were consistently rewarded for approaching the blue object (dashed lines) or the green object (solid lines).", fig.id="colour-pref-training-plot",  warning=FALSE, message=FALSE}
 ###### Time with rewarding object plot during training ######
 ggplot(training.data, 
             aes(x = trial, 
@@ -252,6 +259,7 @@ ggplot(training.data,
   geom_line(aes(group = id), alpha = 0.25) + 
   geom_smooth(method = lm)  
 
+ggsave(filename = 'model-2-colour-pref-training-plot.png', path = 'figs/', device='png', dpi=300)
 ```
 
 ***
@@ -290,6 +298,9 @@ test.data.model.glm =
 ```{r, include=TRUE,echo=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = test.data.model.glm, n = 1000)
 plot(simulationOutput)
+
+# Saving plot to figs directory 
+ggsave(filename = 'model-3-residual-plot.png', plot = (plot(simulationOutput)), path = 'figs/residual-plots/', device='png', dpi=300)
 ```
 
 </div>
@@ -400,6 +411,8 @@ ggplot(test.data,
   scale_x_discrete(labels = testing.data.x.axis.labels) + 
   facet_grid(~rewarding.object.colour, labeller = labeller(rewarding.object.colour = object.labels)) +
   stat_summary(fun=mean, geom="line", aes(group = rewarding.object.colour))
+
+ggsave(filename = 'model-3-test-data-pref-plot.png', path = 'figs/', device='png', dpi=300)
 ```
 
 
@@ -494,6 +507,9 @@ feeding.data.model =
 ```{r, echo=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = feeding.data.model)
 plot(simulationOutput)
+
+# Saving plot to figs directory 
+ggsave(filename = 'model-4-residual-plot.png', plot = (plot(simulationOutput)), path = 'figs/residual-plots/', device='png', dpi=300)
 ```
 
 </div>
@@ -541,6 +557,8 @@ ggplot(my.feeding.data,
         plot.title = element_text(size=16, hjust=0.5)) +
   scale_color_manual(values=c("#2980b9", "#27ae60"))+
   scale_fill_manual(values=c("#2980b9", "#27ae60"))
+
+ggsave(filename = 'model-4-feeding-count-plot.png', path = 'figs/', device='png', dpi=300)
 ```
 
 ***
@@ -596,6 +614,9 @@ test.feeding.data.low.feeders.removed.model =
 ```{r, echo=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = test.feeding.data.low.feeders.removed.model)
 plot(simulationOutput)
+
+# Saving plot to figs directory 
+ggsave(filename = 'ESM-model-1-residual-plot.png', plot = (plot(simulationOutput)), path = 'figs/residual-plots/', device='png', dpi=300)
 ```
 
 </div>
@@ -651,6 +672,9 @@ test.data.feeding.controlled.model =
 ```{r, echo=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = test.data.feeding.controlled.model)
 plot(simulationOutput)
+
+# Saving plot to figs directory 
+ggsave(filename = 'ESM-model-2-residual-plot.png', plot = (plot(simulationOutput)), path = 'figs/residual-plots/', device='png', dpi=300)
 ```
 
 </div>
@@ -717,6 +741,9 @@ training.data.model.rewarding.object =
 ```{r, echo=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = training.data.model.rewarding.object, n = 1000)
 plot(simulationOutput)
+
+# Saving plot to figs directory 
+ggsave(filename = 'ESM-model-3-residual-plot.png', plot = (plot(simulationOutput)), path = 'figs/residual-plots/', device='png', dpi=300)
 ```
 
 There is a significant deviation from uniformity as indicated by the significant Kolmogorov-Smirnov test. However, this model has a particularly large sample size (n = 456) so even slight deviations will be significant. Looking at the effect size of the deviation (D = `r testUniformity(simulationOutput)[1]`) shows that it is minor (D < 0.1) and visual inspection does not suggest large deviations in the residuals so our model is still appropriate.
@@ -808,6 +835,8 @@ ggarrange(p1,p2, widths = c(1.5,1),
           hjust = -2,
           vjust = 3,
           common.legend = TRUE)
+
+ggsave(filename = 'esm-model-3-training-data-ate-plot.png', path = 'figs/', device='png', dpi=300)
 ```
 
 
