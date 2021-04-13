@@ -39,7 +39,7 @@ Date of last update: `r format(Sys.Date(), '%b %d %Y')`
 
 ## Brief Overview
 
-This page reports the analyses for the experiment described in <span style="text-decoration:underline">'Bias in the shift of foraging preference for coloured objects in Trinidadian guppies, *Poecilia reticulata*'</span>. The raw data used to conduct these analyses are available in the [colour-learning-project-data.csv](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/data/colour-learning-project-data.csv) file. Descriptions of the variables found in the dataset are given in the metadata section of the [README](https://github.com/wyatt-toure/guppy-colour-learning-project#metadata) file. The R script to reproduce the analysis and this site are in the [analysis-script-colour-project.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/analysis-script-colour-project.Rmd) file.
+This page reports the analyses for the experiment described in <span style="text-decoration:underline">'Bias in the shift of foraging preference for coloured objects in Trinidadian guppies, *Poecilia reticulata*'</span>. The raw data used to conduct these analyses are available in the [colour-learning-project-data.csv](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/data/colour-learning-project-data.csv) file. Descriptions of the variables found in the dataset are given in the metadata section of the [README](https://github.com/wyatt-toure/guppy-colour-learning-project#metadata) file. The R script to reproduce the analysis and this site are in the [analysis-script-colour-project.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/analysis-script-colour-project.Rmd) file. The methods used to produce this data can be found on the [Methods](methods.html).
 
 ***
 
@@ -268,13 +268,6 @@ For the main effects of training and rewarding object colour on rewarding object
 - **Fixed effect:** `trial` is the number of the training trial. In this model it is supplied as a factor where 0 is the baseline trial and 21 is the final trial
 - **Random effect:** `id` is the identity of the individual fish 
 
-```{r, include=FALSE}
-test.data.model = 
-  lmer(rewarding.object.preference ~ trial * rewarding.object.colour + (1 | id),
-       data = test.data)
-```
-
-
 ```{r model 3, echo=TRUE}
 test.data.model.glm = 
   glmmTMB(rewarding.object.preference ~  
@@ -305,7 +298,7 @@ ggsave(filename = 'model-3-residual-plot.png', plot = (plot(simulationOutput)), 
 test.model.table.row.name.vec = c("Intercept", "Trial", "Rewarding object colour", "Rewarding object colour X Trial")
                        
 # Converting data frame to tibble
-tidy_test.data.model = broom.mixed::tidy(test.data.model)
+tidy_test.data.model = broom.mixed::tidy(test.data.model.glm)
 
 # Formatting p value
 tidy_test.data.model$p.value = ifelse(tidy_test.data.model$p.value < .001, ## Condition
@@ -319,7 +312,7 @@ tidy_test.data.model$p.value = ifelse(tidy_test.data.model$p.value < .001, ## Co
 tidy_test.data.model = rename(tidy_test.data.model, "Factor" = term, "Estimate" = estimate, "Std. Error" = std.error, "T statistic" = statistic, "P value" = p.value)
 
 # Changing tibble row names 
-tidy_test.data.model[1:4,3] <- test.model.table.row.name.vec
+tidy_test.data.model[1:4,4] <- test.model.table.row.name.vec
 ```
 
 </br>
@@ -327,7 +320,7 @@ tidy_test.data.model[1:4,3] <- test.model.table.row.name.vec
 ##### Results
 
 ```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy_test.data.model[1:4,] %>% dplyr::select(-group, -effect) %>% mutate_if(is.numeric, round, digits = 3), caption = "Summary table for Model 3. Estimates ± standard error (SE) of the effects of trial and rewarding object colour on the rewarding object preference from the generalized linear mixed effect model containing the effects Trial, Rewarding object colour, and their interaction effect (Trial X Rewarding object colour).")
+knitr::kable(tidy_test.data.model[1:4,] %>% dplyr::select(-group, -effect, -component) %>% mutate_if(is.numeric, round, digits = 3), caption = "Summary table for Model 3. Estimates ± standard error (SE) of the effects of trial and rewarding object colour on the rewarding object preference from the generalized linear mixed effect model containing the effects Trial, Rewarding object colour, and their interaction effect (Trial X Rewarding object colour).")
 ```
 
 When comparing the initial and final preference test, both conducted after training and without food rewards present, we found a significant interaction effect between test and rewarding object colour (p = `r tidy_test.data.model$'P value'[4]`). Guppies that had been green-rewarded had a shift in their rewarded object preference that was on average `r tidy_test.data.model$Estimate[4] %>% round(1)` seconds stronger than the shift in rewarded object preference of guppies trained to blue (Figure \@ref(fig:test-data-pref-plot)). These results were unaffected by the removal of one fish that did not feed during training ([See ESM model 2](#esm-model-2)).
@@ -449,7 +442,7 @@ knitr::kable(pairwise.comparison.contrasts.table.show %>% dplyr::select(contrast
 
 ```
 
-Post-hoc comparisons (Table \@ref(tab:contrasts-table)) reveal that initially, before training, there was no significant difference in the strength of preference for the rewarded object between the treatments (p `r formatted_p.pairwise.comparison.contrasts.table[4]`). The shift in rewarded object preference between the initial and final preference tests was significant for green-trained guppies but not for blue-trained guppies: green trained guppies increased their preference for the green object by `r abs(pairwise.comparison.contrasts.table$estimate[2] %>% round(1))` seconds from initial to final test whereas blue-trained guppies increased their preference for the blue object by `r abs(pairwise.comparison.contrasts.table$estimate[1] %>% round(1))` seconds an effect that was not statistically significant (p `r formatted_p.pairwise.comparison.contrasts.table[1]`). At final test, green-rewarded guppies had a significantly stronger preference for the previously rewarded object compared to the blue-rewarded guppies.
+Post-hoc comparisons (Table \@ref(tab:contrasts-table)) reveal that initially, before training, there was no significant difference in the strength of preference for the rewarded object between the treatments (p `r formatted_p.pairwise.comparison.contrasts.table[4]`). The shift in rewarded object preference between the initial and final preference tests was significant for green-trained guppies but not for blue-trained guppies: green trained guppies increased their preference for the green object by `r abs(pairwise.comparison.contrasts.table$estimate[2] %>% round(1))` seconds from initial to final (p `formatted_p.pairwise.comparison.contrasts.table[1]`) test whereas blue-trained guppies increased their preference for the blue object by `r abs(pairwise.comparison.contrasts.table$estimate[1] %>% round(1))` seconds an effect that was not statistically significant (p `r formatted_p.pairwise.comparison.contrasts.table[1]`). At final test, green-rewarded guppies had a significantly stronger preference for the previously rewarded object compared to the blue-rewarded guppies.
 
 ***
 
@@ -641,7 +634,7 @@ knitr::kable(tidy_fit.test.feeding.data.low.feeders.removed[1:4,] %>% dplyr::sel
 
 #### ESM Model 2 - Including feeding count as a covariate {#esm-model-2}
 
-With this next model I look to see whether including the amount of trials an individual fed as a covariate in the model changes the conclusions. 
+With this next model we looked to see whether including the amount of trials an individual fed as a covariate in the model changes the conclusions. 
 
 - **Response variable:** `rewarding.object.preference` is the time (seconds) spent near the rewarding object subtracted by the time spent near the unrewarding object 
 - **Fixed effect:** `rewarding.object.colour` is the identity of the rewarding object (blue or green)

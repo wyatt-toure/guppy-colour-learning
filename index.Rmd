@@ -30,7 +30,7 @@ knit: (function(input, ...) {
 
 Welcome to the project site for the experiment described in <span style="text-decoration:underline">'Colour biases in learned foraging preferences in Trinidadian guppies'</span>. This site contains detailed protocols and sample videos for the experiment as well as the code, model outputs, data tables, and residual diagnostics for the analyses. The R markdown scripts to reconstruct this site are available at the [GitHub repository for this site.](https://github.com/wyatt-toure/guppy-colour-learning-project) 
 
-The goal of this project was to determine whether we could shift the preference for particular objects in Trinidadian guppies regardless of the object's colour, in this case we focused on green and blue. To address this we rewarded guppies for feeding from either green or blue Lego blocks, you can see example footage of this in the [Methods](methods.html#Tests) section.
+The goal of this project was to determine whether we could shift the preference for particular objects in Trinidadian guppies regardless of the object's colour, in this case we focused on green and blue. To address this we rewarded guppies for feeding from either green or blue Lego blocks, you can see example footage of this in the [Methods](methods.html#Tests) section. The analysis and the code underlying it can be found in the [Analysis](analysis.html) section.
 
 <img src="images/training-data-animation.gif" alt="animation of training data" width="500" style="display: block; margin-left: auto; margin-right: auto;"/>
 

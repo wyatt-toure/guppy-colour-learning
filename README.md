@@ -28,37 +28,37 @@ Below I provide the variable descriptions for the dataset and the [packages requ
 
 ### Variable descriptions
 
-| Variable                    | Description                                                                                                                  |
-|-----------------------------|------------------------------------------------------------------------------------------------------------------------------|
-| id                          | The individual ID of a guppy                                                                                                 |
-| trial                       | The trial number                                                                                                             |
-| distance.moved              | The distance moved (centimeters)                                                                                             |
-| mean.velocity               | The mean velocity (centimeters per second)                                                                                   |
-| time.in.periphery           | The amount of time spent in the periphery of the tank (seconds)                                                              |
-| time.in.center              | The amonut of time spent in the center of the tank (seconds)                                                                 |
-| left.visits.object          | The number of times a guppy came within 2 body lengths of the object placed on the left side of the tank                     |
-| left.time.object            | The amount of time a guppy spent within 2 body lengths of the object placed on the left side of the tank (seconds)           |
-| left.latency.object         | The time it took for a guppy to first come within 2 body lengths of the object placed on the left side of the tank (seconds) |
-| right.visits.object         | The number of times a guppy came within 2 body lengths of the object placed on the right side of the tank                    |
-| right.time.object           | The amount of time a guppy spent within 2 body lengths of the object placed on the left side of the tank (seconds)           |
-| right.latency.object        | The time it took for a guppy to first come within 2 body lengths of the object placed on the left side of the tank (seconds) |
-| freezes                     | The number of times a guppy halted movement                                                                                  |
-| time.freezing               | The amount of time a guppy spent not moving (seconds)                                                                        |
-| object.side.my.view         | The side of the tank the rewarding object was on from my perspective                                                         |
-| object.side.etho.view       | The side of the tank the rewarding object was on from the camera's perspective (inverted from mine)                          |
-| time.with.trained.object    | The amount of time a guppy spent within 2 body lengths of the object they were trained to (seconds)                          |
-| time.with.untrained.object  | The amount of time a guppy spent within 2 body lengths of the object they were not trained to (seconds)                      |
-| latency.trained.object      | The amount of time it took a guppy to get within 2 body lengths of the object they were trained to (seconds)                 |
-| latency.untrained.object    | The amount of time it took a guppy to get within 2 body lengths of the object they were not trained to (seconds)             |
-| prop.time.trained.object    | The proportion of time guppies spent within 2 body lengths of the object they were trained to                                |
-| visits.trained.object       | The number of times a guppy came within 2 body lengths of the object they were trained to                                    |
-| visits.untrained.object     | The number of times a guppy came within 2 body lengths of the object they were not trained to                                |
-| rewarding.object.colour     | The colour of the object a guppy was trained to                                                                              |
-| first.choice                | The first object a guppy came within 2 body lengths of                                                                       |
-| distance.moved.in.periphery | The distance moved in the periphery (centimeters)                                                                            |
-| distance.moved.in.center    | The distance moved in the center (centimeters)                                                                               |
-| ate                         | Whether a guppy ate during the trial or not                                                                                  |
-| trial.type                  | The type of trial (training or testing)                                                                                      |
+| Variable                    | Description                                                  |
+| --------------------------- | ------------------------------------------------------------ |
+| id                          | The individual ID of a guppy                                 |
+| trial                       | The trial number                                             |
+| distance.moved              | The distance moved (centimeters)                             |
+| mean.velocity               | The mean velocity (centimeters per second)                   |
+| time.in.periphery           | The amount of time spent in the periphery of the tank (seconds) |
+| time.in.center              | The amount of time spent in the center of the tank (seconds) |
+| left.visits.object          | The number of times a guppy came within 4 cm of the object placed on the left side of the tank |
+| left.time.object            | The amount of time a guppy spent within 4 cm of the object placed on the left side of the tank (seconds) |
+| left.latency.object         | The time it took for a guppy to first come within 2 body lengths of the object placed on the left side of the tank (seconds). Dashes represents no visit. 0 indiciates an immediate visit (i.e. as soon as the release glass was lifted) |
+| right.visits.object         | The number of times a guppy came within 4 cm of the object placed on the right side of the tank |
+| right.time.object           | The amount of time a guppy spent within 4 cm of the object placed on the left side of the tank (seconds) |
+| right.latency.object        | The time it took for a guppy to first come within 4 cm of the object placed on the left side of the tank (seconds). Dashes represent no visit. 0 indiciates an immediate visit (i.e. as soon as the release glass was lifted) |
+| freezes                     | The number of times a guppy spent more than 1 second motionless |
+| time.freezing               | The total amount of time a guppy spent not moving (seconds)  |
+| object.side.my.view         | The side of the tank the rewarding object was on from my perspective |
+| object.side.etho.view       | The side of the tank the rewarding object was on from the camera's perspective (inverted from mine) |
+| time.with.trained.object    | The amount of time a guppy spent within 4 cm of the object they were trained to (seconds). In the paper we refer to this as the rewarded object. |
+| time.with.untrained.object  | The amount of time a guppy spent within 4 cm lengths of the object they were not trained to (seconds). In the paper we refer to this as the unrewarded. |
+| latency.trained.object      | The amount of time it took a guppy to get within 4 cmof the object they were trained to (seconds). 0 indiciates an immediate visit (i.e. as soon as the release glass was lifted) |
+| latency.untrained.object    | The amount of time it took a guppy to get within 4 cm of the object they were not trained to (seconds). 0 indiciates an immediate visit (i.e. as soon as the release glass was lifted) |
+| prop.time.trained.object    | The proportion of time guppies spent within 4 cm of the object they were trained to |
+| visits.trained.object       | The number of times a guppy came within 4 cm of the object they were trained to |
+| visits.untrained.object     | The number of times a guppy came within 4 cm of the object they were not trained to |
+| rewarding.object.colour     | The colour of the object a guppy was trained to              |
+| first.choice                | The first object a guppy came within 4 cm of                 |
+| distance.moved.in.periphery | The distance moved in the periphery (centimeters)            |
+| distance.moved.in.center    | The distance moved in the center (centimeters)               |
+| ate                         | Whether a guppy ate during the trial or not                  |
+| trial.type                  | The type of trial (training or testing)                      |
 
 ### Required tools and references
 
