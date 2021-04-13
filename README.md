@@ -1,10 +1,6 @@
-<p align="center">
-<img src="https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/images/training-data-animation.gif" style="display:block; margin: 0 auto;"   width = '50%'>
-</p>
-
 ## Summary
 
-This is the GitHub repository containing all the code to produce the analyses and figures in the manuscript <span style="text-decoration:underline">‘Colour biases in learned foraging preferences
+This is the repository containing all the code to produce the analyses and figures in the manuscript <span style="text-decoration:underline">‘Colour biases in learned foraging preferences
 in Trinidadian guppies’</span>. 
 
 ## Website
