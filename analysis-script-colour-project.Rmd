@@ -154,7 +154,7 @@ knitr::kable(tidy_baseline.model%>% mutate_if(is.numeric, round, digits = 3))
 During the initial test, there was no significant preference for the green object across all guppies (p = `r tidy_baseline.model$'P value' %>%  round(3)`).
 
 
-```{r baseline-pref-plot, echo=FALSE, fig.cap="Preference for the green object relative to the blue object across all guppies at baseline. Negative values represent more time spent with the blue object, positive values indicate more time spent with the green object. Data are means +/- 95% CI", fig.id="baseline-pref-plot",  warning=FALSE, message=FALSE}
+```{r baseline-pref-plot, echo=FALSE, message=FALSE, fig.cap="Preference for the green object relative to the blue object across all guppies at baseline. Negative values represent more time spent with the blue object, positive values indicate more time spent with the green object. Data are means +/- 95% CI", fig.id="baseline-pref-plot",  warning=FALSE, message=FALSE}
 ###### Baseline green object preference plot ######
 baseline.data.x.axis.label = 'Initial Test'
 ggplot(baseline.data, 
@@ -237,7 +237,7 @@ knitr::kable(tidy_training.data.model[1:4,] %>% dplyr::select(-group, -effect)%>
 
 Throughout training, over the 20 trials, guppies increased their relative preference for the rewarded object by `r tidy_training.data.model$Estimate[3] %>% round(3)` seconds each trial (Figure \@ref(fig:colour-pref-training-plot), p = `r tidy_training.data.model$'P value'[3]`). There was also a significant effect of rewarding object colour (p = `r tidy_training.data.model$'P value'[2]`). During training green-rewarded guppies expressed a stronger preference for their rewarded object (the green object) than blue-rewarded guppies did for the blue object However, there was no interaction effect between rewarding object colour and trial (p = `r tidy_training.data.model$'P value'[4]`) suggesting there was no difference in the rate of learning between the treatments
 
-```{r colour-pref-training-plot, echo=FALSE, fig.cap="Relative preference for the green object in both treatments during training trials (trials 1-20). Negative values represent more time spent with the blue object, positive values indicate more time spent with the green object. Light lines connect individuals across trials and bold lines represents a linear fit with 95% CI (grey shading). Subjects were consistently rewarded for approaching the blue object (dashed lines) or the green object (solid lines).", fig.id="colour-pref-training-plot",  warning=FALSE, message=FALSE}
+```{r colour-pref-training-plot, echo=FALSE, message=FALSE, fig.cap="Relative preference for the green object in both treatments during training trials (trials 1-20). Negative values represent more time spent with the blue object, positive values indicate more time spent with the green object. Light lines connect individuals across trials and bold lines represents a linear fit with 95% CI (grey shading). Subjects were consistently rewarded for approaching the blue object (dashed lines) or the green object (solid lines).", fig.id="colour-pref-training-plot",  warning=FALSE, message=FALSE}
 ###### Time with rewarding object plot during training ######
 ggplot(training.data, 
             aes(x = trial, 
@@ -381,7 +381,7 @@ pairwise.comparison.contrasts.table$df = pairwise.comparison.contrasts.table$df 
 ```
 
 
-```{r test-data-pref-plot, echo=FALSE, fig.cap="Changes in object preference from an initial test before training to a final test after training. During training, fish were rewarded for approaching the blue object (blue squares and lines) or the green object (green squares and lines). At test, no food reward was present. Dashed line represents an equal preference for either object. Data are means ± 95% CI; lighter points and lines are data for each individual. The final preference for green-rewarded fish is stronger than that of fish that has been rewarded for approaching the blue object, but both sets of subjects increased their preference for the rewarded object compared to the initial test preference.", fig.id="test-data-pref-plot", warning=FALSE, message=FALSE}
+```{r test-data-pref-plot, echo=FALSE, message=FALSE, fig.cap="Changes in object preference from an initial test before training to a final test after training. During training, fish were rewarded for approaching the blue object (blue squares and lines) or the green object (green squares and lines). At test, no food reward was present. Dashed line represents an equal preference for either object. Data are means ± 95% CI; lighter points and lines are data for each individual. The final preference for green-rewarded fish is stronger than that of fish that has been rewarded for approaching the blue object, but both sets of subjects increased their preference for the rewarded object compared to the initial test preference.", fig.id="test-data-pref-plot", warning=FALSE, message=FALSE}
 ###### Time with rewarding object plot during training ######
 testing.data.x.axis.labels = c("Baseline", "Re-test")
 object.labels = c("Blue-trained", "Green-trained")
@@ -541,7 +541,7 @@ knitr::kable(tidy_feeding.data.model[1:2,]%>% mutate_if(is.numeric, round, digit
 
 I found no significant difference in the amount of feeding done by individuals trained to green versus individuals trained to blue (Figure \@ref(fig:feeding-count-plot), p = `r tidy_feeding.data.model$'P value'[2] %>% round(3)`) which suggests that the observed group-level differences in final test performance between blue-trained guppies versus green-trained guppies  cannot be explained by differences in performance during training.  
 
-```{r feeding-count-plot, echo=FALSE, fig.cap="Average number of trials in which a fish fed during training. Data are means ± 95% confidence intervals with probability density functions of the data (showing the negative binomial distribution) to the right of the raw data.", fig.id="training-data-ate-plot", warning=FALSE}
+```{r feeding-count-plot, echo=FALSE, message=FALSE, fig.cap="Average number of trials in which a fish fed during training. Data are means ± 95% confidence intervals with probability density functions of the data (showing the negative binomial distribution) to the right of the raw data.", fig.id="training-data-ate-plot", warning=FALSE}
 source("https://gist.githubusercontent.com/benmarwick/2a1bb0133ff568cbe28d/raw/fb53bd97121f7f9ce947837ef1a4c65a73bffb3f/geom_flat_violin.R")
 ggplot(my.feeding.data,
              aes(x=rewarding.object.colour,
@@ -795,7 +795,7 @@ formatted_p.rewarding.object = ifelse(tidy_fit.rewarding.object$p.value < .001, 
 Throughout all of training, fish that ate during a session spent on average `r tidy_fit.rewarding.object$estimate[2] %>% round(1)` more seconds near the rewarded object compared to fish that did not eat (Figure, \@ref(fig:training-data-ate-plot), p `r formatted_p.rewarding.object[2]`). Fish that spent more trials eating may therefore have received more reinforcement for the object-food association. This result is what led me to investigate whether there was a difference in food reinforcement between the two treatments in [Model 4](#model-4). 
 </br>
 
-```{r training-data-ate-plot, echo=FALSE, fig.cap="Preference for the rewarding object during training based on whether an individual ate during a trial or not. Dashed line represents the no preference value. In panel A, Data are means ± 95% CI. In panel B, the data consist of all the feeding choices of all individuals across all training trials. Data are means ± 95% CI with probability density functions to the right of the raw data.", fig.id="training-data-ate-plot", warning=FALSE}
+```{r training-data-ate-plot, echo=FALSE, message=FALSE, fig.cap="Preference for the rewarding object during training based on whether an individual ate during a trial or not. Dashed line represents the no preference value. In panel A, Data are means ± 95% CI. In panel B, the data consist of all the feeding choices of all individuals across all training trials. Data are means ± 95% CI with probability density functions to the right of the raw data.", fig.id="training-data-ate-plot", warning=FALSE}
 ###### Time with rewarding object plot during training [gaussian] ######
 source("https://gist.githubusercontent.com/benmarwick/2a1bb0133ff568cbe28d/raw/fb53bd97121f7f9ce947837ef1a4c65a73bffb3f/geom_flat_violin.R")
 
