@@ -44,6 +44,7 @@ This page reports the analyses for the experiment described in <span style="text
 ***
 
 ```{r library-prep, include=FALSE}
+# Loading required packages
 library(lme4)
 library(tidyr)
 library(lmerTest)
@@ -64,36 +65,28 @@ library(MASS)
 ```
 
 ```{r data-prep, include=FALSE}
-#### Reading in Data 
+# Reading in Data 
 my.data = read.csv('data/colour-learning-project-data.csv')
 
-# Crerating new variables 
+# Creating new variables 
+
+## Rewarding object preference
 my.data = my.data %>% group_by(id) %>% mutate(rewarding.object.preference = (time.with.trained.object-time.with.untrained.object))
 
-my.data = my.data %>% group_by(id) %>% mutate(rewarding.object.preference.prop = (time.with.trained.object/(time.with.trained.object+time.with.untrained.object)))
-
+## Green object preference
 my.data = my.data %>% mutate(green.object.preference = (case_when(
   rewarding.object.colour == "green" ~ (time.with.trained.object-time.with.untrained.object), 
   rewarding.object.colour == "blue" ~ (time.with.untrained.object-time.with.trained.object) 
 )))
 
+# Restrict data to training data
 training.data = my.data %>% filter(trial.type =='training')
 
 # Restrict data to only the baseline and re-test data
-
 test.data = my.data %>% filter(trial.type =='test')
 
 # Restrict data to only the baseline data
-
 baseline.data = my.data %>% filter(trial == 0)
-
-# Create green object preference variable
-
-baseline.data = baseline.data %>% mutate(green.object.preference = (case_when(
-  rewarding.object.colour == "green" ~ (time.with.trained.object-time.with.untrained.object), 
-  rewarding.object.colour == "blue" ~ (time.with.untrained.object-time.with.trained.object) 
-)))
-
 
 # Change trial to factor 
 test.data$trial = as.factor(test.data$trial)
@@ -235,7 +228,7 @@ tidy_training.data.model[1:4,3] <- training.model.table.row.name.vec
 knitr::kable(tidy_training.data.model[1:4,] %>% dplyr::select(-group, -effect)%>% mutate_if(is.numeric, round, digits = 3))
 ```
 
-Throughout training, over the 20 trials, guppies increased their relative preference for the rewarded object by `r tidy_training.data.model$Estimate[3] %>% round(3)` seconds each trial (Figure \@ref(fig:colour-pref-training-plot), p = `r tidy_training.data.model$'P value'[3]`). There was also a significant effect of rewarding object colour (p = `r tidy_training.data.model$'P value'[2]`). During training green-rewarded guppies expressed a stronger preference for their rewarded object (the green object) than blue-rewarded guppies did for the blue object However, there was no interaction effect between rewarding object colour and trial (p = `r tidy_training.data.model$'P value'[4]`) suggesting there was no difference in the rate of learning between the treatments
+There was a significant effect of trial. Over the 20 training trials, guppies in the two treatments increased their relative preference for their respective rewarded objects by `r tidy_training.data.model$Estimate[3] %>% round(3)` seconds each trial (Figure \@ref(fig:colour-pref-training-plot), p = `r tidy_training.data.model$'P value'[3]`). There was also a significant effect of rewarded-object colour (p = `r tidy_training.data.model$'P value'[2]`). during training green-rewarded guppies expressed a stronger preference for their rewarded object (the green object) than did blue-rewarded guppies did for the blue object. However, there was no significant interaction effect between rewarding object colour and trial (p = `r tidy_training.data.model$'P value'[4]`), *i.e.*, the rate of increase in object preference over trials did not significantly differ between the treatments.
 
 ```{r colour-pref-training-plot, echo=FALSE, message=FALSE, fig.cap="Relative preference for the green object in both treatments during training trials (trials 1-20). Negative values represent more time spent with the blue object, positive values indicate more time spent with the green object. Light lines connect individuals across trials and bold lines represents a linear fit with 95% CI (grey shading). Subjects were consistently rewarded for approaching the blue object (dashed lines) or the green object (solid lines).", fig.id="colour-pref-training-plot",  warning=FALSE, message=FALSE}
 ###### Time with rewarding object plot during training ######
@@ -337,7 +330,7 @@ tidy_test.data.model[1:4,3] <- test.model.table.row.name.vec
 knitr::kable(tidy_test.data.model[1:4,] %>% dplyr::select(-group, -effect) %>% mutate_if(is.numeric, round, digits = 3), caption = "Summary table for Model 3. Estimates ± standard error (SE) of the effects of trial and rewarding object colour on the rewarding object preference from the generalized linear mixed effect model containing the effects Trial, Rewarding object colour, and their interaction effect (Trial X Rewarding object colour).")
 ```
 
-I found a significant interaction effect between trial and rewarding object colour (p = `r tidy_test.data.model$'P value'[4]`). Guppies that had the green object rewarded had an increase in rewarded object preference at final test that was `r tidy_test.data.model$Estimate[4] %>% round(1)` seconds stronger than the increase in the rewarded object preference of guppies trained to blue (Figure \@ref(fig:test-data-pref-plot)). 
+When comparing the initial and final preference test, both conducted after training and without food rewards present, we found a significant interaction effect between test and rewarding object colour (p = `r tidy_test.data.model$'P value'[4]`). Guppies that had been green-rewarded had a shift in their rewarded object preference that was on average `r tidy_test.data.model$Estimate[4] %>% round(1)` seconds stronger than the shift in rewarded object preference of guppies trained to blue (Figure \@ref(fig:test-data-pref-plot)). These results were unaffected by the removal of one fish that did not feed during training ([See ESM model 2](#esm-model-2)).
 
 ```{r, include=FALSE}
 # We see that there is a significant interaction effect. To see whether both blue-trained and green-trained guppies significantly shift their rewarded object preference
@@ -382,8 +375,8 @@ pairwise.comparison.contrasts.table$df = pairwise.comparison.contrasts.table$df 
 
 
 ```{r test-data-pref-plot, echo=FALSE, message=FALSE, fig.cap="Changes in object preference from an initial test before training to a final test after training. During training, fish were rewarded for approaching the blue object (blue squares and lines) or the green object (green squares and lines). At test, no food reward was present. Dashed line represents an equal preference for either object. Data are means ± 95% CI; lighter points and lines are data for each individual. The final preference for green-rewarded fish is stronger than that of fish that has been rewarded for approaching the blue object, but both sets of subjects increased their preference for the rewarded object compared to the initial test preference.", fig.id="test-data-pref-plot", warning=FALSE, message=FALSE}
-###### Time with rewarding object plot during training ######
-testing.data.x.axis.labels = c("Baseline", "Re-test")
+###### Time with rewarding object plot during testing ######
+testing.data.x.axis.labels = c("Initial test", "Final test")
 object.labels = c("Blue-trained", "Green-trained")
 names(object.labels) <- c("blue", "green")
 
@@ -456,9 +449,7 @@ knitr::kable(pairwise.comparison.contrasts.table.show %>% dplyr::select(contrast
 
 ```
 
-Post-hoc comparisons investigating the differences between treatments based on whether guppies are untrained or trained reveals that initially, when untrained, there was no difference in the strength of preference for the rewarding object between the treatments (blue-trained guppies had a blue object preference of `r pairwise.comparison.means.table$emmean[1] %>% round(1)` seconds and green-trained guppies had a green object preference of `r pairwise.comparison.means.table$emmean[3] %>% round(1)` seconds, p `r formatted_p.pairwise.comparison.contrasts.table[4]`). 
-
-Comparing the shift in rewarding object preference between initial and final preference tests in blue-trained and green-trained guppies reveals that the shift in rewarding object preference is significant for green-trained guppies but not for blue-trained guppies. Green trained guppies increased their preference for the green object by `r abs(pairwise.comparison.contrasts.table$estimate[2] %>% round(1))` seconds (going from a green object preference of `r pairwise.comparison.means.table$emmean[3] %>% round(1)` seconds initially to `r pairwise.comparison.means.table$emmean[4] %>% round(1)` seconds at final test, p `r formatted_p.pairwise.comparison.contrasts.table[2]`) whereas blue-trained guppies non-significantly increased their preference for the blue object by `r abs(pairwise.comparison.contrasts.table$estimate[1] %>% round(1))` seconds (going from a blue object preference `r pairwise.comparison.means.table$emmean[1] %>% round(1)` seconds initially to `r (pairwise.comparison.means.table$emmean[2]) %>% round(1)` seconds at final test, p `r formatted_p.pairwise.comparison.contrasts.table[1]`). For a full description of post-hoc comparisons see table \@ref(tab:contrasts-table).
+Post-hoc comparisons (Table \@ref(tab:contrasts-table)) reveal that initially, before training, there was no significant difference in the strength of preference for the rewarded object between the treatments (p `r formatted_p.pairwise.comparison.contrasts.table[4]`). The shift in rewarded object preference between the initial and final preference tests was significant for green-trained guppies but not for blue-trained guppies: green trained guppies increased their preference for the green object by `r abs(pairwise.comparison.contrasts.table$estimate[2] %>% round(1))` seconds from initial to final test whereas blue-trained guppies increased their preference for the blue object by `r abs(pairwise.comparison.contrasts.table$estimate[1] %>% round(1))` seconds an effect that was not statistically significant (p `r formatted_p.pairwise.comparison.contrasts.table[1]`). At final test, green-rewarded guppies had a significantly stronger preference for the previously rewarded object compared to the blue-rewarded guppies.
 
 ***
 
@@ -539,7 +530,7 @@ tidy_feeding.data.model[1:2,1] <- feeding.model.table.row.name.vec
 knitr::kable(tidy_feeding.data.model[1:2,]%>% mutate_if(is.numeric, round, digits = 3))
 ```
 
-I found no significant difference in the amount of feeding done by individuals trained to green versus individuals trained to blue (Figure \@ref(fig:feeding-count-plot), p = `r tidy_feeding.data.model$'P value'[2] %>% round(3)`) which suggests that the observed group-level differences in final test performance between blue-trained guppies versus green-trained guppies  cannot be explained by differences in performance during training.  
+We found no significant difference in the number of trials individuals fed between green-rewarded and blue-rewarded fish (Figure \@ref(fig:feeding-count-plot), p = `r tidy_feeding.data.model$'P value'[2] %>% round(3)`). Removing the one individual that did not feed during training gave a similar result (p = 0.87). We also incorporated feeding count as a covariate in [Model 3](#model-3), finding the same pattern of results (See [ESM Model 2](#esm-model-2)).
 
 ```{r feeding-count-plot, echo=FALSE, message=FALSE, fig.cap="Average number of trials in which a fish fed during training. Data are means ± 95% confidence intervals with probability density functions of the data (showing the negative binomial distribution) to the right of the raw data.", fig.id="training-data-ate-plot", warning=FALSE}
 source("https://gist.githubusercontent.com/benmarwick/2a1bb0133ff568cbe28d/raw/fb53bd97121f7f9ce947837ef1a4c65a73bffb3f/geom_flat_violin.R")
@@ -574,7 +565,7 @@ In this section we describe models not included in the main text.
 The models described in this section were run to address the potential role of feeding count on test performance. The concern was that the results may be explained by differential levels of reinforcement between the groups or between individuals during training. To ensure our results were robust to matters arising from feeding count variation we: 
 
 1) Removed an individual that did not feed and re-ran the analysis in [Model 3](#model-3)
-2) Included feeding count as a co-variate and re-ran the analyysis in [Model 3](#model-3)
+2) Included feeding count as a co-variate and re-ran the analysis in [Model 3](#model-3)
 
 </br>
 
@@ -648,7 +639,7 @@ knitr::kable(tidy_fit.test.feeding.data.low.feeders.removed[1:4,] %>% dplyr::sel
 
 ***
 
-#### ESM Model 2 - Including feeding count as a covariate
+#### ESM Model 2 - Including feeding count as a covariate {#esm-model-2}
 
 With this next model I look to see whether including the amount of trials an individual fed as a covariate in the model changes the conclusions. 
 
