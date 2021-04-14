@@ -691,7 +691,7 @@ knitr::kable(tidy_fit.test.data.feeding.controlled.model[1:5,]%>% dplyr::select(
 The main results do not change if I control for feeding count. The above table is the output feeding controlled model. Below we have the output table for the non-feeding-count controlled model from [Model 3](#model-3).
 
 ```{r, results=TRUE, echo=FALSE}
-knitr::kable(tidy_test.data.model[1:4,] %>% dplyr::select(-group, -effect) %>% mutate_if(is.numeric, round, digits = 3))
+knitr::kable(tidy_test.data.model[1:4,] %>% dplyr::select(-group, -effect, -component) %>% mutate_if(is.numeric, round, digits = 3))
 ```
 
 In both models the p-values are similar. While the effect of feeding count is not significant (p = `r tidy_fit.test.data.feeding.controlled.model$'P value'[4]`) the effect of feeding count trends in the expected direction in our feeding count controlled model. As feeding count increases the preference for the rewarding object colour also increases.
