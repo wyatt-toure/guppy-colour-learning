@@ -112,7 +112,7 @@ baseline.data.model =
 <button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName"> See Model 1 Residuals </button>  
 <div id="BlockName" class="collapse"> 
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = baseline.data.model)
 plot(simulationOutput)
 
@@ -186,7 +186,7 @@ training.data.model =
 <button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName2"> See Model 2 Residuals </button>  
 <div id="BlockName2" class="collapse">  
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = training.data.model, n = 1000)
 plot(simulationOutput)
 
@@ -281,7 +281,7 @@ test.data.model.glm =
 <button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName3"> See Model 3 Residuals </button>  
 <div id="BlockName3" class="collapse">  
 
-```{r, include=TRUE,echo=FALSE}
+```{r, include=TRUE,echo=FALSE, message=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = test.data.model.glm, n = 1000)
 plot(simulationOutput)
 
@@ -488,7 +488,7 @@ feeding.data.model =
 <button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName4"> See Model 4 Residuals </button>  
 <div id="BlockName4" class="collapse">  
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = feeding.data.model)
 plot(simulationOutput)
 
@@ -595,7 +595,7 @@ test.feeding.data.low.feeders.removed.model =
 <button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName6"> See ESM Model 1 Residuals </button>  
 <div id="BlockName6" class="collapse">  
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = test.feeding.data.low.feeders.removed.model)
 plot(simulationOutput)
 
@@ -653,7 +653,7 @@ test.data.feeding.controlled.model =
 <button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName7"> See ESM Model 2 Residuals </button>  
 <div id="BlockName7" class="collapse">  
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = test.data.feeding.controlled.model)
 plot(simulationOutput)
 
@@ -722,7 +722,7 @@ training.data.model.rewarding.object =
 <button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName5"> See ESM Model 3 Residuals </button>  
 <div id="BlockName5" class="collapse">  
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = training.data.model.rewarding.object, n = 1000)
 plot(simulationOutput)
 
