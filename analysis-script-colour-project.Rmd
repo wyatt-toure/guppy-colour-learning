@@ -991,7 +991,7 @@ training session is influenced by whether a fish ate or not. Here trial is a
 variable containing the training trials (1-20). It is supplied as a random
 effect along with individual ID in the model.
 
-  - **Responsible variable:** `rewarding.object.preference` is the time
+  - **Response variable:** `rewarding.object.preference` is the time
     (seconds) spent near the rewarding object subtracted by the time spent near
     the unrewarding object
   - **Fixed effect:** `ate` is a binary factor (Yes or No) and corresponds to
