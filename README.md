@@ -11,6 +11,7 @@ A reader-friendly website which walks through each of the models in the manuscri
 
 - `data/` contains the raw data used to conduct the analyses
 - `docs/` contains the reader-friendly html write-up of the analyses, the GitHub pages site is built from this folder
+- `R/` contains custom R functions used in the analysis
 - `figs/` contains the individual files for the figures and residual diagnostic plots produced by the analysis script 
 - `images/` contains relevant images and videos of the experiment
 
