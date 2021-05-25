@@ -2,7 +2,7 @@
 
 ## Authors
 
-M. Wyatt Toure (Contact: wyatt.toure@gmail.com)
+M. Wyatt Toure (Contact: wyatt.toure@gmail.com)\
 Simon M. Reader
 
 ## Summary
