@@ -1,3 +1,10 @@
+# Analysis documentation for 'Colour biases in learned foraging preferences in Trinidadian guppies'
+
+## Authors
+
+M. Wyatt Toure (Contact: wyatt.toure@gmail.com)
+Simon M. Reader
+
 ## Summary
 
 This is the repository containing all the code to produce the analyses and figures in the manuscript <span style="text-decoration:underline">‘Colour biases in learned foraging preferences
@@ -6,6 +13,17 @@ in Trinidadian guppies’</span>.
 ## Website
 
 A reader-friendly website which walks through each of the models in the manuscript is available at https://wyatt-toure.github.io/guppy-colour-learning-project/.
+
+## How to reproduce the results
+
+If you want to reproduce the results you need to download the entire repository
+onto your system and open
+[analysis.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/analysis.Rmd)
+in RStudio. You will then need to install the packages required for the analysis
+which are listed in the Required tools and references of this README. Then you
+can select the Run All option under the Code option in the navbar. You can also
+run all chunks independently as well though you should do so sequentially since
+variables necessary for the analysis are created as the script progresses.
 
 ## Directory structure
 
