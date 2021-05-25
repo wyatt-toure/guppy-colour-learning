@@ -35,7 +35,7 @@ variables necessary for the analysis are created as the script progresses.
 
 The root directory contains all the Rmd scripts used to conduct the analyses and render the website. 
 
-The R code for the analysis can be found in [analysis-script-colour-project.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/analysis-script-colour-project.Rmd). 
+The R code for the analysis can be found in [analysis.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/analysis.Rmd). 
 
 The methods page is built from the [methods.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/methods.Rmd) file and the home page is built from the [index.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/index.Rmd) file.
 
