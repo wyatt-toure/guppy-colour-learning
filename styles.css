@@ -191,4 +191,8 @@ p.author-affil {
     outline-color: #333333;
 }
 
+blockquote {
+    font-size: inherit;
+}
+
 
