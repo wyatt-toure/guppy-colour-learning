@@ -1,0 +1,81 @@
+---
+title: "Datasheet for colour learning part 2"
+output:
+  bookdown::html_document2:
+    include:
+      highlight: pygments
+    number_sections: false
+    split_by: section
+    
+knit: (function(input, ...) {
+    rmarkdown::render(
+      input,
+      output_file = 'docs/datasheet-part2')
+  })
+---
+
+```{r library-prep, include=FALSE}
+# Loading required packages
+library(dplyr)
+library(randomizr)
+```
+
+## Assigning treatments
+
+To assign individuals to treatments I used the complete_ra() function from the
+randomizr package to randomly assign equal amounts of n = 16 individuals to
+either blue or green trained treatments.
+
+Next I used rbinom to return a random sequence of 1s and 0s which I converted
+to left and right which would determine which side of the tank an object would
+end up on. I used a random seed which produced equal amounts of 1s and 0s.
+
+The I run a series of dplyr calls which creates a new variable called trial
+that counts from 1 to nrow() of the data frame separated by id. There are 20
+levels of ID.
+
+```{r treatment-assignment, echo=FALSE}
+# Creating IDs
+id <- as.factor(c(
+  "1a", "1b", "2a", "2b", "3a", "3b", "4a", "4b",
+  "5a", "5b", "6a", "6b", "7a", "7b", "8a", "8b"
+))
+
+# Get treatment assignments
+set.seed(123)
+treatment <- complete_ra(
+  N = 16,
+  num_arms = 2,
+  conditions = c("green-trained", "blue-trained")
+)
+
+# Get object sides for training
+set.seed(52)
+object_sides_training <- rbinom(20, 1, 0.5)
+
+# Create a data frame with trials and object sides
+data_sheet <- data.frame(id = rep(id, times = 20)) %>%
+  group_by(id) %>%
+  mutate(trial = 1:n()) %>%
+  ungroup() %>%
+  mutate(
+    object.side =
+      ifelse(
+        trial %% 2 == 1,
+        object_sides_training, 1 - object_sides_training
+      )
+  )
+
+# Change object side to factor and re-code from numbers to words
+data_sheet$object.side <- as.factor(data_sheet$object.side)
+data_sheet$object.side <- recode_factor(data_sheet$object.side,
+  "1" = "left",
+  "0" = "right"
+)
+
+# add individual treatments to data sheet
+data_sheet <- cbind(data_sheet, treatment)
+```
+
+
+
