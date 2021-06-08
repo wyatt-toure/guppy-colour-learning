@@ -1,8 +1,8 @@
 #' @title Batch processing raw EthoVision file directory
 #'
-#' @description This function takes a directory of raw, EthoVision exported,
-#' .xlsx files and returns them in one data frame appended together. Requires the
-#' format_ethovision_data() function.
+#' @description A custom function for my data prep. It takes a directory of raw, 
+#' EthoVision exported, `.xlsx` files and returns them in one data frame appended 
+#' together. Requires my format_ethovision_data() function.
 #'
 #' @param raw_data_path the path to the directory containing raw data files
 #'
