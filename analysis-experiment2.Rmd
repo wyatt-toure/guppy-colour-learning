@@ -277,7 +277,9 @@ Finally we export the full data set as a `.csv` file to future proof the full
 data sheet in a plain text, machine-readable format.
 
 ```{r data-prep-7}
-write.csv(full_data, file = "data/colour-learning-experiment-2-full-data.csv")
+write.csv(full_data, 
+          file = "data/colour-learning-experiment-2-full-data.csv",
+          row.names = FALSE)
 ```
 
 ## Models
