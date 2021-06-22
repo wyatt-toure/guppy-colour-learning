@@ -22,18 +22,20 @@ library(randomizr)
 
 ## Assigning treatments
 
-To assign individuals to treatments I used the complete_ra() function from the
-randomizr package to randomly assign equal amounts of n = 16 individuals to
+To assign individuals to treatments I used the `complete_ra()` function from the
+`randomizr` package to randomly assign equal amounts of n = 16 individuals to
 either blue or green trained treatments. I picked an arbitrary random seed.
 
-Next I used rbinom to return a random sequence of 1s and 0s which I converted to
-left and right which would determine which side of the tank an object would end
-up on. To get the random seed I randomly picked numbers until I got one which
-produced equal amounts of 1s and 0s.
+Next I used `rbinom()` to return a random sequence of 1s and 0s which I
+converted to left and right which would determine which side of the tank an
+object would end up on. To get the random seed I randomly picked numbers until I
+got one which produced equal amounts of 1s and 0s.
 
-The I run a series of dplyr calls which creates a new variable called trial that
-counts from 1 to nrow() of the data frame separated by id. There are 20 levels
-of ID.
+Then I ran a series of dplyr calls which creates a new variable called `trial`
+that counts from 1 to `nrow()` of the data frame separated by id. There are 20
+levels of `trial`. The object sides for trial 0 was obtained by reversing the
+object sides of trial 1. Trial 21 had its object sides obtained my reversing the
+object sides for trial 21.
 
 ```{r treatment-assignment, echo=FALSE}
 # Creating IDs

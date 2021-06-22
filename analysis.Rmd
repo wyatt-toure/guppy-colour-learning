@@ -37,7 +37,7 @@ Date of last update: `r format(Sys.Date(), '%b %d %Y')`
 
 ***
 
-## Brief Overview
+## Overview
 
 This page reports the analyses for the experiment described in
 <span style="text-decoration:underline">'Colour biases in learned foraging

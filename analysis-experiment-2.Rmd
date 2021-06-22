@@ -1,0 +1,659 @@
+---
+title: "Guppy Colour Learning"
+subtitle: "Experiment 2 Data Preparation and Analysis"
+author: 
+  - name: "M. Wyatt Toure"
+    affiliation: "McGill University, Department of Biology, 1205 Docteur Penfield, Montreal, Quebec H3A 1B1, Canada"  
+output:
+  bookdown::html_document2:
+    includes:
+      in_header: docs/header.html    
+    toc: true
+    toc_depth: 4
+    toc_float:
+      collapsed: false      
+    number_sections: false
+    split_by: section
+    css: styles2.css
+bibliography: references/references.bib
+csl: references/elife-citation-style.csl    
+link-citations: yes
+
+knit: (function(input, ...) {
+    rmarkdown::render(
+      input,
+      output_file = 'docs/analysis-experiment-2')
+  })
+---
+
+Date of last update: `r format(Sys.Date(), '%b %d %Y')`
+
+***
+
+## Overview
+
+This page reports the analyses for the second experiment described in 'Colour
+biases in learned foraging preferences in Trinidadian guppies'. The code run to
+produce the results is included on the page along with explanations of what the
+code is doing and why. The raw R script to reproduce the data preparation,
+analysis, figures, and this page are in
+[analysis-experiment-2.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/analysis-experiment-2.Rmd).
+Note the code blocks that produce the figures and tables are not shown on this
+page as they are rather long, however the code to produce the figures and tables
+can also be seen in
+[analysis-experiment-2.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/analysis-experiment-2.Rmd).
+If you only want to see the results you can go straight to the [Models](#models)
+section.
+
+```{r library-prep, include=FALSE}
+# Loading required packages
+library(lme4)
+library(tidyr)
+library(lmerTest)
+library(ggplot2)
+library(ggpubr)
+library(DHARMa)
+library(dplyr)
+library(effects)
+library(broom)
+library(broom.mixed)
+library(knitr)
+library(emmeans)
+library(report)
+library(cowplot)
+library(tidyext)
+library(glmmTMB)
+library(MASS)
+library(googledrive)
+library(stringr)
+source("R/format-p-value.R")
+source("R/rename-lme4-model.R")
+source("R/geom-flat-violin.R")
+source("R/read-and-format-ethovision-data.R")
+```
+
+***
+
+## Data preparation 
+
+In this section we detail the steps taken to process the raw data produced by
+processing video footage with automated tracking from Noldus EthoVision
+[@noldus2001EthoVisionVersatileVideo]. The raw data can be found in the
+[`data/experiment-2-raw-data/`](https://github.com/wyatt-toure/guppy-colour-learning-project/tree/main/data/experiment-2-raw-data)
+directory. They are composed of `.xlsx` files exported from EthoVision XT
+Version 11. Each trial is in a separate `.xlsx` file. The full processed data
+are available as a `.csv` file in the file
+[`colour-learning-experiment-2-full-data.csv`](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/data/colour-learning-experiment-2-full-data.csv).
+Descriptions of the variables found in the data set are given in the variable
+descriptions section of the
+[README](https://github.com/wyatt-toure/guppy-colour-learning-project#metadata)
+file.
+
+### Downloading data
+
+To prepare the data first we download the raw data files from the Google Drive
+folder they are stored in. We make use of the tidyverse package `googledrive` to
+do this. We put `googledrive` into a de-authorized state so we can access public
+Google Drive resources without a Google sign-in. We then get the list of files
+that are present in the Google drive directory and use a `for()` loop which
+downloads each file using the `drive_download()` function. The data are
+downloaded to the
+[`data/experiment-2-raw-data/`](https://github.com/wyatt-toure/guppy-colour-learning-project/tree/main/data/experiment-2-raw-data)
+directory.
+
+```{r data-download, message=FALSE, warning=FALSE, eval=FALSE}
+# Downloading data from Google drive
+
+## Put googledrive into a de-authorized state
+drive_deauth()
+
+## Store link to data folder
+data_folder_link <- "https://drive.google.com/drive/folders/1A8NRlBMQ-BfkgNHzEpmw6hEbgePJncLj?usp=sharing"
+
+## Get id for data folder
+data_folder_id <- drive_get(as_id(data_folder_link))
+
+## Store the list of file names and ids found in the data folder
+data_files <- drive_ls(data_folder_id)
+
+## Loop through and download each file
+for (file_x in 1:length(data_files$name)) {
+      drive_download(
+        as_id(data_files$id[file_x]),
+        path = str_c("data/experiment-2-raw-data/",data_files$name[file_x]),
+        overwrite = TRUE)
+}
+```
+
+### Formatting data
+
+Next we read in and format the raw `.xlsx` files from EthoVision which are in
+`data/experiment-2-raw-data/` using one of my custom functions,
+`read_and_format_ethovision_data()`. The code for this can be seen in
+[`read-and-format-ethovision-data.R`](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/R/read-and-format-ethovision-data.R).
+
+
+```{r data-read, message=FALSE}
+# Reading in Data
+full_data <- read_and_format_ethovision_data("data/experiment-2-raw-data/")
+```
+
+Next we add the rewarding object colour treatments to the correct guppy IDs that
+were established *a priori* in
+[`datasheet-experiment-2.Rmd`](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/datasheet-experiment-2.Rmd).
+The treatments are represented by the variable `rewarding.object.colour`.
+
+```{r treatment-assignment}
+## Assigning treatments
+full_data <- full_data %>%
+  mutate(
+    rewarding.object.colour =
+      case_when(
+        id == "1a" ~ "blue",
+        id == "1b" ~ "green",
+        id == "2a" ~ "blue",
+        id == "2b" ~ "blue",
+        id == "3a" ~ "blue",
+        id == "3b" ~ "green",
+        id == "4a" ~ "green",
+        id == "4b" ~ "green",
+        id == "5a" ~ "green",
+        id == "5b" ~ "blue",
+        id == "6a" ~ "green",
+        id == "6b" ~ "green",
+        id == "7a" ~ "blue",
+        id == "7b" ~ "blue",
+        id == "8a" ~ "green",
+        id == "8b" ~ "blue"
+      )
+  )
+```
+
+All the variables for the data set are read in as characters due to the
+`read_excel()` call in `read_and_format_ethovision_data()`, so we need to
+convert them to their appropriate data structures for the analysis. Variables
+are converted to either factors or numerics where appropriate. 
+
+For the latency measures, dashes in the raw data sheet indicate that an
+individual never visited the zone of interest. In being converted to numerics
+these values are changed to NAs. We convert these values to the maximum value
+which is the trial duration (300 seconds).
+
+```{r variable-conversion, warning=FALSE}
+# Converting variables
+
+## Factors
+Factors <- c("ate", "id", "object.side", "rewarding.object.colour", "object.pair")
+full_data[Factors] <- lapply(full_data[Factors], as.factor)
+
+## Numeric
+Numerics <- c(
+  "trial", "left.object.visits", "time.with.left.object",
+  "left.object.latency", "right.object.visits", "time.with.right.object",
+  "right.object.latency", "periphery.visits", "time.in.periphery",
+  "latency.to.periphery", "center.visits", "time.in.center",
+  "latency.to.center", "distance.moved", "mean.velocity"
+)
+full_data[Numerics] <- lapply(full_data[Numerics], as.numeric)
+
+## Latency NA replacement
+full_data <- full_data %>%
+  replace_na(
+    list(
+      left.object.latency = 300,
+      right.object.latency = 300,
+      latency.to.periphery = 300,
+      latency.to.center = 300
+    )
+  )
+```
+
+### Variable creation
+
+New variables and measures need to be created from the variables we have in the
+raw data sheets. We do this using the `mutate()` and `case_when()` functions
+from the tidyverse package `dplyr`. First we invert the object side because the
+camera image is reversed from the perspective of the experimenter. We then
+create the variables `time.with.trained.object` and `time.with.untrained.object`
+by identifying whether the left or right object is the reward object.
+
+The preference metrics `green.object.preference` and
+`rewarding.object.preference` are created by subtracting the time spent near the
+blue object from the time spent near the green object and subtracting the time
+spent near the untrained object from the time spent near the trained object
+respectively.
+
+`time.with.both.objects` is obtained by summing the time spent near the left and
+the right object. `total.time` is obtained by summing the `time.in.periphery`
+with the `time.in.center`. `total.time` should be close to 300 since trials
+last 5 minutes (300 seconds).
+
+We also create the variable `trial.type` to identify whether a trial is a test
+trial (unreinforced) or training trial (reinforced).
+
+```{r variable-creation, warning=FALSE, message=FALSE}
+# Creating new variables
+
+## Inverting object side
+full_data <- full_data %>%
+  mutate(
+    reward.object.side =
+      as.factor(
+        case_when(
+          object.side == "left" ~ "right",
+          object.side == "right" ~ "left"
+        )
+      )
+  )
+
+## Time with trained object
+full_data <- full_data %>%
+  mutate(
+    time.with.trained.object =
+      case_when(
+        reward.object.side == "left" ~ time.with.left.object,
+        reward.object.side == "right" ~ time.with.right.object
+      )
+  )
+
+## Time with untrained object
+full_data <- full_data %>%
+  mutate(
+    time.with.untrained.object =
+      case_when(
+        reward.object.side == "left" ~ time.with.right.object,
+        reward.object.side == "right" ~ time.with.left.object
+      )
+  )
+
+## Green object preference
+full_data <- full_data %>%
+  mutate(
+    green.object.preference =
+      case_when(
+        rewarding.object.colour == "green" ~
+        time.with.trained.object - time.with.untrained.object,
+        
+        rewarding.object.colour == "blue" ~
+        time.with.untrained.object - time.with.trained.object
+      )
+  )
+
+## Rewarding object preference
+full_data <- full_data %>%
+  group_by(id) %>%
+  mutate(
+    rewarding.object.preference =
+      time.with.trained.object - time.with.untrained.object
+  )
+
+## Proportionanl Rewarding object preference
+full_data <- full_data %>%
+  group_by(id) %>%
+  mutate(
+    prop.rewarding.object.preference =
+      time.with.trained.object / (time.with.trained.object + time.with.untrained.object)
+  )
+
+## Time with both objects
+full_data <- full_data %>%
+  mutate(
+    time.with.both.objects =
+      time.with.left.object + time.with.right.object
+  )
+
+## Total time
+full_data <- full_data %>%
+  mutate(
+    total.time =
+      time.in.center + time.in.periphery
+  )
+
+## Trial type
+full_data <- full_data %>%
+  mutate(
+    trial.type =
+      as.factor(
+        case_when(
+          trial == 0 | trial == 21 ~ "test",
+          trial > 0 & trial < 21 ~ "training"
+        )
+      )
+  )
+```
+
+We next create subsets of the full data set that are restricted to the training
+trials (reinforced), the test trials (unreinforced), and the initial test trial
+(unreinforced) using the `filter()` function from `dplyr`. We change trial to a
+factor for the unreinforced test trial data subset since there are two levels of
+trial being compared to each other for the analysis on this data set.
+
+```{r data-subset, warning=FALSE, message=FALSE}
+# Restrict data to training data
+training_data <- full_data %>%
+  filter(trial.type == "training")
+
+# Restrict data to only the baseline and re-test data
+test_data <- full_data %>%
+  filter(trial.type == "test")
+
+# Restrict data to only the baseline data
+baseline_data <- full_data %>%
+  filter(trial == 0)
+
+# Change trial to factor
+test_data$trial <- as.factor(test_data$trial)
+```
+
+### Exporting processed data
+
+Finally we export the full data set as a `.csv` file to future proof the full
+data sheet in a plain text, machine-readable format. `row.names` is set to
+`FALSE` so that the index column is not exported into the `.csv` file.
+
+```{r data-export}
+write.csv(full_data, 
+          file = "data/colour-learning-experiment-2-full-data.csv",
+          row.names = FALSE)
+```
+
+***
+
+## Models
+
+We analysed the data from our experiment using linear mixed effect and
+generalized linear mixed effect models with the `lmer()` and `glmer()` functions
+from the `lme4` package. P-values and effective degrees of freedom were obtained
+using the `lmerTest` package which uses Satterthwaite's degrees of freedom
+method [@kuznetsova2017LmerTestPackageTests]. Model residuals were checked
+they met distributional assumptions with the `DHARMa` package. The 'See Model
+Residuals' button below the model formulas can be clicked to see the residual
+diagnostic plots produced by `DHARMa` for that particular model.
+
+### Model 1 -  Preference for the green object at baseline
+
+This first model contains the data for all individual guppies during the initial
+test. We looked at the green object preference of all guppies in an intercept
+only model to see if the green object preference at baseline was significantly
+different from zero. `green.object.preference` is the time spent near the green
+object subtracted by the time spent near the blue object.
+
+```{r model-1, echo=TRUE}
+baseline_data_model <-
+  lm(green.object.preference ~ 1,
+    data = baseline_data
+  )
+```
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName"> See Model 1 Residuals </button>  
+<div id="BlockName" class="collapse"> 
+
+```{r, message=FALSE}
+simulationOutput <- simulateResiduals(fittedModel = baseline_data_model)
+plot(simulationOutput)
+
+# Saving plot to figs directory
+ggsave(
+  filename = "exp-2-model-1-residual-plot.png",
+  plot = (plot(simulationOutput)),
+  path = "figs/exp-2/exp-2-residual-plots",
+  device = "png",
+  dpi = 300
+)
+```
+
+</div>
+
+\
+
+##### Result
+
+```{r tidying-model-1, echo=FALSE, message=FALSE}
+# Setting table row names
+baseline_table_row_name_vec <- c("Intercept")
+
+# Converting data frame to tibble
+tidy_baseline_model <- broom.mixed::tidy(baseline_data_model)
+
+# Changing tibble header names
+tidy_baseline_model <- rename_tidy_lme4_cols(tidy_baseline_model)
+
+# Changing tibble row names
+tidy_baseline_model[1:1, 1] <- baseline_table_row_name_vec
+```
+
+```{r,  results=TRUE, echo=FALSE}
+knitr::kable(tidy_baseline_model %>%
+  mutate_if(is.numeric, round, digits = 3))
+```
+
+Just as in experiment 1, there is no significant preference for the green object
+over the blue object across all guppies during the initial test (p =
+`r tidy_baseline_model$'P value' %>% round(3)`).
+
+```{r baseline-pref-plot, echo=FALSE, message=FALSE, echo=FALSE, fig.cap="Preference for the green object relative to the blue object across all guppies at baseline. Negative values represent more time spent with the blue object, positive values indicate more time spent with the green object. Data are means ± 95% CI", fig.id="baseline-pref-plot",  warning=FALSE, message=FALSE}
+###### Baseline green object preference plot ######
+baseline_data_x_axis_label <- "Initial Test"
+ggplot(
+  baseline_data,
+  aes(
+    x = as.factor(trial),
+    y = green.object.preference
+  )
+) +
+  theme_classic() +
+  ylab("Green object preference (sec)") +
+  xlab("") +
+  theme(
+    legend.position = "none",
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 14, face = "bold"),
+    plot.title = element_text(size = 16, hjust = 0.5)
+  ) +
+  geom_hline(yintercept = 0, linetype = "dashed", alpha = 0.5) +
+  geom_jitter(width = 0.04, alpha = 0.3) +
+  stat_summary(
+    geom = "point",
+    fun = "mean",
+    size = 4.5,
+    shape = 15
+  ) +
+  stat_summary(
+    geom = "errorbar",
+    fun.data = "mean_ci", position = position_dodge(width = 0), width = 0.1
+  ) +
+  scale_x_discrete(labels = baseline_data_x_axis_label)
+
+ggsave(
+  filename = "exp-2-model-1-baseline-data-plot.png",
+  path = "figs/exp-2",
+  device = "png",
+  dpi = 300
+)
+```
+
+***
+
+### Preference for the rewarding object during training
+
+```{r, colour-pref-training-plot, echo=FALSE, message=FALSE, fig.cap="Relative preference for the green object in both treatments during training trials (trials 1-20). Negative values represent more time spent with the blue object, positive values indicate more time spent with the green object. Light lines connect individuals across trials. Subjects were consistently rewarded for approaching the blue object (dashed lines) or the green object (solid lines).", fig.id="colour-pref-training-plot"}
+###### Time with rewarding object plot during training ######
+ggplot(
+  full_data,
+  aes(
+    x = as.factor(trial),
+    y = green.object.preference,
+    color = rewarding.object.colour,
+    shape = rewarding.object.colour,
+    linetype = rewarding.object.colour
+  )
+) +
+  theme_minimal() +
+  ylab("Green object preference (sec)") +
+  xlab("Trial") +
+  labs(col = "Rewarding object colour") +
+  theme(
+    legend.position = "none",
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 14, face = "bold"),
+    plot.title = element_text(size = 16, hjust = 0.5)
+  ) +
+  scale_color_manual(values = c("#2980b9", "#27ae60")) +
+  scale_linetype_manual(values = c("longdash", "solid")) +
+  scale_shape_manual(values = c(15, 16)) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  geom_point(alpha = 0.3) +
+  geom_line(aes(group = id), alpha = 0.3) +
+  stat_summary(geom = "point", fun = "mean", size = 4.5) +
+  stat_summary(
+    geom = "errorbar",
+    fun.data = "mean_se",
+    position = position_dodge(width = 0),
+    width = 0.1,
+    alpha = 0.8,
+    linetype = "solid"
+  )
+```
+
+```{r, message=FALSE, include=FALSE}
+training_data %>% 
+  group_by(trial, rewarding.object.colour) %>% 
+  summarise(mean(rewarding.object.preference)) %>% 
+  mutate_if(is.numeric, round, digits = 3) %>% 
+  kable() 
+```
+
+```{r, echo=FALSE}
+ggplot(
+  full_data,
+  aes(
+    x = as.factor(trial),
+    y = rewarding.object.preference,
+    color = object.pair
+  )
+) +
+  theme_minimal() +
+  geom_point(alpha = 0.3) +
+  geom_line(aes(group=id), alpha = 0.1, color = "#333333") +
+  stat_summary(geom = "point", fun = "mean", size = 4.5) +
+  theme(
+    legend.position = "top",
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 14, face = "bold"),
+    plot.title = element_text(size = 16, hjust = 0.5)
+  ) +
+  stat_summary(
+    geom = "errorbar",
+    fun.data = "mean_se",
+    position = position_dodge(width = 0),
+    width = 0.1
+  )
+```
+
+***
+
+### Is there a difference in feeding attempts between treatments?
+
+```{r feeding-data-prep, include = FALSE}
+#### Get feeding data #####
+# Group by ID and count the number of sessions in which an individual ate
+feeding <- full_data %>%
+  group_by(id) %>%
+  count(feeding.count = ate == "yes")
+
+# Remove NAs from this
+feeding <- na.omit(feeding)
+
+# Count only the yeses
+feeding <- feeding %>%
+  filter(feeding.count == "TRUE")
+
+# Remove the column feeding.count to keep only the counts
+feeding <- feeding %>%
+  dplyr::select(-feeding.count)
+
+# Add the feeding values to the main data frame so I can get treatment IDs
+feeding_data <- left_join(baseline_data, feeding, by = "id")
+
+# Replace NAs with 0, rename n to feeding count, and extract id, feeding count,
+# and rewarding object colour treatment
+feeding_data <- feeding_data %>%
+  replace_na(list(n = 0)) %>%
+  rename(feeding.count = n) %>%
+  dplyr::select(id, feeding.count, rewarding.object.colour)
+```
+
+```{r feeding-count-plot, echo=FALSE, message=FALSE, fig.cap="Average number of trials in which a fish fed during training. Data are means ± 95% confidence intervals with probability density functions of the data to the right of the raw data.", fig.id="training-data-ate-plot", warning=FALSE}
+
+ggplot(
+  feeding_data,
+  aes(
+    x = rewarding.object.colour,
+    y = feeding.count,
+    fill = rewarding.object.colour,
+    colour = rewarding.object.colour
+  )
+) +
+  geom_point(position = position_jitter(width = 0.05), alpha = 0.8) +
+  geom_flat_violin(
+    aes(fill = rewarding.object.colour),
+    position = position_nudge(x = .25, y = 0),
+    adjust = 0.7,
+    alpha = 0.4,
+    trim = FALSE,
+    color = NA
+  ) +
+  stat_summary(geom = "point", fun = "mean", size = 4.5, shape = 15) +
+  stat_summary(
+    geom = "errorbar",
+    fun.data = "mean_ci",
+    position = position_dodge(width = 0),
+    width = 0.1
+  ) +
+  ylim(-3, 23) +
+  ylab("Rewarding object preference") +
+  xlab("Trial") +
+  theme_cowplot() +
+  guides(fill = FALSE, colour = FALSE) +
+  ylab("Number of trials fed") +
+  xlab("Rewarding object colour") +
+  labs(col = "Rewarding object colour") +
+  theme(
+    legend.position = "top",
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 14, face = "bold"),
+    plot.title = element_text(size = 16, hjust = 0.5)
+  ) +
+  scale_color_manual(values = c("#2980b9", "#27ae60")) +
+  scale_fill_manual(values = c("#2980b9", "#27ae60"))
+```
+
+***
+
+### Distance moved
+
+```{r, echo=FALSE}
+ggplot(
+  full_data,
+  aes(
+    x = as.factor(trial),
+    y = distance.moved
+  )
+) +
+  theme_minimal() +
+  geom_point(alpha = 0.3) +
+  geom_line(aes(group=id), alpha = 0.2) +
+  stat_summary(geom = "point", fun = "mean", size = 4.5) +
+  theme(
+    legend.position = "top",
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 14, face = "bold"),
+    plot.title = element_text(size = 16, hjust = 0.5)
+  ) 
+```
+
+***
+
+## References
+
+

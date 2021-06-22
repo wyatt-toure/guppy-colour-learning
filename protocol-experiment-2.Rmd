@@ -4,9 +4,12 @@ output:
   bookdown::html_document2:
     number_sections: false
     split_by: section
+    css: styles2.css
 ---
 
 Date of this version: `r format(Sys.Date(), '%b %d %Y')`
+
+***
 
 ## Project goal
 
@@ -56,113 +59,42 @@ Generalization 1 refers to a generalization to different colours of Lego
 material whereas Generalization 2 refers to generalization to completely
 different objects (green and blue disks).
 
-```{r library-prep2, include=FALSE}
-library(ggplot2)
-library(scales)
-library(cowplot)
-```
-
-```{r data-prep, include=FALSE}
-trial.type = c(
-  "Initial Test", "Training","Training",
-"Training", "Training", "Training", "Training", "Training","Training","Training",
-"Training","Training","Training","Training","Training","Training","Training","Training",
-"Training", "Training", "Training", "Final Test", "Refresher", "Refresher", "Generalization 1","Generalization 2")
-
-trial = c(0, 1,2,3,4,5,6,7,8,9,10,
-          11,12,13,14,15,16,17,18,19,20,
-          21,22,23,24,25)
-
-trial.state = c(
-  "Initial","Initial","Initial",
-"Initial","Initial","Initial","Initial",
-"Training","Training","Training","Training","Training",
-"Training","Training","Training","Training","Training",
-"Training","Training","Training","Training","Final Test",
-"Refresher","Refresher","Generalization 1","Generalization 2"
-)
-
-# Tableau colour palettes
-blue = "#4e79a7"
-green = "#59a14f"
-brown = "#9c755f"
-orange = "#f28e2b"
-yellow = "#edc948"
-grey = "#bab0ac"
-red = "#e15759"
-purple = "#b07aa1"
-cyan = "#76b7b2"
-pink = "#ff9da7"
-```
-
-```{r data-prep2, include=FALSE}
-timeline.df = data.frame(trial.type, trial, trial.state)
-
-trial.type.colors <- c(orange, cyan, blue, orange,  red,  green)
-trial.type.shapes <- c(15, 2, 1, 0, 16, 19)
-```
-
-```{r data-prep3, include=FALSE}
-positions <- c(0.5, 0.5, 0.5, 0.5, 0.5, 0.5)
-directions <- c(1, 1)
-
-line_pos <- data.frame(
-    "trial"=unique(timeline.df$trial),
-    "position"=rep(positions, length.out=length(unique(timeline.df$trial))),
-    "direction"=rep(directions, length.out=length(unique(timeline.df$trial)))
-)
-
-timeline.df <- merge(x=timeline.df, y=line_pos, by="trial", all = TRUE)
-timeline.df <- timeline.df[with(timeline.df, order(trial, trial.type)), ]
-
-text_offset <- 0.1
-
-timeline.df$trial_count <- ave(timeline.df$trial==timeline.df$trial, timeline.df$trial, FUN=cumsum)
-timeline.df$text_position <- (timeline.df$trial_count * text_offset * timeline.df$direction) + timeline.df$position
-
-head(timeline.df)
-```
-
-```{r, include=FALSE}
-# Initial ggplot version of timeline commented out. If you see this Hi! :) 
-ggplot(timeline.df,aes(x=trial,
-                       y=0,
-                       color=trial.type,
-                       shape = trial.type,
-                       label = trial)
-       ) +
-  scale_color_manual(values=trial.type.colors, drop = FALSE) +
-  scale_shape_manual(values = trial.type.shapes) +
-  theme_cowplot() +
-  geom_hline(yintercept=0, color = "white", size=0.3) +
-  geom_point(aes(y=0), size=4) +
-  theme(
-    axis.line.y=element_blank(),
-    axis.text.y=element_blank(),
-    axis.title.x=element_blank(),
-    axis.title.y=element_blank(),
-    axis.ticks.y=element_blank(),
-    axis.text.x =element_blank(),
-    axis.ticks.x =element_blank(),
-    axis.line.x =element_blank(),
-    plot.title = element_text(hjust = 0.5,  vjust = -30),
-    legend.position = "none"
-                ) +
-  guides(colour = guide_legend(nrow = 2)) +
-  geom_text(aes(label=trial),hjust=.7, vjust=-2,size=3, fontface = "bold") +
-  labs(color = "Trial Type", shape = "Trial Type")
-```
-
-
 ```{r figure-1, echo=FALSE, out.width="75%", fig.cap="The 7 pairs of objects for the experiment as well as an experimental timeline. The numbered object pairs are used for training while the lettered object pairs are used for testing. The experimental timeline represents the order of the trials. The open orange square at trial 0 represents the initial test which is done with object pair A. The filled green circles represent the 20 training trials (trials 1-20). The filled orange square is the final test trial which is done with object pair A. The 2 red circles represent the refresher trials which are done with object pairs 2 and 3 (I picked these with a random number generator between 1 and 4). The open cyan triangle represents generalization 1 which is done with object pair B. The open blue circle is generalization 2 which is done with object pair C"}
 knitr::include_graphics("images/experiment-timeline-and-objects2.png")
 ```
+
+### Materials information
+
+#### Colours 
+
+| Object Colour 	| Colour Family 	| Exact Colour           	| Hex Value 	|
+|---------------	|---------------	|------------------------	|-----------	|
+| Green         	| Dark Green    	| Bright Yellowish Green 	| B5BD00    	|
+| Blue          	| Blue          	| Dark Azur              	|           	|
+
+#### Bricks 
+
+The objects were 6 pairs of Lego blocks with the manufacturer colours A and B.
+The specific models for the object pairs are as follows 
+
+| Object Pair 	| Brick Style 	| Design ID 	|
+|-------------	|-------------	|-----------	|
+| Pair A      	| BRICK 1X2   	| 3004      	|
+| Pair B      	| BRICK       	|           	|
+| Pair 1      	| BRICK 1X2   	| 3004      	|
+| Pair 2      	| BRICK 2X4   	| 3001      	|
+| Pair 3      	| BRICK 2X2   	| 30165     	|
+| Pair 4      	| BRICK 1X1   	| 3005      	|
+
+These can be looked up and/or purchased using the official Lego store's [Choose a brick](https://www.lego.com/en-us/service/replacementparts/sale/enter-set-number) 
+service by entering the design ID in the Enter an item number or design ID
+prompt of the Enter set number section.
 
 ***
 
 ## Detailed protocol
 
-In this section I provide step by step instructions on how to perform an
+In this section we provide step by step instructions on how to perform an
 experiment for the day.
 
 ### Overview
@@ -185,12 +117,12 @@ objects go where for which fish on any particular day.
 
 After performing the trials for the day you transfer the video files from the SD
 card on the camera and into the `C://Users/Reader Lab/2-colour-learning-experiment-2/videos/` 
-folder on the desktop. Finally, you will use EthoVision to extract the
+folder on the desktop. Finally, you use EthoVision to extract the
 positional data from the video files.
 
 Some additional details. Guppies should only be fed Tetramin flake food in their
-home tank every three days during this experiment. This is to encourage
-motivation to perform the task.
+home tank every three days during this experiment. This is to increase the
+motivation to learn and perform the task.
 
 ### Step 1 - Food strips
 
@@ -204,7 +136,7 @@ objects are made with the following protocol:
 3.  Add a packet of Knox gelatin to the water and stir for about 15 seconds or
     until the powder fully dissolves, then wait another 15 seconds.
 4.  Use a transfer pipette to transfer the food mixture from the beaker onto
-    strips of plastic.
+    X cm by Y cm strips of plastic.
 5.  Spread another pinch of flake food on top of the food mixture on the plastic
     strips while it is still wet.
 6.  Wait one hour for food to fix onto the plastic strips
@@ -214,19 +146,22 @@ objects are made with the following protocol:
 Before you start performing the trials the SD card needs to have footage from
 the previous day cleared up.
 
-1. Open the folder navigation menu by clicking the folder icon on the bottom left of the screen 
-2. Under `Computer` click `Removable Disk (L:)`
-3, Double click `MP_ROOT` then `100ANV01` 
-4. Scroll down to the files that have a date modified date of today
-5. Hold down `CTRL` while selecting the files that have a type of `MP4 Video`
-6. Right click and select Delete 
-7. Again, under `Computer` click `Removable Disk (L:)`
-8. Go to `PRIVATE` then `AVCHD`then `BDMV` then `STREAM`
-9. Scroll down to the files that have a date modified date of today
-10. Hold down `CTRL` while selecting the files that have a type of `MP4 Video`
-11. Right click and select `Delete` 
-12. Under `Computer` **right click** `Removable Disk (L:)` and select eject
-13. Take the SD card out of the card reader and put it into the camera
+1.  Open the folder navigation menu by clicking the folder icon on the bottom
+    left of the screen
+2.  Under `Computer` click `Removable Disk (L:)` 3, Double click `MP_ROOT` then
+    `100ANV01`
+3.  Scroll down to the files that have a `Date modified` date that corresponds
+    to the previous day
+4.  Hold down `CTRL` while selecting the files that have a type of `MP4 Video`
+5.  Right click and select Delete
+6.  Again, under `Computer` click `Removable Disk (L:)`
+7.  Go to `PRIVATE/AVCHD/BDMV/STREAM/`
+8.  Scroll down to the files that have a `Date modified` date that corresponds
+    to the previous day
+9.  Hold down `CTRL` while selecting the files that have a type of `MP4 Video`
+10. Right click and select `Delete`
+11. Under `Computer` **right click** `Removable Disk (L:)` and select eject
+12. Take the SD card out of the card reader and put it into the camera
 
 ### Step 3 - Performing the test or training trials
 
@@ -305,10 +240,9 @@ I provide. On test trial days you therefore do not need to wait an extra hour.
 31. Under the `Export` tab click `Statistics`
 32. Click `OK`, the default settings should be sufficient
 33. Navigate to `C://Users/Reader Lab/2-colour-learning-experiment-2/trial-x/Export Files/`
-34. Open Google chrome and click the third bookmark tab which contains the Google drive folder named `experiment-2-raw-data/`
+34. Open Google chrome and click the third bookmark tab which contains the Google drive folder named [`experiment-2-raw-data/`](https://drive.google.com/drive/u/0/folders/1A8NRlBMQ-BfkgNHzEpmw6hEbgePJncLj)
 35. Drag the raw data file `Statistics-trial-x` into the Google drive folder. 
 36. Save EthoVision and close it. 
 
+***
 
-
-    
