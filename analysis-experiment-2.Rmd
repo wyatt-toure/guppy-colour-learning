@@ -15,7 +15,7 @@ output:
     number_sections: false
     split_by: section
     css: styles2.css
-bibliography: references/references.bib
+bibliography: ["references/references.bib"]
 csl: references/elife-citation-style.csl    
 link-citations: yes
 
@@ -42,12 +42,15 @@ Note the code blocks that produce the figures and tables are not shown on this
 page as they are rather long, however the code to produce the figures and tables
 can also be seen in
 [analysis-experiment-2.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/analysis-experiment-2.Rmd).
-If you only want to see the results you can go straight to the [Models](#models)
-section.
+To get straight to the results go to the [Models](#models) section. If you would
+like to know how to reproduce these results please go to the [How to Reproduce
+the Results]() section of the README.
 
 ```{r library-prep, include=FALSE}
 # Loading required packages
 library(lme4)
+library(knitr)
+library(rmarkdown)
 library(tidyr)
 library(lmerTest)
 library(ggplot2)
@@ -61,7 +64,6 @@ library(knitr)
 library(emmeans)
 library(report)
 library(cowplot)
-library(tidyext)
 library(glmmTMB)
 library(MASS)
 library(googledrive)
@@ -101,7 +103,7 @@ downloaded to the
 [`data/experiment-2-raw-data/`](https://github.com/wyatt-toure/guppy-colour-learning-project/tree/main/data/experiment-2-raw-data)
 directory.
 
-```{r data-download, message=FALSE, warning=FALSE, eval=FALSE}
+```{r data-download, message=FALSE, warning=FALSE}
 # Downloading data from Google drive
 
 ## Put googledrive into a de-authorized state
@@ -172,7 +174,11 @@ full_data <- full_data %>%
 All the variables for the data set are read in as characters due to the
 `read_excel()` call in `read_and_format_ethovision_data()`, so we need to
 convert them to their appropriate data structures for the analysis. Variables
-are converted to either factors or numerics where appropriate. 
+are converted to either factors or numerics where appropriate using the
+`lapply()` function which applies a function over a vector. We apply the
+`as.factor()` function to categorical variables identified in the `Factors`
+vector and the `as.numeric()` function to the numerical variables identified in
+the `Numerics` vector.
 
 For the latency measures, dashes in the raw data sheet indicate that an
 individual never visited the zone of interest. In being converted to numerics
@@ -210,7 +216,7 @@ full_data <- full_data %>%
 
 ### Variable creation
 
-New variables and measures need to be created from the variables we have in the
+New variables and measures need to be created from the variables present in the
 raw data sheets. We do this using the `mutate()` and `case_when()` functions
 from the tidyverse package `dplyr`. First we invert the object side because the
 camera image is reversed from the perspective of the experimenter. We then
@@ -281,7 +287,6 @@ full_data <- full_data %>%
 
 ## Rewarding object preference
 full_data <- full_data %>%
-  group_by(id) %>%
   mutate(
     rewarding.object.preference =
       time.with.trained.object - time.with.untrained.object
@@ -289,7 +294,6 @@ full_data <- full_data %>%
 
 ## Proportionanl Rewarding object preference
 full_data <- full_data %>%
-  group_by(id) %>%
   mutate(
     prop.rewarding.object.preference =
       time.with.trained.object / (time.with.trained.object + time.with.untrained.object)
@@ -329,6 +333,10 @@ factor for the unreinforced test trial data subset since there are two levels of
 trial being compared to each other for the analysis on this data set.
 
 ```{r data-subset, warning=FALSE, message=FALSE}
+# Restrict data to only the baseline data
+baseline_data <- full_data %>%
+  filter(trial == 0)
+
 # Restrict data to training data
 training_data <- full_data %>%
   filter(trial.type == "training")
@@ -337,11 +345,7 @@ training_data <- full_data %>%
 test_data <- full_data %>%
   filter(trial.type == "test")
 
-# Restrict data to only the baseline data
-baseline_data <- full_data %>%
-  filter(trial == 0)
-
-# Change trial to factor
+# Change trial to factor for test trials
 test_data$trial <- as.factor(test_data$trial)
 ```
 
@@ -503,13 +507,13 @@ ggplot(
   scale_shape_manual(values = c(15, 16)) +
   geom_hline(yintercept = 0, linetype = "dashed") +
   geom_point(alpha = 0.3) +
-  geom_line(aes(group = id), alpha = 0.3) +
+  geom_line(aes(group = id), alpha = 0.2) +
   stat_summary(geom = "point", fun = "mean", size = 4.5) +
   stat_summary(
     geom = "errorbar",
     fun.data = "mean_se",
     position = position_dodge(width = 0),
-    width = 0.1,
+    width = 0.5,
     alpha = 0.8,
     linetype = "solid"
   )
@@ -528,7 +532,7 @@ ggplot(
   full_data,
   aes(
     x = as.factor(trial),
-    y = rewarding.object.preference,
+    y = prop.rewarding.object.preference,
     color = object.pair
   )
 ) +
@@ -546,7 +550,7 @@ ggplot(
     geom = "errorbar",
     fun.data = "mean_se",
     position = position_dodge(width = 0),
-    width = 0.1
+    width = 0.5
   )
 ```
 
@@ -614,7 +618,7 @@ ggplot(
   ylab("Rewarding object preference") +
   xlab("Trial") +
   theme_cowplot() +
-  guides(fill = FALSE, colour = FALSE) +
+  guides(fill = "none", colour = "none") +
   ylab("Number of trials fed") +
   xlab("Rewarding object colour") +
   labs(col = "Rewarding object colour") +
@@ -649,7 +653,13 @@ ggplot(
     axis.text = element_text(size = 14),
     axis.title = element_text(size = 14, face = "bold"),
     plot.title = element_text(size = 16, hjust = 0.5)
-  ) 
+  ) +
+  stat_summary(
+    geom = "errorbar",
+    fun.data = "mean_se",
+    position = position_dodge(width = 0),
+    width = 0.1
+  )
 ```
 
 ***

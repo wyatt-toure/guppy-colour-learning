@@ -13,15 +13,10 @@ Date of this version: `r format(Sys.Date(), '%b %d %Y')`
 
 ## Project goal
 
-A reviewer of a project of ours on colour learning says the following:
-
->The critical problem of this study is the presence of covariation between (at least) three features of the object stimulus, its colour, its size, and its shape. Therefore, it is not possible to conclude whether the observed difference in the learned preference between the two stimuli was due to the colour or to the shape or something else.
-
-In order to address this point we are re-doing the study with this critique in
-mind. We are conducting a study where the goal is to determine whether guppies
-can change their preference for a coloured object, regardless of its colour.
-Guppies are trained to green and blue objects that differ only in their colours
-and not also their sizes and shapes (Figure \@ref(fig:figure-1)).
+We are conducting a study where the goal is to determine whether guppies can
+change their preference for a coloured object, regardless of its colour. Guppies
+are trained and tested with green and blue objects that differ only in their
+colours (Figure \@ref(fig:figure-1)).
 
 ***
 
@@ -80,7 +75,7 @@ The specific models for the object pairs are as follows
 | Object Pair 	| Brick Style 	| Design ID 	|
 |-------------	|-------------	|-----------	|
 | Pair A      	| BRICK 1X2   	| 3004      	|
-| Pair B      	| BRICK       	|           	|
+| Pair B      	| BRICK TBD     | TBD         |
 | Pair 1      	| BRICK 1X2   	| 3004      	|
 | Pair 2      	| BRICK 2X4   	| 3001      	|
 | Pair 3      	| BRICK 2X2   	| 30165     	|
@@ -120,9 +115,9 @@ card on the camera and into the `C://Users/Reader Lab/2-colour-learning-experime
 folder on the desktop. Finally, you use EthoVision to extract the
 positional data from the video files.
 
-Some additional details. Guppies should only be fed Tetramin flake food in their
-home tank every three days during this experiment. This is to increase the
-motivation to learn and perform the task.
+Guppies should only be fed Tetramin flake food in their home tank every three
+days during this experiment. This is to increase the motivation to learn and
+perform the task.
 
 ### Step 1 - Food strips
 

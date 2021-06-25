@@ -1,21 +1,42 @@
 /* Headers */
 h1, h2, h3, h4, h5 {
-  font-weight: 600;
+  font-weight: bold;
   padding-top: 60px; 
   margin-top: -60px;
 }
 
+h1 {
+  font-size: 1.7em;
+}
+
+h2 {
+  font-size: 1.5em;
+}
+
+h3 {
+  font-size: 1.3em;
+}
+
+h4 {
+  font-size: 1.2em;
+}
+
+h5 {
+  font-size: 1.1em;
+}
+
 h1.title {
-    font-size: 32px;
+    font-size: 1.7em;
 }
 
 .subtitle {
   font-weight: normal;
-  font-size: 24px;
+  font-size: 1.3em;
 }
 
 .author {
   font-weight: normal;
+  font-size: 16px;
 }
 
 .date {

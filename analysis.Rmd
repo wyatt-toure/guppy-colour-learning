@@ -2,9 +2,9 @@
 title: "Analysis for 'Colour biases in learned foraging preferences in Trinidadian guppies'"
 output:
   bookdown::html_document2:
-    include:
-      highlight: pygments
-    css: styles.css
+    includes:
+      in_header: docs/header.html
+    css: styles2.css
     toc: true
     toc_depth: 4
     toc_float: 
@@ -19,14 +19,6 @@ knit: (function(input, ...) {
       output_file = 'docs/analysis')
   })
 ---
-
-<div class="topnav">
-  <a href="index.html">Guppy colour learning project site</a>
-    <a href="https://github.com/wyatt-toure/guppy-colour-learning-project" style = "float: right;">GitHub</a>
-    <a class="active" href="analysis.html" style = "float: right;">Analysis</a>
-    <a href="methods.html" style = "float: right;">Methods</a>
-    <a href="index.html" style = "float: right;">Home</a>
-</div>
 
 <p class="author-name">M. Wyatt Toure<span class="affil-mark">1*</span>, Simon M. Reader<span class="affil-mark">1</span></p>
 
@@ -1378,9 +1370,9 @@ ggsave(
 
 ***
 
-## Tools used and References
+## Packages used
 
-A complete list of the tools used is produced below
+Below we provide a list of packages used, their versions, and references.
 
 
 ```{r, echo=FALSE, warning=FALSE}
