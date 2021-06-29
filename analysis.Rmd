@@ -1,18 +1,26 @@
 ---
 title: "Analysis for 'Colour biases in learned foraging preferences in Trinidadian guppies'"
+subtitle: "Experiment 1 Analysis"
+author: 
+  - name: "M. Wyatt Toure"
+    affiliation: "McGill University, Department of Biology, 1205 Docteur Penfield, Montreal, Quebec H3A 1B1, Canada"  
+date: "Last Update: `r format(Sys.Date(), '%b %d %Y')`"
 output:
   bookdown::html_document2:
     includes:
       in_header: docs/header.html
-    css: styles2.css
     toc: true
     toc_depth: 4
     toc_float: 
       collapsed: false
-      smooth_scroll: true
     number_sections: false
     split_by: section
+    css: styles2.css
     
+bibliography: ["references/references.bib"]
+csl: references/elife-citation-style.csl    
+link-citations: yes    
+        
 knit: (function(input, ...) {
     rmarkdown::render(
       input,
@@ -20,21 +28,13 @@ knit: (function(input, ...) {
   })
 ---
 
-<p class="author-name">M. Wyatt Toure<span class="affil-mark">1*</span>, Simon M. Reader<span class="affil-mark">1</span></p>
-
-<p class="author-affil"><span class="affil-mark">1</span>McGill University, Department of Biology, 1205 Docteur Penfield, Montreal, Quebec H3A 1B1, Canada</p>
-<p><span class="affil-mark">*</span>Corresponding Author: <br>M. Wyatt Toure<br> e-mail: `m_wyatt.toure@mail.mcgill.ca`<br></p>
-
-Date of last update: `r format(Sys.Date(), '%b %d %Y')`
-
 ***
 
 ## Overview
 
-This page reports the analyses for the experiment described in
-<span style="text-decoration:underline">'Colour biases in learned foraging
-preferences in Trinidadian guppies'</span>. The raw data used to conduct these
-analyses are available in the
+This page reports the analyses for the first experiment described in 'Colour
+biases in learned foraging preferences in Trinidadian guppies'. The raw data
+used to conduct these analyses are available in the
 [colour-learning-project-data.csv](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/data/colour-learning-project-data.csv)
 file. Descriptions of the variables found in the dataset are given in the
 metadata section of the
@@ -70,7 +70,7 @@ source("R/rename-lme4-model.R")
 source("R/geom-flat-violin.R")
 ```
 
-```{r data-prep, include=FALSE}
+```{r data-prep}
 # Reading in Data
 my_data <- read.csv("data/colour-learning-project-data.csv")
 
@@ -84,7 +84,7 @@ my_data <- my_data %>%
 ## Rewarding object proportional preference
 my_data <- my_data %>%
   group_by(id) %>%
-  mutate(rewarding.object.preference.prop = (time.with.trained.object/(time.with.trained.object + time.with.untrained.object)))
+  mutate(prop.rewarding.object.preference = (time.with.trained.object/(time.with.trained.object + time.with.untrained.object)))
 
 ## Green object preference
 my_data <- my_data %>%
@@ -149,9 +149,9 @@ plot(simulationOutput)
 
 # Saving plot to figs directory
 ggsave(
-  filename = "model-1-residual-plot.png",
+  filename = "exp-1-model-1-residual-plot.png",
   plot = (plot(simulationOutput)),
-  path = "figs/residual-plots/",
+  path = "figs/exp-1/residual-plots/",
   device = "png",
   dpi = 300
 )
@@ -196,7 +196,7 @@ ggplot(
     y = green.object.preference
   )
 ) +
-  theme_classic() +
+  theme_minimal() +
   ylab("Green object preference (sec)") +
   xlab("") +
   theme(
@@ -220,8 +220,8 @@ ggplot(
   scale_x_discrete(labels = baseline_data_x_axis_label)
 
 ggsave(
-  filename = "model-1-baseline-data-plot.png",
-  path = "figs/",
+  filename = "exp-1-model-1-baseline-data-plot.png",
+  path = "figs/exp-1/",
   device = "png",
   dpi = 300
 )
@@ -265,9 +265,9 @@ plot(simulationOutput)
 
 # Saving plot to figs directory
 ggsave(
-  filename = "model-2-residual-plot.png",
+  filename = "exp-1-model-2-residual-plot.png",
   plot = (plot(simulationOutput)),
-  path = "figs/residual-plots/",
+  path = "figs/exp-1/residual-plots/",
   device = "png",
   dpi = 300
 )
@@ -336,10 +336,11 @@ ggplot(
     x = trial,
     y = green.object.preference,
     color = rewarding.object.colour,
+    shape = rewarding.object.colour,
     linetype = rewarding.object.colour
   )
 ) +
-  theme_cowplot() +
+  theme_minimal() +
   ylab("Green object preference (sec)") +
   xlab("Trial") +
   labs(col = "Rewarding object colour") +
@@ -351,21 +352,24 @@ ggplot(
   ) +
   scale_color_manual(values = c("#2980b9", "#27ae60")) +
   scale_linetype_manual(values = c("longdash", "solid")) +
+  scale_shape_manual(values = c(15, 16)) +
   geom_hline(yintercept = 0, linetype = "dashed") +
-  geom_line(aes(group = id), alpha = 0.25) +
-  geom_smooth(method = lm)
+  geom_point(alpha = 0.3) +
+  geom_line(aes(group = id), alpha = 0.2) +
+  scale_x_continuous(breaks = c(1:20)) +
+  scale_y_continuous(breaks = seq(-300, 300, by = 100)) +
+  geom_smooth(method = "lm", se = TRUE, alpha = 0.25) +
+  stat_summary(fun = "mean", size = 0.8)
 
 ggsave(
-  filename = "model-2-colour-pref-training-plot.png",
-  path = "figs/",
+  filename = "exp-1-model-2-colour-pref-training-plot.png",
+  path = "figs/exp-1/",
   device = "png",
   dpi = 300
 )
 ```
 
 ***
-
- 
 
 ### Model 3 -  Preference for the rewarded object during testing depending on treatment {#model-3}
 
@@ -407,9 +411,9 @@ plot(simulationOutput)
 
 # Saving plot to figs directory
 ggsave(
-  filename = "model-3-residual-plot.png",
+  filename = "exp-1-model-3-residual-plot.png",
   plot = (plot(simulationOutput)),
-  path = "figs/residual-plots/",
+  path = "figs/exp-1/residual-plots/",
   device = "png",
   dpi = 300
 )
@@ -485,7 +489,7 @@ ggplot(
     shape = rewarding.object.colour
   )
 ) +
-  theme_cowplot() +
+  theme_minimal() +
   geom_jitter(width = 0, alpha = 0.3) +
   stat_summary(geom = "point", fun = "mean", size = 4.5) +
   stat_summary(
@@ -511,11 +515,14 @@ ggplot(
   facet_grid(~rewarding.object.colour,
     labeller = labeller(rewarding.object.colour = object_labels)
   ) +
-  stat_summary(fun = mean, geom = "line", aes(group = rewarding.object.colour))
+  stat_summary(fun = mean, 
+               geom = "line", 
+               aes(group = rewarding.object.colour)) +
+  scale_y_continuous(breaks = seq(-50, 200, by = 25))
 
 ggsave(
-  filename = "model-3-test-data-pref-plot.png",
-  path = "figs/",
+  filename = "exp-1-model-3-test-data-pref-plot.png",
+  path = "figs/exp-1/",
   device = "png",
   dpi = 300
 )
@@ -672,9 +679,9 @@ plot(simulationOutput)
 
 # Saving plot to figs directory
 ggsave(
-  filename = "model-4-residual-plot.png",
+  filename = "exp-1-model-4-residual-plot.png",
   plot = (plot(simulationOutput)),
-  path = "figs/residual-plots/",
+  path = "figs/exp-1/residual-plots/",
   device = "png",
   dpi = 300
 )
@@ -750,8 +757,8 @@ ggplot(
   ylim(-3, 23) +
   ylab("Rewarding object preference") +
   xlab("Trial") +
-  theme_cowplot() +
-  guides(fill = FALSE, colour = FALSE) +
+  theme_minimal() +
+  guides(fill = "none", colour = "none") +
   ylab("Number of trials fed") +
   xlab("Rewarding object colour") +
   labs(col = "Rewarding object colour") +
@@ -766,8 +773,8 @@ ggplot(
 
 # Saving plot
 ggsave(
-  filename = "model-4-feeding-count-plot.png",
-  path = "figs/",
+  filename = "exp-1-model-4-feeding-count-plot.png",
+  path = "figs/exp-1/",
   device = "png",
   dpi = 300
 )
@@ -834,9 +841,9 @@ plot(simulationOutput)
 
 # Saving plot to figs directory
 ggsave(
-  filename = "ESM-model-1-residual-plot.png",
+  filename = "exp-1-ESM-model-1-residual-plot.png",
   plot = (plot(simulationOutput)),
-  path = "figs/residual-plots/",
+  path = "figs/exp-1/residual-plots/",
   device = "png",
   dpi = 300
 )
@@ -911,9 +918,9 @@ plot(simulationOutput)
 
 # Saving plot to figs directory
 ggsave(
-  filename = "ESM-model-2-residual-plot.png",
+  filename = "exp-1-ESM-model-2-residual-plot.png",
   plot = (plot(simulationOutput)),
-  path = "figs/residual-plots/",
+  path = "figs/exp-1/residual-plots/",
   device = "png",
   dpi = 300
 )
@@ -994,7 +1001,7 @@ effect model with a beta distribution.
 
 ```{r}
 prop_test_data_model_glm <-  
-  glmmTMB(rewarding.object.preference.prop ~  
+  glmmTMB(prop.rewarding.object.preference ~  
             trial * rewarding.object.colour + (1|id), 
   data = test_data, 
   family = beta_family(link="logit")
@@ -1017,9 +1024,9 @@ plot(simulationOutput)
 ```{r, echo=FALSE, message=FALSE}
 # Saving plot to figs directory
 ggsave(
-  filename = "esm-model-3-residual-plot.png",
+  filename = "exp-1-ESM-model-3-residual-plot.png",
   plot = (plot(simulationOutput)),
-  path = "figs/residual-plots/",
+  path = "figs/exp-1/residual-plots/",
   device = "png",
   dpi = 300
 )
@@ -1076,12 +1083,12 @@ ggplot(
   test_data,
   aes(
     x = trial,
-    y = rewarding.object.preference.prop,
+    y = prop.rewarding.object.preference,
     color = rewarding.object.colour,
     shape = rewarding.object.colour
   )
 ) +
-  theme_cowplot() +
+  theme_minimal() +
   geom_jitter(width = 0, alpha = 0.3) +
   stat_summary(geom = "point", fun = "mean", size = 4.5) +
   stat_summary(
@@ -1107,11 +1114,12 @@ ggplot(
   facet_grid(~rewarding.object.colour,
     labeller = labeller(rewarding.object.colour = object_labels)
   ) +
-  stat_summary(fun = mean, geom = "line", aes(group = rewarding.object.colour))
+  stat_summary(fun = mean, geom = "line", aes(group = rewarding.object.colour)) +
+  scale_y_continuous(breaks = seq(0.1, 0.9, by = 0.1))
 
 ggsave(
-  filename = "esm-model-3-prop-test-data-pref-plot.png",
-  path = "figs/",
+  filename = "exp-1-ESM-model-3-prop-test-data-pref-plot.png",
+  path = "figs/exp-1/",
   device = "png",
   dpi = 300
 )
@@ -1207,9 +1215,9 @@ plot(simulationOutput)
 
 # Saving plot to figs directory
 ggsave(
-  filename = "ESM-model-4-residual-plot.png",
+  filename = "exp-1-ESM-model-4-residual-plot.png",
   plot = (plot(simulationOutput)),
-  path = "figs/residual-plots/",
+  path = "figs/exp-1/residual-plots/",
   device = "png",
   dpi = 300
 )
@@ -1361,8 +1369,8 @@ ggarrange(p1, p2,
 
 # Saving plot to figs folder
 ggsave(
-  filename = "esm-model-4-training-data-ate-plot.png",
-  path = "figs/",
+  filename = "exp-1-ESM-model-4-training-data-ate-plot.png",
+  path = "figs/exp-1/",
   device = "png",
   dpi = 300
 )

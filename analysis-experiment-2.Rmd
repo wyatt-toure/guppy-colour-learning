@@ -1,9 +1,10 @@
 ---
-title: "Guppy Colour Learning"
+title: "Analysis for 'Colour biases in learned foraging preferences in Trinidadian guppies'"
 subtitle: "Experiment 2 Data Preparation and Analysis"
 author: 
   - name: "M. Wyatt Toure"
     affiliation: "McGill University, Department of Biology, 1205 Docteur Penfield, Montreal, Quebec H3A 1B1, Canada"  
+date: "Last Update: `r format(Sys.Date(), '%b %d %Y')`"
 output:
   bookdown::html_document2:
     includes:
@@ -15,6 +16,7 @@ output:
     number_sections: false
     split_by: section
     css: styles2.css
+    
 bibliography: ["references/references.bib"]
 csl: references/elife-citation-style.csl    
 link-citations: yes
@@ -25,8 +27,6 @@ knit: (function(input, ...) {
       output_file = 'docs/analysis-experiment-2')
   })
 ---
-
-Date of last update: `r format(Sys.Date(), '%b %d %Y')`
 
 ***
 
@@ -42,9 +42,9 @@ Note the code blocks that produce the figures and tables are not shown on this
 page as they are rather long, however the code to produce the figures and tables
 can also be seen in
 [analysis-experiment-2.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/analysis-experiment-2.Rmd).
-To get straight to the results go to the [Models](#models) section. If you would
-like to know how to reproduce these results please go to the [How to Reproduce
-the Results]() section of the README.
+To get straight to the results go to the [Models](#models) section. To see how
+to reproduce these results please visit the [How to Reproduce the Results]()
+section of the README.
 
 ```{r library-prep, include=FALSE}
 # Loading required packages
@@ -103,7 +103,7 @@ downloaded to the
 [`data/experiment-2-raw-data/`](https://github.com/wyatt-toure/guppy-colour-learning-project/tree/main/data/experiment-2-raw-data)
 directory.
 
-```{r data-download, message=FALSE, warning=FALSE}
+```{r data-download, message=FALSE, warning=FALSE, eval=FALSE}
 # Downloading data from Google drive
 
 ## Put googledrive into a de-authorized state
@@ -183,7 +183,8 @@ the `Numerics` vector.
 For the latency measures, dashes in the raw data sheet indicate that an
 individual never visited the zone of interest. In being converted to numerics
 these values are changed to NAs. We convert these values to the maximum value
-which is the trial duration (300 seconds).
+which is the trial duration (300 seconds) using the `tidyr` function
+`replace_na()`.
 
 ```{r variable-conversion, warning=FALSE}
 # Converting variables
@@ -324,6 +325,30 @@ full_data <- full_data %>%
         )
       )
   )
+
+## Assigning weights
+full_data <- full_data %>%
+  mutate(
+    weight =
+      case_when(
+        id == "1a" ~ 0.29,
+        id == "1b" ~ 0.10,
+        id == "2a" ~ 0.20,
+        id == "2b" ~ 0.11,
+        id == "3a" ~ 0.20,
+        id == "3b" ~ 0.12,
+        id == "4a" ~ 0.21,
+        id == "4b" ~ 0.11,
+        id == "5a" ~ 0.18,
+        id == "5b" ~ 0.13,
+        id == "6a" ~ 0.15,
+        id == "6b" ~ 0.11,
+        id == "7a" ~ 0.31,
+        id == "7b" ~ 0.13,
+        id == "8a" ~ 0.17,
+        id == "8b" ~ 0.14
+      )
+  )
 ```
 
 We next create subsets of the full data set that are restricted to the training
@@ -347,6 +372,9 @@ test_data <- full_data %>%
 
 # Change trial to factor for test trials
 test_data$trial <- as.factor(test_data$trial)
+
+# Change trial to integer for training trials
+training_data$trial <- as.integer(training_data$trial)
 ```
 
 ### Exporting processed data
@@ -445,7 +473,7 @@ ggplot(
     y = green.object.preference
   )
 ) +
-  theme_classic() +
+  theme_minimal() +
   ylab("Green object preference (sec)") +
   xlab("") +
   theme(
@@ -478,14 +506,143 @@ ggsave(
 
 ***
 
-### Preference for the rewarding object during training
+### Model 2 -  Preference for the rewarding object during training
 
-```{r, colour-pref-training-plot, echo=FALSE, message=FALSE, fig.cap="Relative preference for the green object in both treatments during training trials (trials 1-20). Negative values represent more time spent with the blue object, positive values indicate more time spent with the green object. Light lines connect individuals across trials. Subjects were consistently rewarded for approaching the blue object (dashed lines) or the green object (solid lines).", fig.id="colour-pref-training-plot"}
-###### Time with rewarding object plot during training ######
+During all of training fish spent on average
+`r training_data %>% summarise(mean((time.with.both.objects/total.time))) %>% round(3)*100`%
+of the trial time near an object during training.
+`r training_data %>% summarise(mean((time.with.trained.object/total.time))) %>% round(3)*100`%
+of trial time was spent near the rewarding object and
+`r training_data %>% summarise(mean((time.with.untrained.object/total.time))) %>% round(3)*100`%
+of trial time was spent near the unrewarding object.
+
+To see how fish behaved during training our second model asks whether the
+preference for the rewarding object changes throughout training and whether the
+change in rewarding object preference is different between the treatments.
+
+  - **Response variable:** `rewarding.object.preference` is the time (seconds)
+    spent near the rewarding object subtracted by the time spent near the
+    unrewarding object
+  - **Fixed effect:** `rewarding.object.colour` is the identity of the rewarding
+    object (blue or green)
+  - **Fixed effect:** `trial` is the number of the training trial. In this model
+    it is supplied as an integer
+  - **Random effect:** `id` is the identity of the individual fish
+
+```{r model-2, echo=TRUE}
+training_data_model <-
+  lmer(rewarding.object.preference ~ trial * rewarding.object.colour + (1 | id),
+    data = training_data
+  )
+```
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName2"> See Model 2 Residuals </button>  
+<div id="BlockName2" class="collapse">  
+
+```{r, message=FALSE}
+# Residual diagnostics
+simulationOutput <- simulateResiduals(
+  fittedModel = training_data_model,
+  n = 1000
+)
+plot(simulationOutput)
+
+# Saving plot to figs directory
+ggsave(
+  filename = "model-2-residual-plot.png",
+  plot = (plot(simulationOutput)),
+  path = "figs/exp-2/exp-2-residual-plots",
+  device = "png",
+  dpi = 300
+)
+```
+
+There is a slight deviation in the lower quantile but no indication in the
+residual plot of a gross model misfit.
+
+</div>
+
+```{r tidying-model-2, echo=FALSE, message=FALSE}
+# Setting table row names
+training_model_table_row_name_vec <- c(
+  "Intercept",
+  "Reward object colour",
+  "Trial",
+  "Rewarding object colour X Trial"
+)
+
+# Converting data frame to tibble
+tidy_training_data_model <- broom.mixed::tidy(training_data_model)
+
+# Formatting p value
+tidy_training_data_model$p.value <- format_p_value(tidy_training_data_model$p.value)
+
+# Getting model confidence intervals
+training_data_model_confint <- tibble::as_tibble((training_data_model %>%
+  confint()), rownames = "factor")
+
+# Changing tibble header names
+tidy_training_data_model <- rename_tidy_lme4_cols(tidy_training_data_model)
+
+# Changing tibble row names
+tidy_training_data_model[1:4, 3] <- training_model_table_row_name_vec
+```
+
+##### Results
+
+```{r,  results=TRUE, echo=FALSE}
+knitr::kable(tidy_training_data_model[1:4, ] %>%
+  dplyr::select(-group, -effect) %>%
+  mutate_if(is.numeric, round, digits = 3))
+```
+
+There was a significant interaction effect between trial and rewarding object
+colour (p = `r tidy_training_data_model$'P value'[4]`) indicating that the
+change in rewarding object preference has a different trend depending on the
+rewarding object colour. We used the `emtrends()` function from `emmeans` to
+estimate and compare the trends.
+
+```{r}
+training_data_model_trends <-
+  emtrends(training_data_model,
+    pairwise ~ rewarding.object.colour,
+    var = "trial"
+  )
+```
+
+```{r, echo=FALSE}
+training_data_model_trends_values <- training_data_model_trends$emtrends %>%
+  as.data.frame()
+
+kable((training_data_model_trends_values %>%
+  rename(
+    "Rewarding object colour" = rewarding.object.colour,
+    "Trial trend" = trial.trend,
+    "Std. Error" = SE,
+    "Lower CL" = lower.CL,
+    "Upper CL" = upper.CL
+  )) %>%
+  mutate_if(is.numeric, round, digits = 3))
+```
+
+
+Guppies that were trained to green objects increased their relative preference
+for rewarding objects by
+`r training_data_model_trends_values$trial.trend[2] %>% round(1)` seconds on
+average each trial whereas guppies trained to blue objects increased their
+relative preference for rewarding objects by
+`r training_data_model_trends_values$trial.trend[1] %>% round(1)` seconds on
+average each trial. Thus, while both groups increased their preference for their
+respective rewarding objects over training, green trained guppies increased
+their preference at a rate that was
+`r (training_data_model_trends_values$trial.trend[2]/training_data_model_trends_values$trial.trend[1]) %>% round(1)`x
+faster than blue trained guppies (Figure \@ref(fig:colour-pref-training-plot)).
+
+```{r, colour-pref-training-plot, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Relative preference for the green object in both treatments during training trials (trials 1-20). Negative values represent more time spent with the blue object, positive values indicate more time spent with the green object. Light lines connect individuals across trials. Subjects were consistently rewarded for approaching the blue object (dashed lines) or the green object (solid lines).", fig.id="colour-pref-training-plot"}
 ggplot(
-  full_data,
+  training_data,
   aes(
-    x = as.factor(trial),
+    x = trial,
     y = green.object.preference,
     color = rewarding.object.colour,
     shape = rewarding.object.colour,
@@ -508,55 +665,190 @@ ggplot(
   geom_hline(yintercept = 0, linetype = "dashed") +
   geom_point(alpha = 0.3) +
   geom_line(aes(group = id), alpha = 0.2) +
-  stat_summary(geom = "point", fun = "mean", size = 4.5) +
-  stat_summary(
-    geom = "errorbar",
-    fun.data = "mean_se",
-    position = position_dodge(width = 0),
-    width = 0.5,
-    alpha = 0.8,
-    linetype = "solid"
-  )
-```
+  scale_x_continuous(breaks = c(1:20)) +
+  scale_y_continuous(breaks = seq(-300, 300, by = 100)) +
+  geom_smooth(method = "lm", se = TRUE, alpha = 0.25) +
+  stat_summary(fun = "mean", size = 0.8)
 
-```{r, message=FALSE, include=FALSE}
-training_data %>% 
-  group_by(trial, rewarding.object.colour) %>% 
-  summarise(mean(rewarding.object.preference)) %>% 
-  mutate_if(is.numeric, round, digits = 3) %>% 
-  kable() 
-```
-
-```{r, echo=FALSE}
-ggplot(
-  full_data,
-  aes(
-    x = as.factor(trial),
-    y = prop.rewarding.object.preference,
-    color = object.pair
-  )
-) +
-  theme_minimal() +
-  geom_point(alpha = 0.3) +
-  geom_line(aes(group=id), alpha = 0.1, color = "#333333") +
-  stat_summary(geom = "point", fun = "mean", size = 4.5) +
-  theme(
-    legend.position = "top",
-    axis.text = element_text(size = 14),
-    axis.title = element_text(size = 14, face = "bold"),
-    plot.title = element_text(size = 16, hjust = 0.5)
-  ) +
-  stat_summary(
-    geom = "errorbar",
-    fun.data = "mean_se",
-    position = position_dodge(width = 0),
-    width = 0.5
-  )
+ggsave(
+  filename = "exp-2-model-2-colour-pref-training-plot.png",
+  path = "figs/exp-2/",
+  device = "png",
+  dpi = 300
+)
 ```
 
 ***
 
-### Is there a difference in feeding attempts between treatments?
+### Model 3 - Preference for the rewarded object during testing depending on treatment
+
+```{r model-3, echo=TRUE}
+test_data_model_glm <-  
+  glmmTMB(rewarding.object.preference ~  
+            trial * rewarding.object.colour + 
+            diag(0 + rewarding.object.colour:trial |id), 
+  data = test_data, 
+  family = gaussian
+  )
+```
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName3"> See Model 3 Residuals </button>  
+<div id="BlockName3" class="collapse">  
+
+```{r, include=TRUE, message=FALSE}
+simulationOutput <- simulateResiduals(fittedModel = test_data_model_glm, n = 1000)
+plot(simulationOutput)
+# Saving plot to figs directory
+ggsave(
+  filename = "exp-2-model-3-residual-plot.png",
+  plot = (plot(simulationOutput)),
+  path = "figs/exp-2/exp-2-residual-plots/",
+  device = "png",
+  dpi = 300
+)
+```
+
+</div>
+
+```{r tidying-model-3, echo=FALSE, message=FALSE}
+# Setting table row names
+test_model_table_row_name_vec <- c(
+  "Intercept",
+  "Trial",
+  "Rewarding object colour",
+  "Rewarding object colour X Trial"
+)
+# Converting data frame to tibble
+tidy_test_data_model <- broom.mixed::tidy(test_data_model_glm)
+# Formatting p value
+tidy_test_data_model$p.value <- format_p_value(tidy_test_data_model$p.value)
+# Getting model confidence intervals
+# test.data.model.confint = tibble::as_tibble((test.data.model %>% confint()), rownames = "factor")
+# Changing tibble header names
+tidy_test_data_model <- rename_tidy_lme4_cols(tidy_test_data_model)
+# Changing tibble row names
+tidy_test_data_model[1:4, 4] <- test_model_table_row_name_vec
+```
+
+##### Results
+
+```{r, results=TRUE, echo=FALSE}
+knitr::kable(tidy_test_data_model[1:4, ] %>%
+  dplyr::select(-group, -effect, -component) %>%
+  mutate_if(is.numeric, round, digits = 3),
+caption = "Summary table for Model 3. Estimates ± standard error (SE) of the 
+effects of trial and rewarding object colour on the rewarding object preference 
+from the generalized linear mixed effect model containing the effects Trial, 
+Rewarding object colour, and their interaction effect (Trial X Rewarding object 
+colour)."
+)
+```
+
+
+```{r test-data-pref-plot, echo=FALSE, message=FALSE, fig.cap="Changes in object preference from an initial test before training to a final test after training. During training, fish were rewarded for approaching the blue object (blue squares and lines) or the green object (green squares and lines). At test, no food reward was present. Dashed line represents an equal preference for either object. Data are means ± 95% CI; lighter points and lines are data for each individual.", fig.id="test-data-pref-plot", warning=FALSE, message=FALSE}
+testing_data_x_axis_labels <- c("Initial test", "Final test")
+object_labels <- c("Blue-trained", "Green-trained")
+names(object_labels) <- c("blue", "green")
+
+ggplot(
+  test_data,
+  aes(
+    x = trial,
+    y = rewarding.object.preference,
+    color = rewarding.object.colour,
+    shape = rewarding.object.colour
+  )
+) +
+  theme_minimal() +
+  geom_jitter(width = 0, alpha = 0.3) +
+  stat_summary(geom = "point", fun = "mean", size = 4.5) +
+  stat_summary(
+    geom = "errorbar",
+    fun.data = "mean_ci",
+    position = position_dodge(width = 0),
+    width = 0.1
+  ) +
+  ylab("Rewarding object preference (sec)") +
+  xlab("Trial") +
+  labs(col = "Rewarding object colour") +
+  theme(
+    legend.position = "none",
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 14, face = "bold"),
+    plot.title = element_text(size = 16, hjust = 0.5)
+  ) +
+  scale_color_manual(values = c("#2980b9", "#27ae60")) +
+  scale_shape_manual(values = c(15, 16)) +
+  geom_hline(yintercept = 0, linetype = "dashed", alpha = 0.6) +
+  geom_line(aes(group = id), alpha = 0.2) +
+  scale_x_discrete(labels = testing_data_x_axis_labels) +
+  facet_grid(~rewarding.object.colour,
+    labeller = labeller(rewarding.object.colour = object_labels)
+  ) +
+  stat_summary(fun = mean, 
+               geom = "line", 
+               aes(group = rewarding.object.colour)) +
+  scale_y_continuous(breaks = seq(-50, 100, by = 25))
+
+ggsave(
+  filename = "exp-2-model-3-test-data-pref-plot.png",
+  path = "figs/exp-2/",
+  device = "png",
+  dpi = 300
+)
+```
+
+```{r post-hoc-comparisons, echo=TRUE}
+test_data_model_emmeans <- emmeans(test_data_model_glm,
+  specs = ~ trial:rewarding.object.colour
+)
+# Making vectors to represent means of interest from emmeans() output
+blue0 <- c(1, 0, 0, 0)
+blue21 <- c(0, 1, 0, 0)
+green0 <- c(0, 0, 1, 0)
+green21 <- c(0, 0, 0, 1)
+# Set seed to prevent confidence intervals from changing when code is re-run
+set.seed(123)
+custom_contrasts <- contrast(test_data_model_emmeans,
+  method = list(
+    "21 blue - 0 blue" = blue21 - blue0,
+    "21 green - 0 green " = green21 - green0,
+    "21 green - 21 blue" = green21 - blue21,
+    "0 green - 0 blue" = green0 - blue0
+  ), adjust = "mvt"
+) %>%
+  summary(infer = TRUE)
+```
+
+##### Post-Hoc Results
+
+```{r contrasts-table-formatting, echo=FALSE, fig.id="contrasts-table", warning=FALSE}
+# Convert contrasts to data frame
+pairwise_comparison_contrasts_table <- as.data.frame(custom_contrasts)
+# Formatting p values
+pairwise_comparison_contrasts_table$p.value <- format_p_value(pairwise_comparison_contrasts_table$p.value)
+```
+
+```{r contrasts-table-display, echo=FALSE}
+knitr::kable(pairwise_comparison_contrasts_table %>%
+  dplyr::select(contrast, estimate, lower.CL, upper.CL, df, p.value) %>%
+  mutate_if(is.numeric, round, digits = 3) %>%
+  rename(
+    "Contrast" = contrast,
+    "Estimate" = estimate,
+    "Lower CL" = lower.CL,
+    "Upper CL" = upper.CL,
+    "P Value" = p.value
+  ),
+caption = "Table of post-hoc tests with a multivariate-t adjustment for multiple 
+comparisons of a selected set of means. The numbers represent the initial test 
+(0) and the final test (21). The colour corresponds to the identity of the 
+rewarding object (blue for blue-rewarded guppies, green for green-rewarded 
+guppies). Values are all rounded to 3 decimal places. CL = confidence limit."
+)
+```
+
+***
 
 ```{r feeding-data-prep, include = FALSE}
 #### Get feeding data #####
@@ -586,6 +878,83 @@ feeding_data <- feeding_data %>%
   rename(feeding.count = n) %>%
   dplyr::select(id, feeding.count, rewarding.object.colour)
 ```
+
+### Model 4 - Is there a difference in feeding attempts between treatments? {#model-4}
+
+A discrepancy in reinforcement between treatments may influence performance on a
+final preference test. To see whether there was a difference in feeding between
+treatments we counted the number of trials in which an individual fish ate
+throughout all of training and compared the feeding counts between treatments.
+To do this we fit a generalized linear model with a negative binomial
+distribution. The response variable 'feeding count' is a sum of the number of
+trials in which a guppy ate.
+
+  - **Response variable:** `feeding.count` is the number of trials in which an
+    individual fish ate
+  - **Fixed effect:** `rewarding.object.colour` is the identity of the rewarding
+    object (blue or green)
+
+```{r model-4, echo=TRUE}
+feeding_data_model <-
+  glm.nb(feeding.count ~ rewarding.object.colour,
+    data = feeding_data 
+  )
+```
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName4"> See Model 4 Residuals </button>  
+<div id="BlockName4" class="collapse">  
+
+```{r, warning=FALSE, message=FALSE}
+simulationOutput <- simulateResiduals(fittedModel = feeding_data_model)
+plot(simulationOutput)
+
+# Saving plot to figs directory
+ggsave(
+  filename = "exp-2-model-4-residual-plot.png",
+  plot = (plot(simulationOutput)),
+  path = "figs/exp-2/exp-2-residual-plots/",
+  device = "png",
+  dpi = 300
+)
+```
+
+</div>
+
+```{r tidying-model-4, echo=FALSE, message=FALSE}
+# Setting table row names
+feeding_model_table_row_name_vec <- c(
+  "Intercept",
+  "Rewarding object colour"
+)
+
+# Converting data frame to tibble
+tidy_feeding_data_model <- broom.mixed::tidy(feeding_data_model)
+
+# Getting model confidence intervals
+feeding_data_model_confint <- tibble::as_tibble((feeding_data_model %>%
+  confint()), rownames = "factor")
+
+# Changing tibble header names
+tidy_feeding_data_model <- rename_tidy_lme4_cols(tidy_feeding_data_model)
+
+# Changing tibble row names
+tidy_feeding_data_model[1:2, 1] <- feeding_model_table_row_name_vec
+```
+
+##### Results
+
+```{r, results=TRUE, echo=FALSE}
+knitr::kable(tidy_feeding_data_model[1:2, ] %>%
+  mutate_if(is.numeric, round, digits = 3))
+```
+
+We found no significant difference in the number of trials individuals fed
+between green-rewarded and blue-rewarded fish (Figure
+\@ref(fig:feeding-count-plot), p =
+`r tidy_feeding_data_model$'P value'[2] %>% round(3)`). Removing the one
+individual that did not feed during training does not change this result (p
+= 0.577).
+
 
 ```{r feeding-count-plot, echo=FALSE, message=FALSE, fig.cap="Average number of trials in which a fish fed during training. Data are means ± 95% confidence intervals with probability density functions of the data to the right of the raw data.", fig.id="training-data-ate-plot", warning=FALSE}
 
@@ -617,7 +986,7 @@ ggplot(
   ylim(-3, 23) +
   ylab("Rewarding object preference") +
   xlab("Trial") +
-  theme_cowplot() +
+  theme_minimal() +
   guides(fill = "none", colour = "none") +
   ylab("Number of trials fed") +
   xlab("Rewarding object colour") +
@@ -634,33 +1003,406 @@ ggplot(
 
 ***
 
-### Distance moved
+## ESM Models
 
-```{r, echo=FALSE}
+In this section we describe models not included in the main text.
+
+
+### Addressing feeding count
+
+The models described in this section were run to address the potential role of
+feeding count on test performance. The concern was that the results may be
+explained by differential levels of reinforcement between the groups or between
+individuals during training. To ensure our results were robust to matters
+arising from feeding count variation we:
+
+1)  Removed an individual that did not feed and re-ran the analysis in
+    [Model 3](#model-3)
+2)  Included feeding count as a co-variate and re-ran the analysis in
+    [Model 3](#model-3)
+
+### ESM Model 1 - Removing individual that did not feed
+
+```{r, include=FALSE}
+test_feeding_data <- left_join(test_data, feeding, by = "id")
+test_feeding_data <- test_feeding_data %>% replace_na(list(n = 0))
+test_feeding_data <- rename(test_feeding_data, feeding.count = n)
+retest_feeding_data <- test_feeding_data %>% filter(trial == "21")
+```
+
+There is a fish that did not eat during any trials, however removing this individual does not change the conclusions 
+
+```{r, echo=TRUE}
+test_feeding_data_low_feeders_removed <-
+  test_feeding_data %>% filter(feeding.count > 0)
+```
+
+
+##### Model
+
+```{r, echo=TRUE}
+test_feeding_data_low_feeders_removed_model <-
+  glmmTMB(rewarding.object.preference ~
+  trial * rewarding.object.colour +
+    diag(0 + rewarding.object.colour:trial | id),
+  data = test_feeding_data_low_feeders_removed,
+  family = gaussian
+  )
+```
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName6"> See ESM Model 1 Residuals </button>  
+<div id="BlockName6" class="collapse">  
+
+```{r, message=FALSE}
+simulationOutput <- simulateResiduals(fittedModel = test_feeding_data_low_feeders_removed_model)
+plot(simulationOutput)
+# Saving plot to figs directory
+ggsave(
+  filename = "exp-2-ESM-model-1-residual-plot.png",
+  plot = (plot(simulationOutput)),
+  path = "figs/exp-2/exp-2-residual-plots/",
+  device = "png",
+  dpi = 300
+)
+```
+
+</div>
+
+```{r, echo=FALSE, results=FALSE}
+# Setting table row names
+feeding_data_low_feeders_removed_model_table_row_name_vec <- c(
+  "Intercept",
+  "Trial",
+  "Rewarding object colour",
+  "Rewarding object colour X Trial"
+)
+tidy_fit_test_feeding_data_low_feeders_removed <- broom.mixed::tidy(test_feeding_data_low_feeders_removed_model)
+# format p value
+tidy_fit_test_feeding_data_low_feeders_removed$p.value <- format_p_value(tidy_fit_test_feeding_data_low_feeders_removed$p.value)
+# Changing tibble header names
+tidy_fit_test_feeding_data_low_feeders_removed <- rename_tidy_lme4_cols(tidy_fit_test_feeding_data_low_feeders_removed)
+tidy_fit_test_feeding_data_low_feeders_removed[1:4, 4] <- feeding_data_low_feeders_removed_model_table_row_name_vec
+```
+
+##### Results
+
+```{r, results=TRUE, echo=FALSE}
+knitr::kable(tidy_fit_test_feeding_data_low_feeders_removed[1:4, ] %>%
+  dplyr::select(-group, -effect, -component) %>%
+  mutate_if(is.numeric, round, digits = 3))
+```
+
+***
+
+### ESM Model 2 - Including feeding count as a covariate {#esm-model-2}
+
+With this next model we looked to see whether including the amount of trials an
+individual fed as a covariate in the model changes the conclusions.
+
+  - **Response variable:** `rewarding.object.preference` is the time (seconds)
+    spent near the rewarding object subtracted by the time spent near the
+    unrewarding object
+  - **Fixed effect:** `rewarding.object.colour` is the identity of the rewarding
+    object (blue or green)
+  - **Fixed effect:** `trial` is the number of the training trial. In this model
+    it is supplied as an integer
+  - **Random effect:** `id` is the identity of the individual fish
+  - **Covariate:** `feeding.count` is the number of trials in which an
+    individual fish ate
+
+```{r, echo = TRUE}
+test_data_feeding_controlled_model <-
+  glmmTMB(rewarding.object.preference ~
+  trial * rewarding.object.colour + feeding.count + (1 | id) +
+    diag(0 + rewarding.object.colour * trial | id),
+  data = test_feeding_data,
+  family = gaussian
+  )
+```
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName7"> See ESM Model 2 Residuals </button>  
+<div id="BlockName7" class="collapse">  
+
+```{r, message=FALSE}
+simulationOutput <- simulateResiduals(fittedModel = test_data_feeding_controlled_model)
+plot(simulationOutput)
+# Saving plot to figs directory
+ggsave(
+  filename = "exp-2-ESM-model-2-residual-plot.png",
+  plot = (plot(simulationOutput)),
+  path = "figs/exp-2/exp-2-residual-plots/",
+  device = "png",
+  dpi = 300
+)
+```
+
+</div>
+
+```{r, echo=FALSE, results=FALSE}
+# Setting table row names
+test_data_feeding_controlled_model_table_row_name_vec <- c(
+  "Intercept",
+  "Trial",
+  "Rewarding object colour",
+  "Feeding count",
+  "Rewarding object colour X Trial"
+)
+tidy_fit_test_data_feeding_controlled_model <- broom.mixed::tidy(test_data_feeding_controlled_model)
+# formatted p value
+tidy_fit_test_data_feeding_controlled_model$p.value <- format_p_value(tidy_fit_test_data_feeding_controlled_model$p.value)
+# Changing tibble header names
+tidy_fit_test_data_feeding_controlled_model <- rename_tidy_lme4_cols(tidy_fit_test_data_feeding_controlled_model)
+tidy_fit_test_data_feeding_controlled_model[1:5, 4] <- test_data_feeding_controlled_model_table_row_name_vec
+```
+
+##### Results
+
+```{r, results=TRUE, echo=FALSE}
+knitr::kable(tidy_fit_test_data_feeding_controlled_model[1:5, ] %>%
+  dplyr::select(-group, -effect, -component) %>%
+  mutate_if(is.numeric, round, digits = 3),
+caption = "Summary table for a modification of Model 3. This model is the same 
+as that described in Table S1 except it includes feeding count as a covariate. 
+Estimates ± standard error (SE) of the effects of trial and rewarding object 
+colour of the rewarding object colour from the generalized linear mixed effect 
+model containing the effects (Trial, Rewarding object colour, and their 
+interaction effect)."
+)
+```
+
+The main results do not change if I control for feeding count. The above table
+is the output feeding controlled model. Below we have the output table for the
+non-feeding-count controlled model from [Model 3](#model-3).
+
+```{r, results=TRUE, echo=FALSE}
+knitr::kable(tidy_test_data_model[1:4, ] %>%
+  dplyr::select(-group, -effect, -component) %>%
+  mutate_if(is.numeric, round, digits = 3))
+```
+
+In both models the p-values are similar. While the effect of feeding count is
+not significant (p =
+`r tidy_fit_test_data_feeding_controlled_model$'P value'[4]`) the effect of
+feeding count trends in the expected direction in our feeding count controlled
+model. As feeding count increases the preference for the rewarding object colour
+also increases.
+
+***
+
+### Preference as a percentage
+
+A reviewer of our manuscript asks 
+
+>Why the authors did not (also) exploit a percentage preference, which is commonly used?
+
+To determine whether our results are robust despite our different
+measure we also ran an analysis with the percentage preference as ESM Model 3. 
+The results from the main experiment remain unchanged when we do this.
+
+### ESM Model 3 - Percentage preference for the rewarded object during testing depending on treatment
+
+Since our data are continuous proportions we used a generalized linear mixed
+effect model with a beta distribution.
+
+```{r}
+prop_test_data_model_glm <-  
+  glmmTMB(prop.rewarding.object.preference ~  
+            trial * rewarding.object.colour + (1|id), 
+  data = test_data, 
+  family = beta_family(link="logit")
+  )
+```
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName8"> See ESM Model 3 Residuals </button>  
+<div id="BlockName8" class="collapse"> 
+
+```{r, message=FALSE}
+simulationOutput <- simulateResiduals(
+  fittedModel = prop_test_data_model_glm,
+  n = 1000
+)
+plot(simulationOutput)
+
+# Saving plot to figs directory
+ggsave(
+  filename = "exp-2-esm-model-3-residual-plot.png",
+  plot = (plot(simulationOutput)),
+  path = "figs/exp-2/exp-2-residual-plots/",
+  device = "png",
+  dpi = 300
+)
+```
+
+</div>
+
+```{r tidying-esm-model-3, echo=FALSE, message=FALSE}
+# Setting table row names
+test_model_table_row_name_vec <- c(
+  "Intercept",
+  "Trial",
+  "Rewarding object colour",
+  "Rewarding object colour X Trial"
+)
+# Converting data frame to tibble
+tidy_prop_test_data_model <- broom.mixed::tidy(prop_test_data_model_glm)
+# Formatting p value
+tidy_prop_test_data_model$p.value <- format_p_value(tidy_prop_test_data_model$p.value)
+# Getting model confidence intervals
+# test.data.model.confint = tibble::as_tibble((test.data.model %>% confint()), rownames = "factor")
+# Changing tibble header names
+tidy_prop_test_data_model <- rename_tidy_lme4_cols(tidy_prop_test_data_model)
+# Changing tibble row names
+tidy_prop_test_data_model[1:4, 4] <- test_model_table_row_name_vec
+```
+
+##### Results
+
+```{r, results=TRUE, echo=FALSE}
+knitr::kable(tidy_prop_test_data_model[1:4, ] %>%
+  dplyr::select(-group, -effect, -component) %>%
+  mutate_if(is.numeric, round, digits = 3),
+caption = "Summary table for ESM Model 3. Estimates ± standard error (SE) of the 
+effects of trial and rewarding object colour on the rewarding object preference 
+from the generalized linear mixed effect model containing the effects Trial, 
+Rewarding object colour, and their interaction effect (Trial X Rewarding object 
+colour)."
+)
+```
+
+```{r prop-test-data-pref-plot, echo=FALSE, message=FALSE, fig.cap="Changes in proportional object preference from an initial test before training to a final test after training. During training, fish were rewarded for approaching the blue object (blue squares and lines) or the green object (green squares and lines). At test, no food reward was present. Dashed line represents an equal preference for either object. Data are means ± 95% CI; lighter points and lines are data for each individual.", fig.id="prop-test-data-pref-plot", warning=FALSE, message=FALSE}
+testing_data_x_axis_labels <- c("Initial test", "Final test")
+object_labels <- c("Blue-trained", "Green-trained")
+names(object_labels) <- c("blue", "green")
 ggplot(
-  full_data,
+  test_data,
   aes(
-    x = as.factor(trial),
-    y = distance.moved
+    x = trial,
+    y = prop.rewarding.object.preference,
+    color = rewarding.object.colour,
+    shape = rewarding.object.colour
   )
 ) +
   theme_minimal() +
-  geom_point(alpha = 0.3) +
-  geom_line(aes(group=id), alpha = 0.2) +
+  geom_jitter(width = 0, alpha = 0.3) +
   stat_summary(geom = "point", fun = "mean", size = 4.5) +
+  stat_summary(
+    geom = "errorbar",
+    fun.data = "mean_ci",
+    position = position_dodge(width = 0),
+    width = 0.1
+  ) +
+  ylab("Rewarding object preference") +
+  xlab("Trial") +
+  labs(col = "Rewarding object colour") +
   theme(
-    legend.position = "top",
+    legend.position = "none",
     axis.text = element_text(size = 14),
     axis.title = element_text(size = 14, face = "bold"),
     plot.title = element_text(size = 16, hjust = 0.5)
   ) +
-  stat_summary(
-    geom = "errorbar",
-    fun.data = "mean_se",
-    position = position_dodge(width = 0),
-    width = 0.1
-  )
+  scale_color_manual(values = c("#2980b9", "#27ae60")) +
+  scale_shape_manual(values = c(15, 16)) +
+  geom_hline(yintercept = 0.5, linetype = "dashed", alpha = 0.6) +
+  geom_line(aes(group = id), alpha = 0.2) +
+  scale_x_discrete(labels = testing_data_x_axis_labels) +
+  facet_grid(~rewarding.object.colour,
+    labeller = labeller(rewarding.object.colour = object_labels)
+  ) +
+  stat_summary(fun = mean, geom = "line", 
+               aes(group = rewarding.object.colour)) +
+  scale_y_continuous(breaks = seq(0.1, 0.9, by = 0.1))
+
+ggsave(
+  filename = "exp-2-esm-model-3-prop-test-data-pref-plot.png",
+  path = "figs/exp-2/",
+  device = "png",
+  dpi = 300
+)
 ```
+
+##### Post-Hoc Comparisons
+
+```{r}
+prop_test_data_model_emmeans <- emmeans(prop_test_data_model_glm,
+  specs = ~ trial:rewarding.object.colour, type = "response"
+)
+# Set seed to prevent confidence intervals from changing when code is re-run
+set.seed(123)
+prop_custom_contrasts <- contrast(prop_test_data_model_emmeans,
+  method = list(
+    "21 blue - 0 blue" = blue21 - blue0,
+    "21 green - 0 green " = green21 - green0,
+    "21 green - 21 blue" = green21 - blue21,
+    "0 green - 0 blue" = green0 - blue0
+  ), adjust = "mvt"
+) %>%
+  summary(infer = TRUE)
+```
+
+```{r prop-contrasts-table-formatting, echo=FALSE, fig.id="prop-contrasts-table", warning=FALSE}
+# Convert contrasts to data frame
+prop_pairwise_comparison_contrasts_table <- as.data.frame(prop_custom_contrasts)
+# Formatting p values
+prop_pairwise_comparison_contrasts_table$p.value <- format_p_value(prop_pairwise_comparison_contrasts_table$p.value)
+```
+
+##### Results
+
+```{r prop-contrasts-table-display, echo=FALSE}
+knitr::kable(prop_pairwise_comparison_contrasts_table %>%
+  dplyr::select(contrast, odds.ratio, lower.CL, upper.CL, df, p.value) %>%
+  mutate_if(is.numeric, round, digits = 3) %>%
+  rename(
+    "Contrast" = contrast,
+    "Odds ratio" = odds.ratio,
+    "Lower CL" = lower.CL,
+    "Upper CL" = upper.CL,
+    "P Value" = p.value
+  ),
+caption = "Table of post-hoc tests with a multivariate-t adjustment for multiple 
+comparisons of a selected set of means. The numbers represent the initial test 
+(0) and the final test (21). The colour corresponds to the identity of the 
+rewarding object (blue for blue-rewarded guppies, green for green-rewarded 
+guppies). Values are all rounded to 3 decimal places. CL = confidence limit."
+)
+```
+
+***
+
+## Miscellaneous descriptive statistics
+
+After trial 21 the guppies were all weighed. The weights ranged from
+`r min(baseline_data$weight)` to `r max(baseline_data$weight)` grams. Guppies
+weighed on average `r baseline_data %>% summarise(mean(weight)) %>% round(2)`
+grams. Blue-trained guppies weighed more than green-trained guppies
+(`r baseline_data %>% filter(rewarding.object.colour == "blue") %>% summarise(mean(weight)) %>% round(2)`
+grams vs
+`r baseline_data %>% filter(rewarding.object.colour == "green") %>% summarise(mean(weight)) %>% round(2)` grams)
+but this difference was not statistically significant.
+
+```{r, echo=FALSE}
+lm(weight ~ rewarding.object.colour, data = baseline_data) %>%
+  broom::tidy() %>% 
+  rename_tidy_lme4_cols() %>% 
+  mutate_if(is.numeric, round, digits = 3) %>%
+  kable()
+```
+
+
+## Packages used 
+
+The analyses on this page were done with `r R.version.string` and with functions
+from packages listed in Table \@ref(tab:r-packages). This page was written in
+Rmarkdown and rendered with `knitr`. To see the full list of dependencies for
+all packages used as well as their versions please visit the [How to Reproduce
+the Results]() section of the README.
+
+```{r, r-packages, echo=FALSE}
+report(sessionInfo()) %>% 
+  as.data.frame() %>% 
+  kable(caption = "All packages used for this analysis. The dependencies for these packages as well as their versions can be found in the README file.")
+```
+
 
 ***
 
