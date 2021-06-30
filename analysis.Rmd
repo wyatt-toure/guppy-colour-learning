@@ -78,21 +78,28 @@ my_data <- read.csv("data/colour-learning-project-data.csv")
 
 ## Rewarding object preference
 my_data <- my_data %>%
-  group_by(id) %>%
-  mutate(rewarding.object.preference = (time.with.trained.object - time.with.untrained.object))
+  mutate(
+    rewarding.object.preference =
+      time.with.trained.object - time.with.untrained.object
+  )
 
 ## Rewarding object proportional preference
 my_data <- my_data %>%
-  group_by(id) %>%
-  mutate(prop.rewarding.object.preference = (time.with.trained.object/(time.with.trained.object + time.with.untrained.object)))
+  mutate(
+    prop.rewarding.object.preference =
+      (time.with.trained.object / (time.with.trained.object + time.with.untrained.object))
+  )
 
 ## Green object preference
 my_data <- my_data %>%
   mutate(
     green.object.preference =
       case_when(
-        rewarding.object.colour == "green" ~ (time.with.trained.object - time.with.untrained.object),
-        rewarding.object.colour == "blue" ~ (time.with.untrained.object - time.with.trained.object)
+        rewarding.object.colour == "green" ~ 
+          time.with.trained.object - time.with.untrained.object,
+        
+        rewarding.object.colour == "blue" ~ 
+          time.with.untrained.object - time.with.trained.object
       )
   )
 
@@ -505,7 +512,8 @@ ggplot(
     legend.position = "none",
     axis.text = element_text(size = 14),
     axis.title = element_text(size = 14, face = "bold"),
-    plot.title = element_text(size = 16, hjust = 0.5)
+    plot.title = element_text(size = 16, hjust = 0.5),
+    strip.text.x = element_text(size = 14, face = "bold")
   ) +
   scale_color_manual(values = c("#2980b9", "#27ae60")) +
   scale_shape_manual(values = c(15, 16)) +
@@ -1104,7 +1112,8 @@ ggplot(
     legend.position = "none",
     axis.text = element_text(size = 14),
     axis.title = element_text(size = 14, face = "bold"),
-    plot.title = element_text(size = 16, hjust = 0.5)
+    plot.title = element_text(size = 16, hjust = 0.5),
+    strip.text.x = element_text(size = 14, face = "bold")
   ) +
   scale_color_manual(values = c("#2980b9", "#27ae60")) +
   scale_shape_manual(values = c(15, 16)) +
