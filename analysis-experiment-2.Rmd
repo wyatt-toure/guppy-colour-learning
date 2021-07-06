@@ -1,5 +1,5 @@
 ---
-title: "Analysis for 'Colour biases in learned foraging preferences in Trinidadian guppies'"
+title: "Analysis for 'Colour biases in learned foraging preferences in Trinidadian guppies' "
 subtitle: "Experiment 2 Data Preparation and Analysis"
 author: 
   - name: "M. Wyatt Toure"
@@ -321,7 +321,12 @@ full_data <- full_data %>%
       as.factor(
         case_when(
           trial == 0 | trial == 21 ~ "test",
-          trial > 0 & trial < 21 ~ "training"
+          trial > 0 & trial < 21 ~ "training",
+          trial == 22 | trial == 24 |  trial == 26 | trial == 28 ~ "refresher",
+          trial == 23 ~ "test",
+          trial == 25 ~ "test",
+          trial == 27  ~ "test",
+          trial == 29 ~ "test"
         )
       )
   )
@@ -588,6 +593,8 @@ tidy_training_data_model <- rename_tidy_lme4_cols(tidy_training_data_model)
 tidy_training_data_model[1:4, 3] <- training_model_table_row_name_vec
 ```
 
+\
+
 ##### Results
 
 ```{r,  results=TRUE, echo=FALSE}
@@ -670,7 +677,7 @@ ggplot(
   geom_smooth(method = "lm", se = TRUE, alpha = 0.25) +
   stat_summary(fun = "mean", size = 0.8)
 
-ggsave(
+ ggsave(
   filename = "exp-2-model-2-colour-pref-training-plot.png",
   path = "figs/exp-2/",
   device = "png",
@@ -682,12 +689,14 @@ ggsave(
 
 ### Model 3 - Preference for the rewarded object during testing depending on treatment
 
+We used a generalised linear mixed effects model which allowed us to model the variance associated with trial since variances are heterogeneous between the initial trial and final trial.
+
 ```{r model-3, echo=TRUE}
 test_data_model_glm <-  
   glmmTMB(rewarding.object.preference ~  
-            trial * rewarding.object.colour + 
+            trial * rewarding.object.colour +
             diag(0 + rewarding.object.colour:trial |id), 
-  data = test_data, 
+  data = test_data %>% filter(trial == "0" | trial == "21"), 
   family = gaussian
   )
 ```
@@ -730,6 +739,8 @@ tidy_test_data_model <- rename_tidy_lme4_cols(tidy_test_data_model)
 tidy_test_data_model[1:4, 4] <- test_model_table_row_name_vec
 ```
 
+\
+
 ##### Results
 
 ```{r, results=TRUE, echo=FALSE}
@@ -751,7 +762,7 @@ object_labels <- c("Blue-trained", "Green-trained")
 names(object_labels) <- c("blue", "green")
 
 ggplot(
-  test_data,
+  test_data %>% filter(trial == "0" | trial == "21"),
   aes(
     x = trial,
     y = rewarding.object.preference,
@@ -775,9 +786,10 @@ ggplot(
     legend.position = "none",
     axis.text = element_text(size = 14),
     axis.title = element_text(size = 14, face = "bold"),
-    plot.title = element_text(size = 16, hjust = 0.5)
+    plot.title = element_text(size = 16, hjust = 0.5),
+    strip.text.x = element_text(size = 14, face = "bold")
   ) +
-  scale_color_manual(values = c("#2980b9", "#27ae60")) +
+  scale_color_manual(values = c("#4e79a7", "#59a14f")) +
   scale_shape_manual(values = c(15, 16)) +
   geom_hline(yintercept = 0, linetype = "dashed", alpha = 0.6) +
   geom_line(aes(group = id), alpha = 0.2) +
@@ -853,7 +865,7 @@ guppies). Values are all rounded to 3 decimal places. CL = confidence limit."
 ```{r feeding-data-prep, include = FALSE}
 #### Get feeding data #####
 # Group by ID and count the number of sessions in which an individual ate
-feeding <- full_data %>%
+feeding <- training_data %>%
   group_by(id) %>%
   count(feeding.count = ate == "yes")
 
@@ -941,6 +953,8 @@ tidy_feeding_data_model <- rename_tidy_lme4_cols(tidy_feeding_data_model)
 tidy_feeding_data_model[1:2, 1] <- feeding_model_table_row_name_vec
 ```
 
+\
+
 ##### Results
 
 ```{r, results=TRUE, echo=FALSE}
@@ -1001,12 +1015,80 @@ ggplot(
   scale_fill_manual(values = c("#2980b9", "#27ae60"))
 ```
 
+### Model 5 - Does the learned colour preference generalize 
+
+```{r}
+generalization_data_model <-  
+  glmmTMB(rewarding.object.preference ~  
+            trial * rewarding.object.colour + (1 |id) +
+            diag(0 + trial |id),
+  data = test_data %>% filter(trial == "23" | trial == "25" | trial == "21" | trial == "0" | trial == "27" | trial == "29") %>% filter(id != "8b"),
+  family = gaussian
+  )
+```
+
+```{r}
+emmeans(generalization_data_model,
+        specs = trt.vs.ctrl ~ rewarding.object.colour:trial,
+        by = "rewarding.object.colour")
+```
+
+```{r}
+simulationOutput <- simulateResiduals(fittedModel = generalization_data_model)
+plot(simulationOutput)
+
+# Saving plot to figs directory
+ggsave(
+  filename = "exp-2-model-5-residual-plot.png",
+  plot = (plot(simulationOutput)),
+  path = "figs/exp-2/exp-2-residual-plots/",
+  device = "png",
+  dpi = 300
+)
+```
+
+```{r, echo=FALSE}
+ggplot(
+  test_data %>% filter(trial == "23" | trial == "25"  | trial == "21" | trial == "0" | trial == "27" | trial == "29") %>% filter(id != "8b"), 
+  aes(
+    x = trial, 
+    y = rewarding.object.preference, 
+    colour = rewarding.object.colour,
+    shape = rewarding.object.colour
+  )
+) +
+  theme_minimal() +
+  geom_jitter(width = 0, alpha = 0.3) +
+  stat_summary(geom = "point", fun = "mean", size = 4.5) +
+  stat_summary(
+    geom = "errorbar",
+    fun.data = "mean_ci",
+    position = position_dodge(width = 0),
+    width = 0.1
+  ) +
+  ylab("Rewarding object preference (sec)") +
+  xlab("Trial") +
+  labs(col = "Rewarding object colour") +
+  theme(
+    legend.position = "none",
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 14, face = "bold"),
+    plot.title = element_text(size = 16, hjust = 0.5),
+    strip.text.x = element_text(size = 14, face = "bold")
+  ) +
+  scale_color_manual(values = c("#2980b9", "#27ae60")) +
+  scale_shape_manual(values = c(15, 16)) +
+  geom_hline(yintercept = 0, linetype = "dashed", alpha = 0.6) +
+  geom_line(aes(group = id), alpha = 0.2) + 
+  scale_y_continuous(breaks = seq(-300, 300, by = 25)) +
+  facet_grid(~rewarding.object.colour)
+```
+
 ***
 
 ## ESM Models
 
 In this section we describe models not included in the main text.
-
 
 ### Addressing feeding count
 
@@ -1084,6 +1166,8 @@ tidy_fit_test_feeding_data_low_feeders_removed <- rename_tidy_lme4_cols(tidy_fit
 tidy_fit_test_feeding_data_low_feeders_removed[1:4, 4] <- feeding_data_low_feeders_removed_model_table_row_name_vec
 ```
 
+\
+
 ##### Results
 
 ```{r, results=TRUE, echo=FALSE}
@@ -1155,6 +1239,8 @@ tidy_fit_test_data_feeding_controlled_model <- rename_tidy_lme4_cols(tidy_fit_te
 tidy_fit_test_data_feeding_controlled_model[1:5, 4] <- test_data_feeding_controlled_model_table_row_name_vec
 ```
 
+\
+
 ##### Results
 
 ```{r, results=TRUE, echo=FALSE}
@@ -1208,7 +1294,7 @@ effect model with a beta distribution.
 prop_test_data_model_glm <-  
   glmmTMB(prop.rewarding.object.preference ~  
             trial * rewarding.object.colour + (1|id), 
-  data = test_data, 
+  data = test_data %>% filter(trial == "21" | trial == "0"), 
   family = beta_family(link="logit")
   )
 ```
@@ -1255,6 +1341,8 @@ tidy_prop_test_data_model <- rename_tidy_lme4_cols(tidy_prop_test_data_model)
 tidy_prop_test_data_model[1:4, 4] <- test_model_table_row_name_vec
 ```
 
+\
+
 ##### Results
 
 ```{r, results=TRUE, echo=FALSE}
@@ -1274,7 +1362,7 @@ testing_data_x_axis_labels <- c("Initial test", "Final test")
 object_labels <- c("Blue-trained", "Green-trained")
 names(object_labels) <- c("blue", "green")
 ggplot(
-  test_data,
+  test_data %>% filter(trial == "21" | trial == "0"),
   aes(
     x = trial,
     y = prop.rewarding.object.preference,
@@ -1298,7 +1386,8 @@ ggplot(
     legend.position = "none",
     axis.text = element_text(size = 14),
     axis.title = element_text(size = 14, face = "bold"),
-    plot.title = element_text(size = 16, hjust = 0.5)
+    plot.title = element_text(size = 16, hjust = 0.5),
+    strip.text.x = element_text(size = 14, face = "bold")
   ) +
   scale_color_manual(values = c("#2980b9", "#27ae60")) +
   scale_shape_manual(values = c(15, 16)) +
