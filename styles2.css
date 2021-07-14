@@ -6,11 +6,11 @@ h1, h2, h3, h4, h5 {
 }
 
 h1 {
-  font-size: 1.7em;
+  font-size: 1.5em;
 }
 
 h2 {
-  font-size: 1.5em;
+  font-size: 1.4em;
 }
 
 h3 {
@@ -37,22 +37,35 @@ h1.title {
 .author {
   font-weight: normal;
   font-size: 16px;
+  line-height: 1.5em;
+}
+
+.autor_afil {
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 1.5em;
 }
 
 .date {
   font-weight: normal;
+  font-size: 16px;
+  line-height: 1.5em;
 }
 
 /*  Body font formatting */
 body {
     font-family: "Helvetica", sans-serif;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 1.5em;
     color: #262626;
 }
 
 dd {
   font-size: 0.90em;
+}
+
+blockquote {
+  font-size: 0.95em;
 }
 
 /* Make it so that clicking references sends you straight there*/
@@ -71,12 +84,7 @@ div.csl-entry {
 /* moving main container down so navbar doesnt overlap */
 
 .main-container {
-    margin-top: 2.5%;
-}
-
-/* Smooth scrolling enabled */
-html {
-  scroll-behavior: smooth;
+    margin-top: 3%;
 }
 
 /* NAVIGATION BAR */
@@ -124,6 +132,11 @@ html {
     position: fixed;
     border: 0px solid #c9c9c9;
     border-radius: 0px;
+}
+
+.tocify ul, .tocify li {
+    line-height: 1.1em !important;
+    font-size: 0.95em !important;
 }
 
 /* Change active highlight */

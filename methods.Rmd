@@ -2,9 +2,9 @@
 title: "Guppy Colour Learning Project Methods"
 output:
   bookdown::html_document2:
-    include:
-      highlight: pygments
-    css: styles.css
+    includes:
+      in_header: docs/header.html   
+    css: styles2.css
     toc: true
     toc_depth: 4
     toc_float: 
@@ -18,15 +18,6 @@ knit: (function(input, ...) {
       output_file = 'docs/methods')
   })
 ---
-
-<div class="topnav">
-  <a href="index.html">Guppy colour learning project site</a>
-    <a href="https://github.com/wyatt-toure/guppy-colour-learning-project" 
-    style = "float: right;">GitHub</a>
-    <a href="analysis.html" style = "float: right;">Analysis</a>
-    <a class="active" href="methods.html" style = "float: right;">Methods</a>
-    <a href="index.html" style = "float: right;">Home</a>
-</div>
 
 ***
 

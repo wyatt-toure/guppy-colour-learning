@@ -2,9 +2,9 @@
 title: "Guppy Colour Learning Project Homepage"
 output:
   bookdown::html_document2:
-    include:
-      highlight: pygments
-    css: styles.css
+    includes:
+      in_header: docs/header.html   
+    css: styles2.css
     
 knit: (function(input, ...) {
     rmarkdown::render(
@@ -12,25 +12,6 @@ knit: (function(input, ...) {
       output_file = 'docs/index')
   })
 ---
-
-<div class="topnav">
-  <a href="index.html">Guppy colour learning project site</a>
-    <a href="https://github.com/wyatt-toure/guppy-colour-learning-project" 
-    style = "float: right;">GitHub</a>
-    <a href="analysis.html" style = "float: right;">Analysis</a>
-    <a href="methods.html" style = "float: right;">Methods</a>
-    <a class="active" href="index.html" style = "float: right;">Home</a>
-</div>
-
-
-<p class="author-name">M. Wyatt Toure<span class="affil-mark">1*</span>, Simon M. 
-Reader<span class="affil-mark">1</span></p>
-<p class="author-affil"><span class="affil-mark">1</span>McGill University, 
-Department of Biology, 1205 Docteur Penfield, 
-Montreal, Quebec H3A 1B1, Canada</p>
-<p><span class="affil-mark">*</span>Corresponding Author: <br>
-M. Wyatt Toure <br>
-e-mail: `m_wyatt.toure@mail.mcgill.ca`<br></p>
 
 ***
 
@@ -44,13 +25,12 @@ this site.](https://github.com/wyatt-toure/guppy-colour-learning-project)
 
 The goal of this project was to determine whether we could shift the preference
 for particular objects in Trinidadian guppies regardless of the object's colour,
-in this case we focused on green and blue. To address this we rewarded guppies
-for feeding from either green or blue Lego blocks, you can see example footage
-of this in the [Methods](methods.html#Tests) section. The analysis and the code
-underlying it can be found in the [Analysis](analysis.html) section.
-
-<img src="images/training-data-animation.gif" alt="animation of training data" 
-width="500" style="display: block; margin-left: auto; margin-right: auto;"/>
+in this case we focused on green and blue. To address this we performed two
+experiments where we rewarded guppies for feeding from either green or blue Lego
+blocks, you can see the detailed protocol involved in performing this experiment
+as well as example footage of this in the [Methods](methods.html#Tests) section.
+The analysis and the code underlying this project can be found in the
+[Analysis](analysis.html) section.
 
 
 
