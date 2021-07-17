@@ -12,13 +12,13 @@ in Trinidadian guppies’</span>.
 
 ## Website
 
-A reader-friendly website which walks through each of the models in the manuscript is available at https://wyatt-toure.github.io/guppy-colour-learning-project/.
+A reader-friendly website which walks through each of the models in the manuscript is available at https://wyatt-toure.github.io/guppy-colour-learning/.
 
 ## How to reproduce the results
 
 If you want to reproduce the results you need to download the entire repository
 onto your system and open
-[analysis.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/analysis.Rmd)
+[analysis.Rmd](https://github.com/wyatt-toure/guppy-colour-learning/blob/main/analysis.Rmd)
 in RStudio. You will then need to install the packages required for the analysis
 which are listed in the Required tools and references of this README. Then you
 can select the Run All option under the Code option in the navbar. You can also
@@ -35,13 +35,13 @@ variables necessary for the analysis are created as the script progresses.
 
 The root directory contains all the Rmd scripts used to conduct the analyses and render the website. 
 
-The R code for the analysis can be found in [analysis.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/analysis.Rmd). 
+The R code for the analysis can be found in [analysis.Rmd](https://github.com/wyatt-toure/guppy-colour-learning/blob/main/analysis.Rmd). 
 
-The methods page is built from the [methods.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/methods.Rmd) file and the home page is built from the [index.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/index.Rmd) file.
+The methods page is built from the [methods.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/methods.Rmd) file and the home page is built from the [index.Rmd](https://github.com/wyatt-toure/guppy-colour-learning/blob/main/index.Rmd) file.
 
 ## Metadata
 
-Data are available in the [colour-learning-project-data.csv](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/data/colour-learning-project-data.csv) file.
+Data are available in the [colour-learning-project-data.csv](https://github.com/wyatt-toure/guppy-colour-learning/blob/main/data/colour-learning-project-data.csv) file.
 
 Below I provide the variable descriptions for the dataset and the [packages required](#required-tools-and-references) to conduct the analyses and construct the website as well as their versions and citations. 
 
