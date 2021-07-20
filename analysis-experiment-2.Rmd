@@ -236,7 +236,8 @@ with the `time.in.center`. `total.time` should be close to 300 since trials
 last 5 minutes (300 seconds).
 
 We also create the variable `trial.type` to identify whether a trial is a test
-trial (unreinforced) or training trial (reinforced).
+trial (unreinforced), training trial (reinforced), or refresher trial
+(reinforced).
 
 ```{r variable-creation, warning=FALSE, message=FALSE}
 # Creating new variables
@@ -352,6 +353,51 @@ full_data <- full_data %>%
       )
   )
 ```
+
+We now create a variable which establishes how many trials an individual guppy
+fed in during the 20 training trials. We do this by creating a variable called
+`fed` which can be either True or False. Every time `ate`, the variable which
+indicates whether an individual ate during that trial or not, is equal to yes
+fed is set to True. When this is not the case fed is set to False. We then
+retrieve only the rows of fed which have fed set to True. We remove the column
+fed to keep only the counts. We then add the feeding values to the full data
+set. We end by extracting a smaller data set that contains only the variables
+`id`, `feeding.count`, and `rewarding.object.colour` treatment which will be
+used for model 4.
+
+```{r feeding-data-prep}
+# Group by ID and count the number of sessions in which an individual ate during training
+feeding <- full_data %>%
+  filter(trial.type == "training") %>% 
+  group_by(id) %>%
+  count(fed = ate == "yes")
+
+# Count only the yeses
+feeding <- feeding %>%
+  filter(fed == "TRUE")
+
+# Remove the column feeding.count to keep only the counts
+feeding <- feeding %>%
+  dplyr::select(-fed)
+
+# Add the feeding values to the main data frame so I can get treatment IDs
+full_data <- left_join(full_data, feeding, by = "id") %>%
+  replace_na(list(n = 0)) %>% 
+  rename(training.feeding.count = n)
+
+# Extract id, feeding count, and rewarding object colour treatment
+feeding_data <- full_data %>%
+  filter(trial == 0) %>% 
+  dplyr::select(id, training.feeding.count, rewarding.object.colour)
+```
+
+We also made the decision to omit an individual that did not feed throughout all
+reinforced trials.
+
+```{r}
+full_data <- full_data %>% filter(training.feeding.count > 0)
+```
+
 
 We next create subsets of the full data set that are restricted to the training
 trials (reinforced), the test trials (unreinforced), and the initial test trial
@@ -853,39 +899,10 @@ trials in which a guppy ate.
     individual fish ate
   - **Fixed effect:** `rewarding.object.colour` is the identity of the rewarding
     object (blue or green)
-    
-    ```{r feeding-data-prep, include = FALSE}
-#### Get feeding data #####
-# Group by ID and count the number of sessions in which an individual ate
-feeding <- training_data %>%
-  group_by(id) %>%
-  count(feeding.count = ate == "yes")
-
-# Remove NAs from this
-feeding <- na.omit(feeding)
-
-# Count only the yeses
-feeding <- feeding %>%
-  filter(feeding.count == "TRUE")
-
-# Remove the column feeding.count to keep only the counts
-feeding <- feeding %>%
-  dplyr::select(-feeding.count)
-
-# Add the feeding values to the main data frame so I can get treatment IDs
-feeding_data <- left_join(baseline_data, feeding, by = "id")
-
-# Replace NAs with 0, rename n to feeding count, and extract id, feeding count,
-# and rewarding object colour treatment
-feeding_data <- feeding_data %>%
-  replace_na(list(n = 0)) %>%
-  rename(feeding.count = n) %>%
-  dplyr::select(id, feeding.count, rewarding.object.colour)
-```
 
 ```{r model-4, echo=TRUE}
 feeding_data_model <-
-  glm.nb(feeding.count ~ rewarding.object.colour,
+  glm.nb(training.feeding.count ~ rewarding.object.colour,
     data = feeding_data 
   )
 ```
@@ -950,7 +967,7 @@ ggplot(
   feeding_data,
   aes(
     x = rewarding.object.colour,
-    y = feeding.count,
+    y = training.feeding.count,
     fill = rewarding.object.colour,
     colour = rewarding.object.colour
   )
@@ -1009,6 +1026,114 @@ lm(weight ~ rewarding.object.colour, data = baseline_data) %>%
   mutate_if(is.numeric, round, digits = 3) %>%
   kable()
 ```
+
+***
+
+## ESM Models
+
+### Model 1 - Percentage preference for the rewarded object during testing depending on treatment
+
+```{r}
+prop_test_data_model_glm <-  
+  glmmTMB(prop.rewarding.object.preference ~  
+            trial * rewarding.object.colour + (1|id), 
+  data = test_data %>% mutate(prop.rewarding.object.preference =
+                         case_when(
+                             prop.rewarding.object.preference == 1 ~ 0.999,
+                             prop.rewarding.object.preference != 1 ~ prop.rewarding.object.preference
+                         )), 
+  family = beta_family(link="logit")
+  )
+```
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName5"> See ESM Model 2 Residuals </button>  
+<div id="BlockName7" class="collapse">  
+
+```{r, echo=FALSE, message=FALSE}
+simulationOutput <- simulateResiduals(fittedModel = prop_test_data_model_glm)
+plot(simulationOutput)
+
+# Saving plot to figs directory
+# ggsave(
+#   filename = "exp-2-ESM-model-1-residual-plot.png",
+#   plot = (plot(simulationOutput)),
+#   path = "figs/exp-2/residual-plots/",
+#   device = "png",
+#   dpi = 300
+# )
+```
+
+</div>
+
+```{r}
+prop_test_data_model_emmeans <- emmeans(prop_test_data_model_glm,
+        specs = trt.vs.ctrl ~ rewarding.object.colour:trial,
+        by = "rewarding.object.colour")
+```
+
+```{r}
+prop_test_data_contrasts <- as.data.frame(prop_test_data_model_emmeans$contrasts) %>% 
+  mutate_if(is.numeric, round, digits = 3) 
+
+prop_test_data_contrasts$p.value <- format_p_value(prop_test_data_contrasts$p.value)
+
+prop_test_data_contrasts$contrast <- c("Probe 1 - Initial",
+  "Generalization 1 - Initial",
+  "Generalization 2 - Initial",
+  "Probe 2 - Initial",
+  "Odour - Initial",
+  "Probe 1 - Initial",
+  "Generalization 1 - Initial",
+  "Generalization 2 - Initial",
+  "Probe 2 - Initial",
+  "Odour - Initial")
+
+prop_test_data_contrasts %>% kable()
+```
+
+
+
+
+```{r, echo=FALSE}
+testing_data_x_axis_labels <- c("Initial", "Probe 1", "G1", "G2", "Probe 2", "Odour")
+
+ggplot(
+  test_data, 
+  aes(
+    x = trial, 
+    y = prop.rewarding.object.preference, 
+    colour = rewarding.object.colour,
+    shape = rewarding.object.colour
+  )
+) +
+  theme_minimal() +
+  geom_jitter(alpha = 0.5, size = 2,
+              position = position_dodge(width = 0.5)) +
+  stat_summary(geom = "point", fun = "mean", size = 4, 
+               position = position_dodge(width = 0.5)) +
+  stat_summary(
+    geom = "errorbar",
+    fun.data = "mean_ci",
+    position = position_dodge(width = 0.5),
+    width = 0.3
+  ) +
+  ylab("Rewarding object preference") +
+  xlab("Test") +
+  labs(col = "Rewarding object colour") +
+  theme(
+    legend.position = "none",
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 14, face = "bold"),
+    plot.title = element_text(size = 16, hjust = 0.5),
+    strip.text.x = element_text(size = 14, face = "bold")
+  ) +
+  scale_x_discrete(labels = testing_data_x_axis_labels) +
+  scale_color_manual(values = c("#2980b9", "#27ae60")) +
+  scale_shape_manual(values = c(15, 16)) +
+  geom_hline(yintercept = 0.5, linetype = "dashed", alpha = 0.6) +
+  scale_y_continuous(breaks = seq(0, 1, by = 0.10))
+```
+
 
 ***
 
