@@ -2,8 +2,8 @@
 title: "Analysis for 'Colour biases in learned foraging preferences in Trinidadian guppies' "
 subtitle: "Experiment 2 Data Preparation and Analysis"
 author: 
-  - name: "M. Wyatt Toure"
-    affiliation: "McGill University, Department of Biology, 1205 Docteur Penfield, Montreal, Quebec H3A 1B1, Canada"  
+  - name: "M. Wyatt Toure^1^"
+    affiliation: "^1^McGill University, Department of Biology, 1205 Docteur Penfield, Montreal, Quebec H3A 1B1, Canada" 
 date: "Last Update: `r format(Sys.Date(), '%b %d %Y')`"
 output:
   bookdown::html_document2:
@@ -73,6 +73,8 @@ source("R/format-p-value.R")
 source("R/rename-lme4-model.R")
 source("R/geom-flat-violin.R")
 source("R/read-and-format-ethovision-data.R")
+source("R/report-est-plus-minus-std-error.R")
+source("R/report-ci.R")
 ```
 
 ***
@@ -395,8 +397,11 @@ To conduct the analyses we planned, we create subsets of the full data set that
 are restricted to the training trials (reinforced), the test trials
 (unreinforced), and the initial test trial (unreinforced) using the `filter()`
 function from `dplyr`. We change trial to a factor for the unreinforced test
-trial data subset since there are two levels of trial being compared to each
-other for the analysis on this data set.
+trial data subset since we are interested in comparing the levels of trial to
+each other rather than looking at differences in trends like we are with the
+larger training data subset. Trial in the training data subset is coded as
+integer to allow us to look at trends in the shift of rewarding object
+preference during training.
 
 ```{r data-subset, warning=FALSE, message=FALSE}
 # Restrict data to only the baseline data
@@ -489,8 +494,9 @@ knitr::kable(tidy_baseline_model %>%
 ```
 
 Before training began, there was no significant difference in the time spent
-near the green versus the blue object across all guppies (p =
-`r tidy_baseline_model$'P value' %>% round(3)`).
+near the green versus the blue object across all guppies (green object
+preference: `r report_est_and_std_error(tidy_baseline_model, rounding = 2)`
+seconds, p = `r tidy_baseline_model$'P value' %>% round(3)`).
 
 ```{r baseline-pref-plot, echo=FALSE, message=FALSE, echo=FALSE, fig.cap="Preference for the green object relative to the blue object across all guppies at baseline. Negative values represent more time spent with the blue object, positive values indicate more time spent with the green object. Data are means ± 95% CI", fig.id="baseline-pref-plot",  warning=FALSE, message=FALSE}
 ###### Baseline green object preference plot ######
@@ -616,7 +622,8 @@ knitr::kable(tidy_training_data_model[1:4, ] %>%
 ```
 
 There was a significant interaction effect between trial and rewarding object
-colour (p = `r tidy_training_data_model$'P value'[4]`) indicating that the
+colour (`r report_est_and_std_error(tidy_training_data_model, rounding = 2)[4]`
+seconds, p = `r tidy_training_data_model$'P value'[4]`) indicating that the
 change in rewarding object preference has a different trend depending on the
 rewarding object colour. We used the `emtrends()` function from `emmeans` to
 estimate and compare the trends.
@@ -707,7 +714,7 @@ this control trial for each treatment. To do so we fit a generalized linear
 mixed effects model with a Gaussian distribution with fixed effects of trial and
 rewarding object colour (green versus blue), a random effect of individual
 identity, and a response variable of rewarding object preference. To control for
-heterogeneous variance across trials we additionally modeled the variance due
+heterogeneous variance across trials we additionally modelled the variance due
 to trial. 
 
 ```{r model-3, echo=TRUE}
@@ -763,29 +770,32 @@ model_3_anova_table %>%
   tibble::rownames_to_column(var = "Factor") %>% 
   mutate_if(is.numeric, round, digits = 3) %>% 
   rename("P Value" = 4) %>% 
-  kable(caption = "ANOVA table for the test trials")
+  kable(caption = "Type 3 ANOVA table for the effects of rewarding object colour, trial, and their interaction on rewarding object preference across the six test trials in experiment 2")
 ```
 
-There is an interaction effect between trial and rewarding object colour for the
-test trials (p = `r model_3_anova_table$'Pr(>Chisq)'[4] %>% round(3)`). To
-investigate the interaction effect and determine where the differences in
+There is an overall interaction effect between trial and rewarding object colour
+for the test trials (p = `r model_3_anova_table$'Pr(>Chisq)'[4] %>% round(3)`).
+To investigate the interaction effect and determine where the differences in
 performance were apparent we conducted treatment versus control post-hoc tests.
 Here we compared the estimated marginal means of rewarding object preference for
 each post-training test trial to the estimated marginal mean of the initial
 rewarding object preference for each rewarding object colour respectively to
 establish whether learning had occurred. Learning was assumed to have occurred
 if the change in preference between the initial trial (serving as the control)
-and the test trial was significant. We used the Dunnett adjustment method to
+and the test trial was significant. We used a multivariate t adjustment to
 correct p values in light of multiple comparisons.
 
 ```{r post-hoc-comparisons, echo=TRUE}
 test_data_model_emmeans <- emmeans(test_data_model_glm,
         specs = trt.vs.ctrl ~ rewarding.object.colour:trial,
-        by = "rewarding.object.colour")
+        adjust = "mvt",
+        by = "rewarding.object.colour") 
 ```
 
 ```{r model-3-contrasts-table, echo=FALSE}
-test_data_contrasts <- as.data.frame(test_data_model_emmeans$contrasts) %>% 
+test_data_contrasts <- as.data.frame(
+  test_data_model_emmeans$contrasts %>% summary(infer = TRUE)
+  ) %>% 
   mutate_if(is.numeric, round, digits = 3) 
 
 test_data_contrasts$p.value <- format_p_value(test_data_contrasts$p.value)
@@ -808,7 +818,9 @@ test_data_contrasts %>%
     "Estimate" = estimate,
     "Std. Error" = SE,
     "T ratio" = t.ratio,
-    "P Value" = p.value
+    "P Value" = p.value,
+    "Lower CL" = lower.CL,
+    "Upper CL" = upper.CL
   ) %>%
   kable(
     caption = "Table of post-hoc tests with a Dunnett adjustment for multiple 
@@ -818,45 +830,119 @@ guppies). Values are all rounded to 3 decimal places."
   )
 ```
 
+We also computed simple contrasts for the estimated marginal means of the
+rewarding object preference between green-trained guppies and blue-trained
+guppies within the same test trial to see if performance significantly differed
+between the two groups during a test trial.
+
+```{r}
+test_data_simple_contrasts <- contrast(test_data_model_emmeans$emmeans, 
+         method = "revpairwise", 
+         simple = "rewarding.object.colour")
+```
+
+```{r, echo=FALSE}
+test_data_simple_contrasts <- as.data.frame(
+  test_data_simple_contrasts %>% summary(infer = TRUE)
+  ) %>% 
+    mutate_if(is.numeric, round, digits = 3) 
+
+test_data_simple_contrasts$p.value <- 
+  format_p_value(test_data_simple_contrasts$p.value)
+
+test_data_simple_contrasts$contrast <- c(rep("Green - Blue", times = 6))
+
+test_data_simple_contrasts$trial <- c("Initial",
+                                      "Probe 1",
+                                      "Generalization 1",
+                                      "Generalization 2",
+                                      "Probe 2",
+                                      "Odour")
+
+test_data_simple_contrasts %>%
+  rename(
+    "Contrast" = contrast,
+    "Trial" = trial,
+    "Estimate" = estimate,
+    "Std. Error" = SE,
+    "T ratio" = t.ratio,
+    "P Value" = p.value,
+    "Lower CL" = lower.CL,
+    "Upper CL" = upper.CL
+  ) %>%
+  kable(
+    caption = "Table of simple contrasts of rewarding object preference between colour treatments across each test trial. Initial = Initial test (trial 0). Probe 1 = First probe test with object pair A (trial 21). Generalization 1 = Generalization to similar Lego colours test (trial 23). Generalization 2 = Generalization to non-Lego clay objects (trial 25). Probe 2 = Second probe test with object pair A (trial 27). Odour = Probe test with object pair A and food odour present on the food strips for both objects. Values are all rounded to 3 decimal places. CL = confidence limit."
+  )
+```
+
 Both rewarding object colour treatments showed evidence of having learned during
 the first probe trial. Blue-trained guppies significantly increased their
 preference for the rewarding object by
 `r test_data_contrasts$estimate[1] %>% round(0)` seconds (p =
-`r test_data_contrasts$p.value[1]`) and green-trained guppies significantly
-increased their preference for the rewarding object by
+`r test_data_contrasts$p.value[1]`,
+`r report_ci(test_data_contrasts, rounding = 2)[1]`) and green-trained guppies
+significantly increased their preference for the rewarding object by
 `r test_data_contrasts$estimate[6] %>% round(0)` seconds (p =
-`r test_data_contrasts$p.value[6]`).
+`r test_data_contrasts$p.value[6]`,
+`r report_ci(test_data_contrasts, rounding = 2)[6]`). There is no difference in
+performance between the two colour treatments in this test (p =
+`r test_data_simple_contrasts$p.value[2]`,
+`r report_ci(test_data_simple_contrasts, rounding = 2)[2]`).
 
 Neither group displayed evidence of generalizing the learned colour preference
-to a Lego object with a different blue and green colouration (blue: p =
-`r test_data_contrasts$p.value[2]`, green: p =
-`r test_data_contrasts$p.value[7]`).
+to a Lego object with a darker blue or green colouration (blue: p =
+`r test_data_contrasts$p.value[2]`,
+`r report_ci(test_data_contrasts, rounding = 2)[2]`, green: p =
+`r test_data_contrasts$p.value[7]`,
+`r report_ci(test_data_contrasts, rounding = 2)[7]`) and the groups did not
+perform differently on this test (p = `r test_data_simple_contrasts$p.value[3]`,
+`r report_ci(test_data_simple_contrasts, rounding = 2)[3]`).
 
 Green-trained guppies showed evidence of generalizing their learned preference
-to a non-Lego clay object (p = `r test_data_contrasts$p.value[8]`), displaying a
-change in preference of `r test_data_contrasts$estimate[8] %>% round(0)` seconds
-whereas blue-trained guppies did not show evidence of a learned preference (p =
-`r test_data_contrasts$p.value[3]`).
+to a non-Lego clay object (p = `r test_data_contrasts$p.value[8]`,
+`r report_ci(test_data_contrasts, rounding = 2)[8]`), displaying a change in
+preference of `r test_data_contrasts$estimate[8] %>% round(0)` seconds whereas
+blue-trained guppies did not show evidence of a learned preference (p =
+`r test_data_contrasts$p.value[3]`,
+`r report_ci(test_data_contrasts, rounding = 2)[3]`). There is a significant
+difference in performance between the two colour treatments in this test with
+green-trained guppies displaying a superior performance over blue-trained
+guppies (p = `r test_data_simple_contrasts$p.value[4]`,
+`r report_ci(test_data_simple_contrasts, rounding = 2)[4]`).
 
 For the second probe test to see if the learned preference would habituate with
-a repeated test, green-trained guppies displayed evidence of having retained
-their learned preference maintaining a shift in preference of
+a repeated test, green-trained guppies displayed limited evidence of having
+retained their learned preference maintaining a shift in preference of
 `r test_data_contrasts$estimate[9] %>% round(0)` seconds (p =
-`r test_data_contrasts$p.value[9]`) but blue-trained guppies did not (p =
-`r test_data_contrasts$p.value[4]`).
+`r test_data_contrasts$p.value[9]`,
+`r report_ci(test_data_contrasts, rounding = 2)[9]`) but blue-trained guppies
+did not (p = `r test_data_contrasts$p.value[4]`,
+`r report_ci(test_data_contrasts, rounding = 2)[4]`). There is a trend for
+green-trained guppies to outperform blue-trained guppies in this test but this
+is not significant ( p = `r test_data_simple_contrasts$p.value[5]`,
+`r report_ci(test_data_simple_contrasts, rounding = 2)[5]`).
 
 For the odour test green-trained guppies showed evidence of learning, displaying
 a shift in preference of `r test_data_contrasts$estimate[10] %>% round(0)`
-seconds (p `r test_data_contrasts$p.value[10]`) but blue-trained guppies did not
-(p = `r test_data_contrasts$p.value[5]`) displaying a non-significant shift of
-`r test_data_contrasts$estimate[5] %>% round(0)` seconds.
+seconds (p `r test_data_contrasts$p.value[10]`,
+`r report_ci(test_data_contrasts, rounding = 2)[10]`) but blue-trained guppies
+did not (p = `r test_data_contrasts$p.value[5]`,
+`r report_ci(test_data_contrasts, rounding = 2)[5]`) displaying a
+non-significant shift of `r test_data_contrasts$estimate[5] %>% round(0)`
+seconds. There is a significant difference in performance between the two colour
+treatments in this test with green-trained guppies displaying a superior
+performance over blue (p `r test_data_simple_contrasts$p.value[6]`,
+`r report_ci(test_data_simple_contrasts, rounding = 2)[6]`).
 
 Thus, in three out of five test trials green-trained guppies showed evidence of
 learning while blue-trained guppies show evidence of learning in only one out of
 five test trials with this trial being the very first probe trial after
-training.
+training. Moreover, in two out of five test trials green-trained guppies
+outperform blue-trained guppies and in a third test green-trained guppies trend
+towards outperforming blue-trained guppies. Meanwhile blue-trained guppies never
+outperform green-trained guppies.
 
-```{r test-data-pref-plot, echo=FALSE, message=FALSE, fig.cap="Rewarding object preferences for an initial test prior to training and 5 probe tests after training. During training, fish were rewarded for approaching the blue object (blue squares) or the green object (green circles). At test, no food reward was present. Dashed line represents an equal preference for either object. Large blue sqaures and large green circles are means ± 95% CI, smaller blue sqaures and green circles are individual data points", fig.id="test-data-pref-plot", warning=FALSE, message=FALSE}
+```{r test-data-pref-plot, echo=FALSE, message=FALSE, fig.cap="Rewarding object preferences for an initial test prior to training and 5 probe tests after training. During training, fish were rewarded for approaching the blue object (blue squares) or the green object (green circles). At test, no food reward was present. Dashed line represents an equal preference for either object. Large blue squares and large green circles are means ± 95% CI, smaller blue squares and green circles are individual data points", fig.id="test-data-pref-plot", warning=FALSE, message=FALSE}
 testing_data_x_axis_labels <- c("Initial", "Probe 1", "G1", "G2", "Probe 2", "Odour")
 
 ggplot(
@@ -1193,7 +1279,7 @@ prop_test_data_model_emmeans <- emmeans(prop_test_data_model_glm,
 ```
 
 
-```{r, echo=FALSE}
+```{r prop-test-data-contrasts-table, echo=FALSE}
 prop_test_data_contrasts <- as.data.frame(prop_test_data_model_emmeans$contrasts) %>% 
   mutate_if(is.numeric, round, digits = 3) 
 
@@ -1227,8 +1313,9 @@ guppies). Values are all rounded to 3 decimal places."
   )
 ```
 
-With the proportional data we again find an overall interaction effect between
-trial and rewarding object colour (p =
+For full results see Table \@ref(tab:prop-test-data-contrasts-table). With the
+proportional data we again find an overall interaction effect between trial and
+rewarding object colour (p =
 `r esm_model_1_anova_table$'Pr(>Chisq)'[4] %>% round(3)`) find that there is no
 strong evidence for learning on the first probe test trial for both colour
 treatments (blue: p = `r prop_test_data_contrasts$p.value[1]`, green: p =
@@ -1247,8 +1334,8 @@ generalization trial where guppies were tested to see whether they could
 generalize the colour prefernce to a non-Lego clay object. Green-trained guppies
 showed evidence of generalizing their learned preference to a non-Lego clay
 object (p = `r prop_test_data_contrasts$p.value[8]`), displaying a change in
-preference of 21% whereas blue-trained guppies did not show evidence of a learned
-preference (p = `r prop_test_data_contrasts$p.value[3]`).
+preference of 21% whereas blue-trained guppies did not show evidence of a
+learned preference (p = `r prop_test_data_contrasts$p.value[3]`).
 
 For the second probe test to see if the learned preference would habituate with
 a repeated test the pattern of results between both models is the same.
@@ -1259,8 +1346,8 @@ preference maintaining a non-significant shift in preference of 18% (p =
 
 The odour test displays the same pattern of results as in the original model
 green-trained guppies showed evidence of learning, displaying a shift in
-preference of 25% (p = `r prop_test_data_contrasts$p.value[10]`) but blue-trained
-guppies did not (p = `r prop_test_data_contrasts$p.value[5]`).
+preference of 25% (p = `r prop_test_data_contrasts$p.value[10]`) but
+blue-trained guppies did not (p = `r prop_test_data_contrasts$p.value[5]`).
 
 Thus, in this proportional data model green-trained guppies showed evidence of
 learning in two out of five test trials while blue-trained guppies again show
@@ -1346,16 +1433,23 @@ object_pair_model_anova_table %>%
   tibble::rownames_to_column(var = "Factor") %>% 
   mutate_if(is.numeric, round, digits = 3) %>% 
   rename("P Value" = 4) %>% 
-  kable(caption = "ANOVA table for object pair model")
+  kable(caption = "Type 3 ANOVA table for the effect of object pair on rewarding object preference during training in experiment 2.")
 ```
 
 We find no evidence that guppies spent a different amount of time near a
 rewarding object based on which object pair it came from (p =
 `r object_pair_model_anova_table$'Pr(>Chisq)'[2] %>% round(3)`). Plotting the
-data reveals a slight trend for guppies to spend more time near object pair 4.
+data reveals a slight trend for guppies to spend more time near object pair 4
+(Figure \@ref(fig:object-pair-plot)A). However, we note that object
+pair 4 is the only object pair to have 4 out of 5 of its presentations after the
+halfway mark of training (trial 10, Figure
+\@ref(fig:object-pair-plot)B). This means guppies were much more
+experienced with the colour association task by the time object pair 4 began
+regularly appearing and likely explains the slightly higher rewarding object
+preference for trials where object pair 4 is present.
 
-```{r, object-pref-training-plot, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Relative preference for the rewarding object for all guppies during training trials (trials 1-20). Large circles are means ± 95% CI, smaller circles are raw data for each individual across all training trials", fig.id="object-pref-training-plot"}
-ggplot(
+```{r object-pair-plot, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="(A) Relative preference for the rewarding object for all guppies across all training trials (trials 1-20). Large circles are means ± 95% CI, smaller circles are raw data points. To the right of the raw data are probability density functions displaying the distribution of the data. (B) Relative preference for the rewarding object for all guppies during each individual training trial (trials 1-20). Negative values represent more time spent with the unrewarding object, positive values indicate more time spent with the rewarding object. Light grey lines connect individuals across trials. Large coloured circles are trial means ± 95% CI.", fig.height=8.5, fig.width=7.5}
+p1 <- ggplot(
   training_data,
   aes(
     x = object.pair,
@@ -1364,14 +1458,18 @@ ggplot(
   )
 ) +
   theme_minimal() +
-  ylab("Rewarding object preference (sec)") +
+  ylab("Rewarding object preference (s)") +
   xlab("Object pair") +
   labs(col = "Object pair") +
   theme(
     legend.position = "none",
-    axis.text = element_text(size = 14),
-    axis.title = element_text(size = 14, face = "bold"),
-    plot.title = element_text(size = 16, hjust = 0.5)
+    axis.text = element_text(size = 12),
+    axis.title = element_text(size = 13, face = "bold"),
+    plot.title = element_text(size = 16, hjust = 0.5),
+    panel.border = element_rect(colour = "#bab0ac", fill = NA, size = 0.5),
+    axis.line.x = element_blank(),
+    axis.line.y = element_blank(),
+    strip.text.x = element_text(size = 10, face = "bold")
   ) +
   stat_summary(
     geom = "errorbar",
@@ -1389,25 +1487,10 @@ ggplot(
     alpha = 0.4,
     trim = FALSE,
     color = NA
-  )
+  ) +
+  guides(fill = FALSE)
 
-ggsave(
-  filename = "exp-2-esm-model-2-object-pair-plot.png",
-  path = "figs/exp-2/",
-  device = "png",
-  dpi = 300
-)
-```
-
-However, we note that object pair 4 is the only object pair to have 4 out of 5
-of its presentations after the halfway mark of training (trial 10, Figure
-\@ref(fig:training-object-pair-plot)). This means guppies were much more
-experienced with the colour association task by the time object pair 4 began
-regularly appearing and likely explains the slightly higher rewarding object
-preference for trials where object pair 4 is present.
-
-```{r, training-object-pair-plot, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Relative preference for the rewarding object for all guppies during training trials (trials 1-20). Negative values represent more time spent with the unrewarding object, positive values indicate more time spent with the rewarding object. Light grey lines connect individuals across trials. Large coloured circles are trial means ± 95% CI."}
-ggplot(
+p2 <- ggplot(
   training_data,
   aes(
     x = trial,
@@ -1416,14 +1499,17 @@ ggplot(
   )
 ) +
   theme_minimal() +
-  ylab("Rewarding object preference (sec)") +
+  ylab("Rewarding object preference (s)") +
   xlab("Trial") +
   labs(col = "Object pair") +
   theme(
-    legend.position = "top",
-    axis.text = element_text(size = 14),
-    axis.title = element_text(size = 14, face = "bold"),
-    plot.title = element_text(size = 16, hjust = 0.5)
+    legend.position = "none",
+    axis.text = element_text(size = 12),
+    axis.title = element_text(size = 13, face = "bold"),
+    plot.title = element_text(size = 16, hjust = 0.5),
+    panel.border = element_rect(colour = "#bab0ac", fill = NA, size = 0.5),
+    axis.line.x = element_blank(),
+    axis.line.y = element_blank()
   ) +
   stat_summary(
     geom = "errorbar",
@@ -1437,13 +1523,26 @@ ggplot(
   scale_y_continuous(breaks = seq(-300, 300, by = 100)) +
   stat_summary(fun = "mean", size = 0.8)
 
+# Combining both plots and adding figure labels 
+ggarrange(p1, p2,
+  heights =  c(1.3, 1),
+  labels = "AUTO",
+  label.x = c(0.1, 0.1),
+  label.y = c(1, 1),
+  hjust = -1,
+  vjust = 2.5,
+  nrow = 2,
+  common.legend = TRUE
+)
+
 ggsave(
-  filename = "exp-2-esm-training-object-pair-plot.png",
+  filename = "exp-2-esm-object-pair-plot.png",
   path = "figs/exp-2/",
   device = "png",
   dpi = 300
 )
 ```
+
 
 ***
 

@@ -1,5 +1,8 @@
 ---
 title: "Guppy Colour Learning Project Homepage"
+author: 
+  - name: "M. Wyatt Toure^1^, Simon M. Reader^1^"
+    affiliation: "^1^McGill University, Department of Biology, 1205 Docteur Penfield, Montreal, Quebec H3A 1B1, Canada"  
 output:
   bookdown::html_document2:
     includes:
@@ -15,27 +18,22 @@ knit: (function(input, ...) {
 
 ***
 
-Welcome to the project site for the experiment described in
-<span style="text-decoration:underline">'Colour biases in learned foraging
-preferences in Trinidadian guppies'</span>. This site contains detailed
-protocols and sample videos for the experiment as well as the code, model
-outputs, data tables, and residual diagnostics for the analyses. The R markdown
-scripts to reconstruct this site are available at the [GitHub repository for
-this site.](https://github.com/wyatt-toure/guppy-colour-learning-project)
+Welcome to the project site for the experiment described in the manuscript
+'Colour biases in learned foraging preferences in Trinidadian guppies'. This
+site contains detailed protocols and sample videos for the experiment as well as
+the code, model outputs, data tables, and residual diagnostics for the analyses.
+The R markdown scripts to reconstruct this site are available at the [GitHub
+repository for this
+site.](https://github.com/wyatt-toure/guppy-colour-learning-project)
 
 The goal of this project was to determine whether we could shift the preference
 for particular objects in Trinidadian guppies regardless of the object's colour,
 in this case we focused on green and blue. To address this we performed two
 experiments where we rewarded guppies for feeding from either green or blue Lego
 blocks, you can see the detailed protocol involved in performing this experiment
-as well as example footage of this in the [Methods](methods.html#Tests) section.
-The analysis and the code underlying this project can be found in the
-[Analysis](analysis.html) section.
+as well as example footage of this in the [Protocols](protocols.html) section.
+The analysis and the code for the two experiments underlying this project can be
+found in the sections [Analysis 1](analysis-experiment-1.html) for experiment 1
+and [Analysis 2](analysis-experiment-2.html) for experiment 2.
 
-
-
-
-
-
-
-
+![](images/index-animation.gif)
