@@ -7,23 +7,41 @@ Simon M. Reader
 
 ## Summary
 
-This is the repository containing all the code to produce the analyses and figures in the manuscript <span style="text-decoration:underline">‘Colour biases in learned foraging preferences
-in Trinidadian guppies’</span>. 
-
-## Website
-
-A reader-friendly website which walks through each of the models in the manuscript is available at https://wyatt-toure.github.io/guppy-colour-learning/.
+This is the repository containing all the code to produce the analyses and
+figures in the manuscript ‘Colour biases in learned foraging preferences in
+Trinidadian guppies’. A reader-friendly website which walks through each of the
+models in the manuscript is available at
+<https://wyatt-toure.github.io/guppy-colour-learning/>.
 
 ## How to reproduce the results
 
-If you want to reproduce the results you need to download the entire repository
-onto your system and open
-[analysis.Rmd](https://github.com/wyatt-toure/guppy-colour-learning/blob/main/analysis.Rmd)
-in RStudio. You will then need to install the packages required for the analysis
-which are listed in the Required tools and references of this README. Then you
-can select the Run All option under the Code option in the navbar. You can also
-run all chunks independently as well though you should do so sequentially since
-variables necessary for the analysis are created as the script progresses.
+This project uses [`renv`](https://rstudio.github.io/renv/articles/renv.html) to
+manage package dependencies and ensure reproducibility through time. To ensure
+results are reproduced based on the versions of the packages used at the time
+this project was created you will need to install `renv` using
+`install.packages("renv")` in RStudio.
+
+If you want to reproduce the results it is best to download the entire
+repository onto your system. This can be done either by clicking the green code
+button on GitHub and then clicking Download ZIP or from the command line using
+`git clone https://github.com/wyatt-toure/guppy-colour-learning`.
+
+Once the repository is downloaded onto your system, navigate to the root
+directory and open `guppy-colour-learning-project.Rproj`. It is important to
+open the project using the `.Rproj` file to ensure the working directory is set
+correctly. Then install the package dependencies onto your system using
+`renv::restore()`. Running `renv::restore` will install the correct versions of
+all the packages needed to replicate our results. Packages are installed in a
+stand-alone library for this project, and will not affect your installed R
+packages anywhere else.
+
+If you want to reproduce specific result from the analyses you can open either
+`analysis-experiment-1.Rmd` for results from experiment 1 or
+`analysis-experiment-2.Rmd` for results from experiment 2. You can select the
+Run All option under the Code option in the navbar of RStudio to execute all the
+code chunks. You can also run all chunks independently as well though we advise
+that you do so sequentially since variables necessary for the analysis are
+created as the script progresses.
 
 ## Directory structure
 
@@ -33,15 +51,24 @@ variables necessary for the analysis are created as the script progresses.
 - `figs/` contains the individual files for the figures and residual diagnostic plots produced by the analysis script 
 - `images/` contains relevant images and videos of the experiment
 
-The root directory contains all the Rmd scripts used to conduct the analyses and render the website. 
+The root directory contains all the Rmd scripts used to conduct the analyses and
+render the website.
 
-The R code for the analysis can be found in [analysis.Rmd](https://github.com/wyatt-toure/guppy-colour-learning/blob/main/analysis.Rmd). 
+The R code for the analysis can be found in
+[`analysis-experiment-1.Rmd`](https://github.com/wyatt-toure/guppy-colour-learning/blob/main/analysis-experiment-1.Rmd)
+for the experiment 1 analysis and
+[`analysis-experiment-2.Rmd`](https://github.com/wyatt-toure/guppy-colour-learning/blob/main/analysis-experiment-2.Rmd)
+for the experiment 2 analysis.
 
-The methods page is built from the [methods.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/methods.Rmd) file and the home page is built from the [index.Rmd](https://github.com/wyatt-toure/guppy-colour-learning/blob/main/index.Rmd) file.
+The protocols page is built from the
+[methods.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/methods.Rmd)
+file and the home page is built from the
+[index.Rmd](https://github.com/wyatt-toure/guppy-colour-learning/blob/main/index.Rmd)
+file.
 
 ## Metadata
 
-Data are available in the [colour-learning-project-data.csv](https://github.com/wyatt-toure/guppy-colour-learning/blob/main/data/colour-learning-project-data.csv) file.
+Data are available in the `data/` directory.
 
 Below I provide the variable descriptions for the dataset and the [packages required](#required-tools-and-references) to conduct the analyses and construct the website as well as their versions and citations. 
 
