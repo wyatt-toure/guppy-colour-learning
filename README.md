@@ -32,12 +32,12 @@ Once the repository is downloaded onto your system, navigate to the root
 directory and open `guppy-colour-learning-project.Rproj`. It is important to
 open the project using the `.Rproj` file to ensure the working directory is set
 correctly. Then install the package dependencies onto your system using
-`renv::restore()`. Running `renv::restore` will install the correct versions of
-all the packages needed to replicate our results. Packages are installed in a
+`renv::restore()`. Running `renv::restore()` will install the correct versions
+of all the packages needed to replicate our results. Packages are installed in a
 stand-alone library for this project, and will not affect your installed R
 packages anywhere else.
 
-If you want to reproduce specific result from the analyses you can open either
+If you want to reproduce specific results from the analyses you can open either
 `analysis-experiment-1.Rmd` for results from experiment 1 or
 `analysis-experiment-2.Rmd` for results from experiment 2. Both are located in
 the root directory. You can select the Run All option under the Code option in
