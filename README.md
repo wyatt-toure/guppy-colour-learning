@@ -25,7 +25,8 @@ time this project was created you will need to install `renv` using
 If you want to reproduce the results it is best to download the entire
 repository onto your system. This can be done either by clicking the green code
 button on GitHub and then clicking Download ZIP or from the command line using
-`git clone https://github.com/wyatt-toure/guppy-colour-learning`.
+`git clone https://github.com/wyatt-toure/guppy-colour-learning` which will
+install the repository in your home directory.
 
 Once the repository is downloaded onto your system, navigate to the root
 directory and open `guppy-colour-learning-project.Rproj`. It is important to
@@ -38,11 +39,11 @@ packages anywhere else.
 
 If you want to reproduce specific result from the analyses you can open either
 `analysis-experiment-1.Rmd` for results from experiment 1 or
-`analysis-experiment-2.Rmd` for results from experiment 2. You can select the
-Run All option under the Code option in the navbar of RStudio to execute all the
-code chunks. You can also run all chunks independently as well though we advise
-that you do so sequentially since variables necessary for the analysis are
-created as the script progresses.
+`analysis-experiment-2.Rmd` for results from experiment 2. Both are located in
+the root directory. You can select the Run All option under the Code option in
+the navbar of RStudio to execute all the code chunks. You can also run all
+chunks independently as well though we advise that you do so sequentially since
+variables necessary for the analysis are created as the script progresses.
 
 ## Directory structure
 
