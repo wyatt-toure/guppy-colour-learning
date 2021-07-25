@@ -15,10 +15,11 @@ models in the manuscript is available at
 
 ## How to reproduce the results
 
-This project uses [`renv`](https://rstudio.github.io/renv/articles/renv.html) to
-manage package dependencies and ensure reproducibility through time. To ensure
-results are reproduced based on the versions of the packages used at the time
-this project was created you will need to install `renv` using
+This project uses the
+[`renv`](https://rstudio.github.io/renv/articles/renv.html) package from RStudio
+to manage package dependencies and ensure reproducibility through time. To
+ensure results are reproduced based on the versions of the packages used at the
+time this project was created you will need to install `renv` using
 `install.packages("renv")` in RStudio.
 
 If you want to reproduce the results it is best to download the entire
