@@ -15,7 +15,7 @@ output:
       collapsed: false      
     number_sections: false
     split_by: section
-    css: styles2.css
+    css: styles.css
     
 bibliography: ["references/references.bib"]
 csl: references/elife-citation-style.csl    
@@ -64,7 +64,6 @@ library(broom.mixed)
 library(knitr)
 library(emmeans)
 library(report)
-library(cowplot)
 library(glmmTMB)
 library(MASS)
 library(googledrive)
@@ -154,22 +153,14 @@ full_data <- full_data %>%
   mutate(
     rewarding.object.colour =
       case_when(
-        id == "1a" ~ "blue",
-        id == "1b" ~ "green",
-        id == "2a" ~ "blue",
-        id == "2b" ~ "blue",
-        id == "3a" ~ "blue",
-        id == "3b" ~ "green",
-        id == "4a" ~ "green",
-        id == "4b" ~ "green",
-        id == "5a" ~ "green",
-        id == "5b" ~ "blue",
-        id == "6a" ~ "green",
-        id == "6b" ~ "green",
-        id == "7a" ~ "blue",
-        id == "7b" ~ "blue",
-        id == "8a" ~ "green",
-        id == "8b" ~ "blue"
+        id == "1a" ~ "blue", id == "1b" ~ "green",
+        id == "2a" ~ "blue", id == "2b" ~ "blue",
+        id == "3a" ~ "blue", id == "3b" ~ "green",
+        id == "4a" ~ "green", id == "4b" ~ "green",
+        id == "5a" ~ "green", id == "5b" ~ "blue",
+        id == "6a" ~ "green", id == "6b" ~ "green",
+        id == "7a" ~ "blue", id == "7b" ~ "blue",
+        id == "8a" ~ "green", id == "8b" ~ "blue"
       )
   )
 ```
@@ -576,7 +567,7 @@ plot(simulationOutput)
 
 # Saving plot to figs directory
 ggsave(
-  filename = "model-2-residual-plot.png",
+  filename = "exp-2-model-2-residual-plot.png",
   plot = (plot(simulationOutput)),
   path = "figs/exp-2/exp-2-residual-plots",
   device = "png",
@@ -713,9 +704,10 @@ the rewarding object colour as a control and compared each probe test trial to
 this control trial for each treatment. To do so we fit a generalized linear
 mixed effects model with a Gaussian distribution with fixed effects of trial and
 rewarding object colour (green versus blue), a random effect of individual
-identity, and a response variable of rewarding object preference. To control for
-heterogeneous variance across trials we additionally modelled the variance due
-to trial. 
+identity, and a response variable of rewarding object preference using the
+package [`glmmTMB`](https://cran.r-project.org/web/packages/glmmTMB/index.html).
+To control for heterogeneous variance across trials we additionally modelled the
+variance due to trial.
 
 ```{r model-3, echo=TRUE}
 test_data_model_glm <-  
@@ -1146,22 +1138,14 @@ weight_data <- full_data %>%
   mutate(
     weight =
       case_when(
-        id == "1a" ~ 0.29,
-        id == "1b" ~ 0.10,
-        id == "2a" ~ 0.20,
-        id == "2b" ~ 0.11,
-        id == "3a" ~ 0.20,
-        id == "3b" ~ 0.12,
-        id == "4a" ~ 0.21,
-        id == "4b" ~ 0.11,
-        id == "5a" ~ 0.18,
-        id == "5b" ~ 0.13,
-        id == "6a" ~ 0.15,
-        id == "6b" ~ 0.11,
-        id == "7a" ~ 0.31,
-        id == "7b" ~ 0.13,
-        id == "8a" ~ 0.17,
-        id == "8b" ~ 0.14
+        id == "1a" ~ 0.29, id == "1b" ~ 0.10,
+        id == "2a" ~ 0.20, id == "2b" ~ 0.11,
+        id == "3a" ~ 0.20, id == "3b" ~ 0.12,
+        id == "4a" ~ 0.21, id == "4b" ~ 0.11,
+        id == "5a" ~ 0.18, id == "5b" ~ 0.13,
+        id == "6a" ~ 0.15, id == "6b" ~ 0.11,
+        id == "7a" ~ 0.31, id == "7b" ~ 0.13,
+        id == "8a" ~ 0.17, id == "8b" ~ 0.14
       )
   )
 ```
@@ -1178,8 +1162,15 @@ grams) but this difference was not statistically significant.
 
 ```{r, echo=FALSE}
 lm(weight ~ rewarding.object.colour, data = weight_data) %>%
-  broom::tidy() %>% 
-  rename_tidy_lme4_cols() %>% 
+  broom::tidy() %>%
+  rename_tidy_lme4_cols() %>%
+  mutate(
+    Factor =
+      case_when(
+        Factor == "(Intercept)" ~ "Intercept",
+        Factor == "rewarding.object.colourgreen" ~ "Rewarding object colour"
+      )
+  ) %>%
   mutate_if(is.numeric, round, digits = 3) %>%
   kable()
 ```
@@ -1395,7 +1386,7 @@ ggplot(
   scale_y_continuous(breaks = seq(0, 1, by = 0.10))
 
 ggsave(
-  filename = "exp-2-esm-model-1-percent-test-data-pref-plot.png",
+  filename = "exp-2-ESM-model-1-percent-test-data-pref-plot.png",
   path = "figs/exp-2/",
   device = "png",
   dpi = 300
@@ -1419,6 +1410,36 @@ object_pair_model <-
     data = training_data
   )
 ```
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName8"> See ESM Model 2 Residuals </button>  
+<div id="BlockName8" class="collapse">  
+
+```{r, message=FALSE}
+simulationOutput <- simulateResiduals(fittedModel = object_pair_model)
+plot(simulationOutput)
+
+# Saving plot to figs directory
+ggsave(
+  filename = "exp-2-ESM-model-2-residual-plot.png",
+  plot = (plot(simulationOutput)),
+  path = "figs/exp-2/exp-2-residual-plots/",
+  device = "png",
+  dpi = 300
+)
+```
+
+There is a significant deviation from uniformity as indicated by the significant
+Kolmogorov-Smirnov test. However, this model has a particularly large sample
+size (n = 300) so even slight deviations will be significant. Looking at the
+effect size of the deviation (D = `r testUniformity(simulationOutput)[1]`) shows
+that it is minor (D < 0.1) and visual inspection does not suggest large
+deviations in the residuals so our model is still appropriate.
+
+</div>
+
+\
+
+##### Results
 
 ```{r, eval=FALSE}
 car::Anova(object_pair_model, type = "III")
@@ -1536,7 +1557,7 @@ ggarrange(p1, p2,
 )
 
 ggsave(
-  filename = "exp-2-esm-object-pair-plot.png",
+  filename = "exp-2-ESM-model-2-object-pair-plot.png",
   path = "figs/exp-2/",
   device = "png",
   dpi = 300
