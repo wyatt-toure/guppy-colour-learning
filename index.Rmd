@@ -7,7 +7,7 @@ output:
   bookdown::html_document2:
     includes:
       in_header: docs/header.html   
-    css: styles2.css
+    css: styles.css
     
 knit: (function(input, ...) {
     rmarkdown::render(
@@ -20,11 +20,15 @@ knit: (function(input, ...) {
 
 Welcome to the project site for the experiment described in the manuscript
 'Colour biases in learned foraging preferences in Trinidadian guppies'. This
-site contains detailed protocols and sample videos for the experiment as well as
-the code, model outputs, data tables, and residual diagnostics for the analyses.
-The R markdown scripts to reconstruct this site are available at the [GitHub
-repository for this
-site.](https://github.com/wyatt-toure/guppy-colour-learning-project)
+site contains the code, model outputs, data tables, and residual diagnostics for
+the analyses in the manuscript as well as detailed protocols and sample videos
+for the experiment. The Rmarkdown scripts to reconstruct this site are available
+at the [GitHub repository for this
+site](https://github.com/wyatt-toure/guppy-colour-learning-project). If you
+would like to reproduce the results in the manuscript please consult the [How to
+Reproduce the
+Results](https://github.com/wyatt-toure/guppy-colour-learning#how-to-reproduce-the-results)
+section of the README.
 
 The goal of this project was to determine whether we could shift the preference
 for particular objects in Trinidadian guppies regardless of the object's colour,
