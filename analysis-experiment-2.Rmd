@@ -58,7 +58,6 @@ library(ggplot2)
 library(ggpubr)
 library(DHARMa)
 library(dplyr)
-library(effects)
 library(broom)
 library(broom.mixed)
 library(knitr)
@@ -418,14 +417,16 @@ training_data$trial <- as.integer(training_data$trial)
 
 ## Models
 
-We analysed the data from our experiment using linear mixed effect and
-generalized linear mixed effect models with the `lmer()` and `glmer()` functions
-from the `lme4` package. P-values and effective degrees of freedom were obtained
-using the `lmerTest` package which uses Satterthwaite's degrees of freedom
-method [@kuznetsova2017LmerTestPackageTests]. Model residuals were checked
-they met distributional assumptions with the `DHARMa` package. The 'See Model
-Residuals' button below the model formulas can be clicked to see the residual
-diagnostic plots produced by `DHARMa` for that particular model.
+We analysed the data from our experiment using linear, linear mixed effect,
+generalized linear mixed effect, and generalized linear models with the `lm`,
+`lmer()`, `glmmTMB()`, and `glm.nb` functions from the `stats`, `lme4`,
+`glmmTMB`, and `MASS` packages respectively. P-values and effective degrees of
+freedom were obtained using the `lmerTest` package which uses Satterthwaite's
+degrees of freedom method [@kuznetsova2017LmerTestPackageTests]. Model
+residuals were checked they met distributional assumptions with the `DHARMa`
+package. The 'See Model Residuals' button below the model formulas can be
+clicked to see the residual diagnostic plots produced by `DHARMa` for that
+particular model.
 
 ### Model 1 -  Preference for the green object at baseline
 
@@ -1571,9 +1572,13 @@ ggsave(
 
 The analyses on this page were done with `r R.version.string` and with functions
 from packages listed in Table \@ref(tab:r-packages). This page was written in
-Rmarkdown and rendered with `knitr`. To see the full list of dependencies for
-all packages used as well as their versions please visit the [How to Reproduce
-the
+Rmarkdown and rendered with `knitr`. In Table \@ref(tab:r-packages) we provide a
+list of packages used, their versions, and references. Note this list does not
+include the dependencies of these packages, it includes only packages
+explicitly loaded with a `library()` call. Installing these packages would
+automatically install all their dependencies but to see the full list of
+dependencies for all packages used as well as their versions please visit the
+[How to Reproduce the
 Results](https://github.com/wyatt-toure/guppy-colour-learning#how-to-reproduce-the-results)
 section of the README.
 
