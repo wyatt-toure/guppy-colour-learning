@@ -8,11 +8,12 @@ trial.type = c(
   "Initial Test", "Training","Training",
   "Training", "Training", "Training", "Training", "Training","Training","Training",
   "Training","Training","Training","Training","Training","Training","Training","Training",
-  "Training", "Training", "Training", "Final Test", "Refresher", "Refresher", "Generalization 1","Generalization 2")
+  "Training", "Training", "Training", "Probe 1", "Refresher", "Generalization 1", 
+  "Refresher","Generalization 2", "Refresher", "Probe 2", "Refresher", "Odour")
 
 trial = c(0, 1,2,3,4,5,6,7,8,9,10,
           11,12,13,14,15,16,17,18,19,20,
-          21,22,23,24,25)
+          21,22,23,24,25,26,27,28,29)
 
 trial.state = c(
   "Initial","Initial","Initial",
@@ -20,7 +21,8 @@ trial.state = c(
   "Training","Training","Training","Training","Training",
   "Training","Training","Training","Training","Training",
   "Training","Training","Training","Training","Final Test",
-  "Refresher","Refresher","Generalization 1","Generalization 2"
+  "Refresher","Generalization 1", "Refresher", "Generalization 2",
+  "Refresher", "Final Test", "Refresher", "Final Test"
 )
 
 # Tableau colour palettes
@@ -37,8 +39,8 @@ pink = "#ff9da7"
 
 timeline.df = data.frame(trial.type, trial, trial.state)
 
-trial.type.colors <- c(orange, cyan, blue, orange,  red,  green)
-trial.type.shapes <- c(15, 2, 1, 0, 16, 19)
+trial.type.colors <- c(orange, cyan, blue, brown,  brown,  brown, grey, purple)
+trial.type.shapes <- c(15, 2, 1, 13, 16, 19, 18, 18)
 
 positions <- c(0.5, 0.5, 0.5, 0.5, 0.5, 0.5)
 directions <- c(1, 1)
