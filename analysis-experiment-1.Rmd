@@ -15,7 +15,7 @@ output:
       collapsed: false
     number_sections: false
     split_by: section
-    css: styles2.css
+    css: styles.css
     
 bibliography: ["references/references.bib"]
 csl: references/elife-citation-style.csl    
@@ -24,7 +24,7 @@ link-citations: yes
 knit: (function(input, ...) {
     rmarkdown::render(
       input,
-      output_file = 'docs/analysis')
+      output_file = 'docs/analysis-experiment-1')
   })
 ---
 
@@ -35,17 +35,17 @@ knit: (function(input, ...) {
 This page reports the analyses for the first experiment described in 'Colour
 biases in learned foraging preferences in Trinidadian guppies'. The R script to
 reproduce the analysis and this site are in the
-[analysis.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/analysis.Rmd)
+[analysis-experiment-1.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/analysis-experiment-1.Rmd)
 file. The raw data used to conduct these analyses are available in the
-[colour-learning-project-data.csv](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/data/colour-learning-project-data.csv)
-file. Descriptions of the variables found in the dataset are given in the
-metadata section of the
-[README](https://github.com/wyatt-toure/guppy-colour-learning-project#metadata)
-file. The methods used to produce this data can be found on the
-[Methods](methods.html) page. Note the code blocks that produce the figures and
-tables are not shown on this page as they are rather long, however the code to
-produce the figures and tables can also be seen in
-[analysis.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/analysis-experiment-2.Rmd).
+[colour-learning-experiment-1-data.csv](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/data/colour-learning-experiment-1-data.csv)
+file. Note the code blocks that produce the figures and tables are not shown on
+this page as they are rather long, however the code to produce the figures and
+tables can also be seen in
+[analysis-experiment-1.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/analysis-experiment-1.Rmd).
+To get straight to the results go to the [Models](#models) section. To see how
+to reproduce these results please visit the [How to Reproduce the
+Results](https://github.com/wyatt-toure/guppy-colour-learning#how-to-reproduce-the-results)
+section of the README.
 
 ***
 
@@ -58,7 +58,6 @@ library(ggplot2)
 library(ggpubr)
 library(DHARMa)
 library(dplyr)
-library(effects)
 library(broom)
 library(broom.mixed)
 library(knitr)
@@ -75,14 +74,21 @@ source("R/report-ci.R")
 
 ## Data preparation 
 
-At the time experiment 1 was conducted I still performed much data preparation
-manually in Excel so unlike in experiment 2, we do not format the data in R for
-experiment 1. Additionally, several variables were created in Excel. This Excel
-sheet was then exported as the `.csv` file
-[`colour-learning-project-data.csv`](https://github.com/wyatt-toure/guppy-colour-learning/blob/main/data/colour-learning-project-data.csv).
+At the time experiment 1 was conducted I (MWT) still performed much data
+preparation manually in Excel so unlike in experiment 2, we do not format the
+data in R for experiment 1. Additionally, several variables were created in
+Excel. This Excel sheet was then exported as the `.csv` file
+[colour-learning-experiment-1-data.csv](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/data/colour-learning-experiment-1-data.csv).
 All measures in
-[`colour-learning-project-data.csv`](https://github.com/wyatt-toure/guppy-colour-learning/blob/main/data/colour-learning-project-data.csv)
-except for `ate` are derived from the first 16 columns of that data sheet.
+[colour-learning-experiment-1-data.csv](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/data/colour-learning-experiment-1-data.csv)
+except `ate` (denoting whether a fish ate during a trial or not) are derived
+from the first 16 columns of that data sheet. Please see the [Variable
+Creation](https://wyatt-toure.github.io/guppy-colour-learning/analysis-experiment-2.html#Variable_creation)
+section of Experiment 2's analysis page to see how the additional measures are
+derived. Variables necessary for the analysis which were not created manually
+are created below. Descriptions of the variables found in the data set are given
+in the Experiment 1 Metadata section of
+[`metadata.md`](https://github.com/wyatt-toure/guppy-colour-learning/blob/main/data/metadata.md#experiment-1-metadata).
 
 ### Variable creation
 
@@ -96,7 +102,7 @@ the trained object by the time spent near both objects.
 
 ```{r data-prep}
 # Reading in Data
-my_data <- read.csv("data/colour-learning-project-data.csv")
+my_data <- read.csv("data/colour-learning-experiment-1-data.csv")
 
 # Creating new variables
 
@@ -175,17 +181,37 @@ test_data$trial <- as.factor(test_data$trial)
 baseline_data$trial <- as.factor(baseline_data$trial)
 ```
 
+### Figures directory
+
+This script will generate figures to store them we need to have specific
+directories that have been hard coded into the script. We create the `figs/`
+directory and all the subdirectories within it using the next line of code. Now
+all figures that are created in this script are accessible as individual files
+in the `figs/` directory. If this script is run multiple times it will return a
+warning saying that the directory already exists. However, this is not
+problematic since the figures are always regenerated by running the script so we
+set `showWarnings` to `FALSE`.
+
+```{r}
+dir.create(file.path("figs/exp-1/residual-plots"), 
+           recursive = TRUE,
+           showWarnings = FALSE
+           )
+```
+
+***
+
 ## Models
 
-We analysed the data from our experiment using linear mixed effect and
-generalized linear mixed effect models with the `lmer()` and `glmer()` functions
-from the `lme4` package. P-values and effective degrees of freedom were obtained
-using the `lmerTest` package. Model residuals were checked they met
-distributional assumptions with the `DHARMa` package, you can click the 'See
-Model Residuals' button below the model formulas to see the residual diagnostic
-plots produced by `DHARMa` for that particular model.
-
-</br>
+We analysed the data from our experiment using linear, linear mixed effect,
+generalized linear mixed effect, and generalized linear models with the `lm`,
+`lmer()`, `glmmTMB()`, and `glm.nb` functions from the `stats`, `lme4`,
+`glmmTMB`, and `MASS` packages respectively. P-values and effective degrees of
+freedom for `lme4` models were obtained using the `lmerTest` package. Model
+residuals were checked they met distributional assumptions with the `DHARMa`
+package, you can click the 'See Model Residuals' button below the model formulas
+to see the residual diagnostic plots produced by `DHARMa` for that particular
+model.
 
 ### Model 1 -  Preference for the green object at baseline
 
@@ -338,8 +364,9 @@ ggsave(
 )
 ```
 
-There is a slight deviation in the upper quantile but no indication in the
-residual plot of a gross model misfit.
+We see that there is a slight amount of structure in the residuals, however,
+visual inspection of the residuals reveals that this structure is minor. There
+is not an indication of a gross model misfit so our model is still suitable.
 
 </div>
 
@@ -446,22 +473,10 @@ For the main effects of training and rewarding object colour on rewarding object
 preference I fit a generalized linear mixed effects model with a Gaussian
 distribution which modeled the variances to account for variance heterogeneity
 using the package
-[`glmmTMB`](https://cran.r-project.org/web/packages/glmmTMB/index.html). My
+[`glmmTMB`](https://cran.r-project.org/web/packages/glmmTMB/index.html). Our
 third model asks whether the preference for the rewarding object changed between
 baseline and final test and looks for an interaction with rewarded object
-colour.
-
-  - **Response variable:** `rewarding.object.preference` is the time (seconds)
-    spent near the rewarding object subtracted by the time spent near the
-    unrewarding object
-  - **Fixed effect:** `rewarding.object.colour` is the identity of the rewarding
-    object (blue or green)
-  - **Fixed effect:** `trial` is the number of the training trial. In this model
-    it is supplied as a factor where 0 is the baseline trial and 21 is the final
-    trial
-  - **Random effect:** `id` is the identity of the individual fish
-  
-In addition to the above effects, to control for heterogeneous variance across
+colour. To control for heterogeneous variance across
 trials we additionally modelled the variance due to trial across both colour
 treatments.
 
@@ -523,7 +538,7 @@ tidy_test_data_model[1:4, 4] <- test_model_table_row_name_vec
 
 ##### Results
 
-```{r, results=TRUE, echo=FALSE}
+```{r model-3-table, results=TRUE, echo=FALSE}
 knitr::kable(tidy_test_data_model[1:4, ] %>%
   dplyr::select(-group, -effect, -component) %>%
   mutate_if(is.numeric, round, digits = 3),
@@ -731,11 +746,6 @@ To do this I fit a generalized linear model with a negative binomial
 distribution. The response variable 'feeding count' is a sum of the number of
 trials in which a guppy ate.
 
-  - **Response variable:** `feeding.count` is the number of trials in which an
-    individual fish ate
-  - **Fixed effect:** `rewarding.object.colour` is the identity of the rewarding
-    object (blue or green)
-
 ##### Model
 
 ```{r model-4, echo=TRUE}
@@ -860,14 +870,16 @@ ggsave(
 
 In this section we describe models not included in the main text.
 
-### ESM Model 2 - Including feeding count as a covariate {#esm-model-2}
+### ESM Model 1 - Including feeding count as a covariate {#esm-model-2}
 
-The models described in this section were run to address the potential role of
-feeding count on test performance. The concern was that the results may be
-explained by differential levels of reinforcement between the groups or between
-individuals during training. To ensure our results were robust to matters
-arising from feeding count variation we included feeding count as a co-variate
-and re-ran the analysis in [Model 3](#model-3).
+This model was run to address the potential role of feeding count on test
+performance. The concern was that the results may be explained by differential
+levels of reinforcement between the groups or between individuals during
+training. To ensure our results were robust to matters arising from feeding
+count variation we included feeding count as a co-variate and re-ran the
+analysis in [Model 3](#model-3). With this model we looked to see whether
+including the amount of trials an individual fed as a covariate in the model
+changes the conclusions.
 
 ```{r, include=FALSE}
 test_feeding_data <- left_join(test_data, feeding, by = "id")
@@ -875,22 +887,6 @@ test_feeding_data <- test_feeding_data %>% replace_na(list(n = 0))
 test_feeding_data <- rename(test_feeding_data, feeding.count = n)
 retest_feeding_data <- test_feeding_data %>% filter(trial == "21")
 ```
-
-***
-
-With this next model we looked to see whether including the amount of trials an
-individual fed as a covariate in the model changes the conclusions.
-
-  - **Response variable:** `rewarding.object.preference` is the time (seconds)
-    spent near the rewarding object subtracted by the time spent near the
-    unrewarding object
-  - **Fixed effect:** `rewarding.object.colour` is the identity of the rewarding
-    object (blue or green)
-  - **Fixed effect:** `trial` is the number of the training trial. In this model
-    it is supplied as an integer
-  - **Random effect:** `id` is the identity of the individual fish
-  - **Covariate:** `feeding.count` is the number of trials in which an
-    individual fish ate
 
 ```{r, echo = TRUE}
 test_data_feeding_controlled_model <-
@@ -902,7 +898,7 @@ test_data_feeding_controlled_model <-
   )
 ```
 
-<button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName7"> See ESM Model 2 Residuals </button>  
+<button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName7"> See ESM Model 1 Residuals </button>  
 <div id="BlockName7" class="collapse">  
 
 ```{r, echo=FALSE, message=FALSE}
@@ -911,7 +907,7 @@ plot(simulationOutput)
 
 # Saving plot to figs directory
 ggsave(
-  filename = "exp-1-ESM-model-2-residual-plot.png",
+  filename = "exp-1-ESM-model-1-residual-plot.png",
   plot = (plot(simulationOutput)),
   path = "figs/exp-1/residual-plots/",
   device = "png",
@@ -945,12 +941,12 @@ tidy_fit_test_data_feeding_controlled_model[1:5, 4] <- test_data_feeding_control
 
 ##### Results
 
-```{r, results=TRUE, echo=FALSE}
+```{r feeding-controlled-table, results=TRUE, echo=FALSE}
 knitr::kable(tidy_fit_test_data_feeding_controlled_model[1:5, ] %>%
   dplyr::select(-group, -effect, -component) %>%
   mutate_if(is.numeric, round, digits = 3),
 caption = "Summary table for a modification of Model 3. This model is the same 
-as that described in Table S1 except it includes feeding count as a covariate. 
+as that described in Table 1 except it includes feeding count as a covariate. 
 Estimates ± standard error (SE) of the effects of trial and rewarding object 
 colour of the rewarding object colour from the generalized linear mixed effect 
 model containing the effects (Trial, Rewarding object colour, and their 
@@ -958,9 +954,11 @@ interaction effect)."
 )
 ```
 
-The main results do not change if I control for feeding count. The above table
-is the output feeding controlled model. Below we have the output table for the
-non-feeding-count controlled model from [Model 3](#model-3).
+The main results do not change if we control for feeding count. Table
+\@ref(tab:feeding-controlled-table) is the output feeding controlled model. Below
+we have the output table for the non-feeding-count controlled model from
+[Model 3](#model-3) (Table \@ref(tab:model-3-table)) reproduced. In both models
+the statistical conclusions are the same.
 
 ```{r, results=TRUE, echo=FALSE}
 knitr::kable(tidy_test_data_model[1:4, ] %>%
@@ -968,18 +966,16 @@ knitr::kable(tidy_test_data_model[1:4, ] %>%
   mutate_if(is.numeric, round, digits = 3))
 ```
 
-In both models the p-values are similar.
-
 ***
 
-### ESM Model 3 - Percentage preference for the rewarded object during testing depending on treatment
+### ESM Model 2 - Percentage preference for the rewarded object during testing depending on treatment
 
 A reviewer of our manuscript asks 
 
 >Why the authors did not (also) exploit a percentage preference, which is commonly used?
 
 To determine whether our results are robust despite our different
-measure we also ran an analysis with the percentage preference as ESM Model 3. 
+measure we also ran an analysis with the percentage preference as ESM Model 2. 
 The results from the main experiment remain unchanged when we do this.
 
 Since our data are continuous proportions we used a generalized linear mixed
@@ -994,7 +990,7 @@ prop_test_data_model_glm <-
   )
 ```
 
-<button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName8"> See ESM Model 3 Residuals </button>  
+<button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName8"> See ESM Model 2 Residuals </button>  
 <div id="BlockName8" class="collapse"> 
 
 ```{r, message=FALSE}
@@ -1010,7 +1006,7 @@ plot(simulationOutput)
 ```{r, echo=FALSE, message=FALSE}
 # Saving plot to figs directory
 ggsave(
-  filename = "exp-1-ESM-model-3-residual-plot.png",
+  filename = "exp-1-ESM-model-2-residual-plot.png",
   plot = (plot(simulationOutput)),
   path = "figs/exp-1/residual-plots/",
   device = "png",
@@ -1051,7 +1047,7 @@ tidy_prop_test_data_model[1:4, 4] <- test_model_table_row_name_vec
 knitr::kable(tidy_prop_test_data_model[1:4, ] %>%
   dplyr::select(-group, -effect, -component) %>%
   mutate_if(is.numeric, round, digits = 3),
-caption = "Summary table for ESM Model 3. Estimates ± standard error (SE) of the 
+caption = "Summary table for ESM Model 2. Estimates ± standard error (SE) of the 
 effects of trial and rewarding object colour on the rewarding object preference 
 from the generalized linear mixed effect model containing the effects Trial, 
 Rewarding object colour, and their interaction effect (Trial X Rewarding object 
@@ -1059,7 +1055,7 @@ colour)."
 )
 ```
 
-As in [Model 3](#model-3) we find there there is an interaction effect between
+As in [Model 3](#model-3) we find there is an interaction effect between
 trial and rewarding object colour for the test trials (p =
 `r tidy_prop_test_data_model$'P value'[4]`). We again conduct
 post-hoc tests as described in the [Model 3](#model-3) section.
@@ -1175,12 +1171,15 @@ We find the same pattern of results as in [Model 3](#model-3)
 
 The analyses on this page were done with `r R.version.string` and with functions
 from packages listed in Table \@ref(tab:r-packages). This page was written in
-Rmarkdown and rendered with `knitr`. To see the full list of dependencies for
-all packages used as well as their versions please visit the [How to Reproduce
-the
+Rmarkdown and rendered with `knitr`. In Table \@ref(tab:r-packages) we provide a
+list of packages used, their versions, and references. Note this list does not
+include the dependencies of these packages, it includes only packages
+explicitly loaded with a `library()` call. Installing these packages would
+automatically install all their dependencies but to see the full list of
+dependencies for all packages used as well as their versions please visit the
+[How to Reproduce the
 Results](https://github.com/wyatt-toure/guppy-colour-learning#how-to-reproduce-the-results)
-section of the README. Below we provide a list of packages used, their versions,
-and references.
+section of the README.
 
 ```{r r-packages, echo=FALSE, warning=FALSE}
 report(sessionInfo()) %>% 
