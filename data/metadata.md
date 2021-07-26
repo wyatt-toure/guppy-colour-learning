@@ -13,7 +13,7 @@ Variable descriptions for `colour-learning-experiment-2-full-data.csv`
 
 `object.side`	
 : The side of the tank the rewarding object was placed on (relative to the
-experimenter's perpsective) during the trial
+experimenter's perspective) during the trial
 
 `trial`	
 : The trial number
@@ -32,7 +32,7 @@ experimenter's perpsective) during the trial
 
 `latency.to.periphery`	
 : The time it took for a guppy to first approach the periphery of the tank
-(seconds). Dashes represents no visit. 0 indiciates an immediate visit (i.e. as
+(seconds). Dashes represents no visit. 0 indicates an immediate visit (i.e. as
 soon as the tracking began)
 
 `center.visits`	
