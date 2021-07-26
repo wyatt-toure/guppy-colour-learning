@@ -65,7 +65,7 @@ for the experiment 1 analysis and
 for the experiment 2 analysis.
 
 The protocols page is built from the
-[methods.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/methods.Rmd)
+[protocols.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/methods.Rmd)
 file and the home page is built from the
 [index.Rmd](https://github.com/wyatt-toure/guppy-colour-learning/blob/main/index.Rmd)
 file.
