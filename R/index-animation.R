@@ -1,3 +1,6 @@
+# This script creates the animation of the index page of guppy colour learning
+# project.
+
 library(gganimate)
 
 index_animation <- ggplot(

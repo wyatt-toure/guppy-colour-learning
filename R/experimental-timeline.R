@@ -1,8 +1,9 @@
+# This script generates a timeline used as the foundation for a figure which 
+# explains the experimental timeline of the experiment. 
+
 library(ggplot2)
 library(scales)
 library(cowplot)
-
-
 
 trial.type = c(
   "Initial Test", "Training","Training",
