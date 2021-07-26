@@ -139,7 +139,7 @@ protocol:
 
 ## Objects 
 
-```{r experiment-2-objects, echo=FALSE, fig.cap="(A) The two objects used in experiment 1. Blue-trained guppies were trained to the left object and green-trained guppies were trained to the right object. The manufacturer’s colour name for the blue object is ‘dark azur (hex #078BC9) and for the green object is ‘bright yellowish green’ (hex # BBE90B). (B) The 7 pairs of objects in experiment 2. The numbered object pairs are used for training while the lettered object pairs are used for testing. The experimental timeline represents the order of the trials. Experiment 1 ends at trial 21."}
+```{r experiment-2-objects, echo=FALSE, fig.cap="(A) The two objects used in experiment 1. Blue-trained guppies were trained to the left object and green-trained guppies were trained to the right object. The manufacturer’s colour name for the blue object is ‘dark azur (hex #078BC9) and for the green object is ‘bright yellowish green’ (hex # BBE90B). (B) The 7 pairs of objects in experiment 2. Object pairs 1,2,3,4, and A had the same colour properties as the object pair used in experiment 1. The bricks for the generalization objects were 'dark green' (hex #237841) and 'bright blue' (#0055BF) as specified by the manufacturer. The numbered object pairs are used for training while the lettered object pairs are used for testing. The experimental timeline represents the order of the trials. Experiment 1 ends at trial 21."}
 knitr::include_graphics("images/objects-colour-learning-both-exp.png")
 ```
 
