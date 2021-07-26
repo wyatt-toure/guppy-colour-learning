@@ -87,9 +87,9 @@ directory. They are composed of `.xlsx` files exported from EthoVision XT
 Version 11. Each trial is in a separate `.xlsx` file. The full processed data
 are available as a `.csv` file in the file
 [`colour-learning-experiment-2-full-data.csv`](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/data/colour-learning-experiment-2-full-data.csv).
-Descriptions of the variables found in the data set are given in the variable
-descriptions section of the
-[README](https://github.com/wyatt-toure/guppy-colour-learning-project#metadata)
+Descriptions of the variables found in the data set are given in the
+Experiment 2 Metadata section of
+[`metadata.md`](https://github.com/wyatt-toure/guppy-colour-learning/blob/main/data/metadata.md#experiment-2-metadata)
 file.
 
 ### Downloading data
