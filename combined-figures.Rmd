@@ -1,0 +1,585 @@
+---
+title: "Code to make composite plots for 'Colour biases in learned foraging preferences in Trinidadian guppies'"
+author: M. Wyatt Toure
+---
+
+This document contains the code to make the figures in the manuscript that
+incorporate data from both experiments.
+
+```{r library-prep, echo=FALSE}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(ggpubr)
+```
+
+
+## Data preparation
+
+```{r exp-1-data-prep}
+exp_1_data <- read.csv("data/colour-learning-experiment-1-data.csv")
+
+# Creating new variables
+
+## Rewarding object preference
+exp_1_data <- exp_1_data %>%
+  mutate(
+    rewarding.object.preference =
+      time.with.trained.object - time.with.untrained.object
+  )
+
+## Rewarding object proportional preference
+exp_1_data <- exp_1_data %>%
+  mutate(
+    prop.rewarding.object.preference =
+      (time.with.trained.object / (time.with.trained.object + time.with.untrained.object))
+  )
+
+## Green object preference
+exp_1_data <- exp_1_data %>%
+  mutate(
+    green.object.preference =
+      case_when(
+        rewarding.object.colour == "green" ~ 
+          time.with.trained.object - time.with.untrained.object,
+        
+        rewarding.object.colour == "blue" ~ 
+          time.with.untrained.object - time.with.trained.object
+      )
+  )
+
+# Remove males
+exp_1_data <- exp_1_data %>% filter(id != "a3",
+                              id != "b3",
+                              id != "c3",
+                              id != "e3",
+                              id != "g3",
+                              id != "v3",
+                              id != "w3",
+                              id != "x3")
+
+# Restrict data to training data
+exp_1_training_data <- exp_1_data %>%
+  filter(trial.type == "training")
+
+# Restrict data to only the baseline and re-test data
+exp_1_test_data <- exp_1_data %>%
+  filter(trial.type == "test")
+
+# Change trial to factor
+exp_1_test_data$trial <- as.factor(exp_1_test_data$trial)
+
+# Change trial to integer for training trials
+exp_1_training_data$trial <- as.integer(exp_1_training_data$trial)
+```
+
+```{r exp-2-data-prep}
+exp_2_data <- read.csv("data/colour-learning-experiment-2-full-data.csv")
+
+exp_2_data <- exp_2_data %>% filter(training.feeding.count > 0)
+
+# Restrict data to training data
+exp_2_training_data <- exp_2_data %>%
+  filter(trial.type == "training")
+
+# Restrict data to only the baseline and re-test data
+exp_2_test_data <- exp_2_data %>%
+  filter(trial.type == "test")
+
+# Change trial to factor for test trials
+exp_2_test_data$trial <- as.factor(exp_2_test_data$trial)
+
+# Change trial to integer for training trials
+exp_2_training_data$trial <- as.integer(exp_2_training_data$trial)
+```
+
+## Training and test results
+
+```{r, fig.height=7.5, fig.width=10.5}
+exp_1_training <- ggplot(
+  exp_1_training_data,
+  aes(
+    x = trial,
+    y = green.object.preference,
+    color = rewarding.object.colour,
+    shape = rewarding.object.colour,
+    linetype = rewarding.object.colour
+  )
+) +
+  theme_minimal() +
+  ylab("Green object preference (sec)") +
+  xlab("Training Trial") +
+  labs(col = "Rewarding object colour") +
+  theme(
+    legend.position = "none",
+    axis.text = element_text(size = 11),
+    axis.title = element_text(size = 12, face = "bold"),
+    plot.title = element_text(size = 16, hjust = 0.5),
+    panel.border = element_rect(colour = "#bab0ac", fill = NA, size = 0.5),
+    axis.line.x = element_blank(),
+    axis.line.y = element_blank()
+  ) +
+  scale_color_manual(values = c("#2980b9", "#27ae60")) +
+  scale_linetype_manual(values = c("longdash", "solid")) +
+  scale_shape_manual(values = c(15, 16)) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  geom_point(alpha = 0.3) +
+  geom_line(aes(group = id), alpha = 0.2) +
+  scale_x_continuous(breaks = c(1:20)) +
+  scale_y_continuous(breaks = seq(-300, 300, by = 100)) +
+  geom_smooth(method = "lm", se = TRUE, alpha = 0.25) +
+  stat_summary(fun = "mean", size = 0.8)
+testing_data_x_axis_labels <- c("Initial test", "Final test")
+object_labels <- c("Blue-trained", "Green-trained")
+names(object_labels) <- c("blue", "green")
+
+exp_1_test <- ggplot(
+  exp_1_test_data,
+  aes(
+    x = trial,
+    y = rewarding.object.preference,
+    color = rewarding.object.colour,
+    shape = rewarding.object.colour
+  )
+) +
+  theme_minimal() +
+  geom_jitter(width = 0, alpha = 0.3) +
+  stat_summary(geom = "point", fun = "mean", size = 4.5) +
+  stat_summary(
+    geom = "errorbar",
+    fun.data = "mean_ci",
+    position = position_dodge(width = 0),
+    width = 0.1
+  ) +
+  ylab("Rewarding object preference (sec)") +
+  xlab("Test Trial") +
+  labs(col = "Rewarding object colour") +
+  theme(
+    legend.position = "none",
+    axis.text = element_text(size = 11),
+    axis.title = element_text(size = 12, face = "bold"),
+    plot.title = element_text(size = 16, hjust = 0.5),
+    axis.line.x = element_blank(),
+    axis.line.y = element_blank(),
+    strip.background = element_blank(),
+    strip.text.x = element_blank(),
+    panel.spacing = unit(0, "lines")
+  ) +
+  scale_color_manual(values = c("#2980b9", "#27ae60")) +
+  scale_shape_manual(values = c(15, 16)) +
+  geom_hline(yintercept = 0, linetype = "dashed", alpha = 0.6) +
+  geom_line(aes(group = id), alpha = 0.2) +
+  scale_x_discrete(labels = testing_data_x_axis_labels) +
+  facet_grid(~rewarding.object.colour,
+    labeller = labeller(rewarding.object.colour = object_labels)
+  ) +
+  stat_summary(fun = mean, 
+               geom = "line", 
+               aes(group = rewarding.object.colour)) +
+  scale_y_continuous(breaks = seq(-300, 300, by = 25), limits = c(-110,185))
+
+exp_2_training <- ggplot(
+  exp_2_training_data,
+  aes(
+    x = trial,
+    y = green.object.preference,
+    color = rewarding.object.colour,
+    shape = rewarding.object.colour,
+    linetype = rewarding.object.colour
+  )
+) +
+  theme_minimal() +
+  ylab("Green object preference (sec)") +
+  xlab("Training Trial") +
+  labs(col = "Rewarding object colour") +
+  theme(
+    legend.position = "none",
+    axis.text = element_text(size = 11),
+    axis.title = element_text(size = 12, face = "bold"),
+    plot.title = element_text(size = 16, hjust = 0.5),
+    panel.border = element_rect(colour = "#bab0ac", fill = NA, size = 0.5),
+    axis.line.x = element_blank(),
+    axis.title.y = element_blank(),
+    axis.line.y = element_blank()
+  ) +
+  scale_color_manual(values = c("#2980b9", "#27ae60")) +
+  scale_linetype_manual(values = c("longdash", "solid")) +
+  scale_shape_manual(values = c(15, 16)) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  geom_point(alpha = 0.3) +
+  geom_line(aes(group = id), alpha = 0.2) +
+  scale_x_continuous(breaks = c(1:20)) +
+  scale_y_continuous(breaks = seq(-300, 300, by = 100)) +
+  geom_smooth(method = "lm", se = TRUE, alpha = 0.25) +
+  stat_summary(fun = "mean", size = 0.8)
+
+
+testing_data_x_axis_labels <- c("Initial", "Probe 1", "G1", "G2", "Probe 2", "Odour")
+
+exp_2_test <- ggplot(
+  exp_2_test_data, 
+  aes(
+    x = trial, 
+    y = rewarding.object.preference, 
+    colour = rewarding.object.colour,
+    shape = rewarding.object.colour
+  )
+) +
+  theme_minimal() +
+  geom_jitter(alpha = 0.5, size = 2,
+              position = position_dodge(width = 0.5)) +
+  stat_summary(geom = "point", fun = "mean", size = 4, 
+               position = position_dodge(width = 0.5)) +
+  stat_summary(
+    geom = "errorbar",
+    fun.data = "mean_ci",
+    position = position_dodge(width = 0.5),
+    width = 0.3
+  ) +
+  ylab("Rewarding object preference (sec)") +
+  xlab("Test trial") +
+  labs(col = "Rewarding object colour") +
+  theme(
+    legend.position = "none",
+    axis.text = element_text(size = 11),
+    axis.title = element_text(size = 12, face = "bold"),
+    plot.title = element_text(size = 16, hjust = 0.5),
+    axis.line.x = element_blank(),
+    axis.line.y = element_blank(),
+    strip.text.x = element_text(size = 10, face = "bold"),
+    axis.title.y = element_blank()
+  ) +
+  scale_x_discrete(labels = testing_data_x_axis_labels) +
+  scale_color_manual(values = c("#2980b9", "#27ae60")) +
+  scale_shape_manual(values = c(15, 16)) +
+  geom_hline(yintercept = 0, linetype = "dashed", alpha = 0.6) +
+  scale_y_continuous(breaks = seq(-300, 300, by = 25), limits = c(-110,185))
+
+ggarrange((exp_1_training + ggtitle("Experiment 1")), (exp_2_training + ggtitle("Experiment 2")), exp_1_test, exp_2_test,
+          labels = "AUTO",
+          label.x = c(0.125, 0.1,0.125,0.1),
+  label.y = c(0.9, 0.9,1,1),
+  hjust = -1,
+  vjust = 2.5)
+
+ggsave(
+  filename = "both-exp-combined-model-2-model-3-plot.png",
+  path = "figs/both-exps/",
+  device = "png",
+  units = "in",
+  width = 10.5,
+  height = 7.5,
+  dpi = 300
+)
+```
+
+```{r feeding-data-prep, include = FALSE}
+#### Get feeding data #####
+# Group by ID and count the number of sessions in which an individual ate
+exp_1_feeding_data <- exp_1_data %>%
+  group_by(id) %>%
+  count(feeding.count = ate == "yes")
+
+# Remove NAs from this
+exp_1_feeding_data <- na.omit(exp_1_feeding_data)
+
+# Count only the yeses
+exp_1_feeding_data <- exp_1_feeding_data %>%
+  filter(feeding.count == "TRUE")
+
+# Remove the column feeding.count to keep only the counts
+exp_1_feeding_data <- exp_1_feeding_data %>%
+  dplyr::select(-feeding.count)
+
+# Add the feeding values to the main data frame so I can get treatment IDs
+exp_1_feeding_data <- left_join((exp_1_data %>% filter(trial == 0)), exp_1_feeding_data, by = "id")
+
+# Replace NAs with 0, rename n to feeding count, and extract id, feeding count,
+# and rewarding object colour treatment
+exp_1_feeding_data <- exp_1_feeding_data %>%
+  replace_na(list(n = 0)) %>%
+  rename(feeding.count = n) %>%
+  dplyr::select(id, feeding.count, rewarding.object.colour)
+```
+
+## Feeding data
+
+```{r}
+exp_1_feeding_plot <- ggplot(
+  exp_1_feeding_data,
+  aes(
+    x = rewarding.object.colour,
+    y = feeding.count,
+    fill = rewarding.object.colour,
+    colour = rewarding.object.colour,
+    shape = rewarding.object.colour
+  )
+) +
+  geom_point(position = position_jitter(width = 0.05), alpha = 0.8) +
+  stat_summary(geom = "point", fun = "mean", size = 4.5) +
+  stat_summary(
+    geom = "errorbar",
+    fun.data = "mean_ci",
+    position = position_dodge(width = 0),
+    width = 0.1
+  ) +
+  ylim(-3, 23) +
+  ylab("Rewarding object preference") +
+  xlab("Trial") +
+  theme_minimal() +
+  guides(fill = "none", colour = "none") +
+  ylab("Number of trials fed") +
+  labs(col = "Rewarding object colour") +
+  theme(
+    legend.position = "none",
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 14, face = "bold"),
+    plot.title = element_text(size = 16, hjust = 0.5),
+    axis.title.x = element_blank()
+  ) +
+  scale_color_manual(values = c("#2980b9", "#27ae60")) +
+  scale_shape_manual(values = c(15, 16)) +
+  scale_fill_manual(values = c("#2980b9", "#27ae60"))
+
+exp_2_feeding_plot <- ggplot(
+  exp_2_data %>% filter(training.feeding.count > 0 & trial == 0),
+  aes(
+    x = rewarding.object.colour,
+    y = training.feeding.count,
+    fill = rewarding.object.colour,
+    colour = rewarding.object.colour,
+    shape = rewarding.object.colour
+  )
+) +
+  geom_point(position = position_jitter(width = 0.05), alpha = 0.8) +
+  stat_summary(geom = "point", fun = "mean", size = 4.5) +
+  stat_summary(
+    geom = "errorbar",
+    fun.data = "mean_ci",
+    position = position_dodge(width = 0),
+    width = 0.1
+  ) +
+  ylim(-3, 23) +
+  ylab("Rewarding object preference") +
+  xlab("Trial") +
+  theme_minimal() +
+  guides(fill = "none", colour = "none") +
+  ylab("Number of trials fed") +
+  labs(col = "Rewarding object colour") +
+  theme(
+    legend.position = "none",
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 14, face = "bold"),
+    plot.title = element_text(size = 16, hjust = 0.5),
+    axis.title.y = element_blank(),
+    axis.title.x = element_blank()
+  ) +
+  scale_color_manual(values = c("#2980b9", "#27ae60")) +
+  scale_shape_manual(values = c(15, 16)) +
+  scale_fill_manual(values = c("#2980b9", "#27ae60"))
+
+ggarrange(
+  (exp_1_feeding_plot + ggtitle("Experiment 1")), 
+  (exp_2_feeding_plot + ggtitle("Experiment 2")),
+  label.x = c(0.1, 0.1),
+  label.y = c(1, 1),
+  hjust = -1,
+  vjust = 2.5
+) %>% annotate_figure(bottom = text_grob("Rewarding object colour", color = "black",
+                                   hjust = 0, x = 0.35, face = "bold", size = 14))
+
+ggsave(
+  filename = "both-exp-combined-model-4-plot.png",
+  path = "figs/both-exps/",
+  device = "png",
+  units = "in",
+  width = 7.5,
+  height = 5,
+  dpi = 300
+)
+```
+
+## Proportion versus raw
+
+```{r}
+exp_1_raw <- testing_data_x_axis_labels <- c("Initial test", "Final test")
+object_labels <- c("Blue-trained", "Green-trained")
+names(object_labels) <- c("blue", "green")
+
+exp_1_raw <- ggplot(
+  exp_1_test_data,
+  aes(
+    x = trial,
+    y = rewarding.object.preference,
+    color = rewarding.object.colour,
+    shape = rewarding.object.colour
+  )
+) +
+  theme_minimal() +
+  geom_jitter(width = 0, alpha = 0.3) +
+  stat_summary(geom = "point", fun = "mean", size = 4.5) +
+  stat_summary(
+    geom = "errorbar",
+    fun.data = "mean_ci",
+    position = position_dodge(width = 0),
+    width = 0.1
+  ) +
+  ylab("Rewarding object preference (sec)") +
+  xlab("Trial") +
+  labs(col = "Rewarding object colour") +
+  theme(
+    legend.position = "none",
+    axis.text = element_text(size = 12),
+    axis.title = element_text(size = 12, face = "bold"),
+    plot.title = element_text(size = 16, hjust = 0.5),
+    strip.text.x = element_blank(),
+    axis.title.x = element_blank()
+  ) +
+  scale_color_manual(values = c("#2980b9", "#27ae60")) +
+  scale_shape_manual(values = c(15, 16)) +
+  geom_hline(yintercept = 0, linetype = "dashed", alpha = 0.6) +
+  geom_line(aes(group = id), alpha = 0.2) +
+  scale_x_discrete(labels = testing_data_x_axis_labels) +
+  facet_grid(~rewarding.object.colour,
+    labeller = labeller(rewarding.object.colour = object_labels)
+  ) +
+  stat_summary(fun = mean, 
+               geom = "line", 
+               aes(group = rewarding.object.colour)) +
+  scale_y_continuous(breaks = seq(-50, 200, by = 25))
+
+exp_1_proportion <- ggplot(
+  exp_1_test_data,
+  aes(
+    x = trial,
+    y = prop.rewarding.object.preference,
+    color = rewarding.object.colour,
+    shape = rewarding.object.colour
+  )
+) +
+  theme_minimal() +
+  geom_jitter(width = 0, alpha = 0.3) +
+  stat_summary(geom = "point", fun = "mean", size = 4.5) +
+  stat_summary(
+    geom = "errorbar",
+    fun.data = "mean_ci",
+    position = position_dodge(width = 0),
+    width = 0.1
+  ) +
+  ylab("Proportional rewarding object preference") +
+  xlab("Trial") +
+  labs(col = "Rewarding object colour") +
+  theme(
+    legend.position = "none",
+    axis.text = element_text(size = 12),
+    axis.title = element_text(size = 12, face = "bold"),
+    axis.title.x = element_blank(),
+    plot.title = element_text(size = 16, hjust = 0.5),
+    strip.text.x = element_blank()
+  ) +
+  scale_color_manual(values = c("#2980b9", "#27ae60")) +
+  scale_shape_manual(values = c(15, 16)) +
+  geom_hline(yintercept = 0.5, linetype = "dashed", alpha = 0.6) +
+  geom_line(aes(group = id), alpha = 0.2) +
+  scale_x_discrete(labels = testing_data_x_axis_labels) +
+  facet_grid(~rewarding.object.colour,
+    labeller = labeller(rewarding.object.colour = object_labels)
+  ) +
+  stat_summary(fun = mean, geom = "line", aes(group = rewarding.object.colour)) +
+  scale_y_continuous(breaks = seq(0.1, 0.9, by = 0.1))
+
+testing_data_x_axis_labels <- c("Initial", "Probe 1", "G1", "G2", "Probe 2", "Odour")
+
+
+exp_2_raw <- ggplot(
+  exp_2_test_data, 
+  aes(
+    x = trial, 
+    y = rewarding.object.preference, 
+    colour = rewarding.object.colour,
+    shape = rewarding.object.colour
+  )
+) +
+  theme_minimal() +
+  geom_jitter(alpha = 0.5, size = 2,
+              position = position_dodge(width = 0.5)) +
+  stat_summary(geom = "point", fun = "mean", size = 4, 
+               position = position_dodge(width = 0.5)) +
+  stat_summary(
+    geom = "errorbar",
+    fun.data = "mean_ci",
+    position = position_dodge(width = 0.5),
+    width = 0.3
+  ) +
+  ylab("Rewarding object preference (sec)") +
+  xlab("Test") +
+  labs(col = "Rewarding object colour") +
+  theme(
+    legend.position = "none",
+    axis.text = element_text(size = 12),
+    axis.title = element_text(size = 12, face = "bold"),
+    plot.title = element_text(size = 16, hjust = 0.5),
+    strip.text.x = element_text(size = 14, face = "bold")
+  ) +
+  scale_x_discrete(labels = testing_data_x_axis_labels) +
+  scale_color_manual(values = c("#2980b9", "#27ae60")) +
+  scale_shape_manual(values = c(15, 16)) +
+  geom_hline(yintercept = 0, linetype = "dashed", alpha = 0.6) +
+  scale_y_continuous(breaks = seq(-300, 300, by = 25))
+
+exp_2_proportion <- ggplot(
+  exp_2_test_data, 
+  aes(
+    x = trial, 
+    y = prop.rewarding.object.preference, 
+    colour = rewarding.object.colour,
+    shape = rewarding.object.colour
+  )
+) +
+  theme_minimal() +
+  geom_jitter(alpha = 0.5, size = 2,
+              position = position_dodge(width = 0.5)) +
+  stat_summary(geom = "point", fun = "mean", size = 4, 
+               position = position_dodge(width = 0.5)) +
+  stat_summary(
+    geom = "errorbar",
+    fun.data = "mean_ci",
+    position = position_dodge(width = 0.5),
+    width = 0.3
+  ) +
+  ylab("Proportional rewarding object preference") +
+  xlab("Test") +
+  labs(col = "Rewarding object colour") +
+  theme(
+    legend.position = "none",
+    axis.text = element_text(size = 12),
+    axis.title = element_text(size = 12, face = "bold"),
+    plot.title = element_text(size = 16, hjust = 0.5),
+    strip.text.x = element_text(size = 14, face = "bold")
+  ) +
+  scale_x_discrete(labels = testing_data_x_axis_labels) +
+  scale_color_manual(values = c("#2980b9", "#27ae60")) +
+  scale_shape_manual(values = c(15, 16)) +
+  geom_hline(yintercept = 0.5, linetype = "dashed", alpha = 0.6) +
+  scale_y_continuous(breaks = seq(0, 1, by = 0.10))
+
+ggarrange(exp_1_raw, exp_1_proportion, exp_2_raw, exp_2_proportion,
+          labels = "AUTO",
+  label.x = c(0.1, 0.1),
+  label.y = c(1, 1),
+  hjust = -1,
+  vjust = 2.5
+)
+
+ggsave(
+  filename = "both-exp-combined-model-3-prop-vs-raw-plot.png",
+  path = "figs/both-exps/",
+  device = "png",
+  units = "in",
+  width = 10.5,
+  height = 7.5,
+  dpi = 300
+)
+```
+
+
