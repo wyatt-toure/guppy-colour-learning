@@ -809,7 +809,7 @@ between green-rewarded and blue-rewarded fish (Figure
 \@ref(fig:feeding-count-plot), p =
 `r tidy_feeding_data_model$'P value'[2] %>% round(3)`).
 We also incorporated feeding count as a covariate in [Model 3](#model-3),
-finding the same pattern of results (See [ESM Model 2](#esm-model-2)).
+finding the same pattern of results (See [ESM Model 1](#esm-model-1)).
 
 ```{r feeding-count-plot, echo=FALSE, message=FALSE, fig.cap="Average number of trials in which a fish fed during training. Data are means ± 95% confidence intervals with probability density functions of the data to the right of the raw data.", fig.id="training-data-ate-plot", warning=FALSE}
 
@@ -870,7 +870,7 @@ ggsave(
 
 In this section we describe models not included in the main text.
 
-### ESM Model 1 - Including feeding count as a covariate {#esm-model-2}
+### ESM Model 1 - Including feeding count as a covariate {#esm-model-1}
 
 This model was run to address the potential role of feeding count on test
 performance. The concern was that the results may be explained by differential
