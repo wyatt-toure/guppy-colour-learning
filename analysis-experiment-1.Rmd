@@ -183,7 +183,7 @@ baseline_data$trial <- as.factor(baseline_data$trial)
 
 ### Figures directory
 
-This script will generate figures to store them we need to have specific
+This script will generate figures but to store them we need to create specific
 directories that have been hard coded into the script. We create the `figs/`
 directory and all the subdirectories within it using the next line of code. Now
 all figures that are created in this script are accessible as individual files
