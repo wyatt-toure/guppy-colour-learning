@@ -143,7 +143,7 @@ full_data <- read_and_format_ethovision_data("data/experiment-2-raw-data/")
 
 Next we add the rewarding object colour treatments to the correct guppy IDs that
 were established *a priori* in
-[`datasheet-experiment-2.Rmd`](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/datasheet-experiment-2.Rmd).
+[`treatment-object-side-assignment.Rmd`](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/treatment-object-side-assignment.Rmd).
 The treatments are represented by the variable `rewarding.object.colour`.
 
 ```{r treatment-assignment}
@@ -538,15 +538,6 @@ ggsave(
 To see how fish behaved during training our second model asks whether the
 preference for the rewarding object changes throughout training and whether the
 change in rewarding object preference is different between the treatments.
-
-  - **Response variable:** `rewarding.object.preference` is the time (seconds)
-    spent near the rewarding object subtracted by the time spent near the
-    unrewarding object
-  - **Fixed effect:** `rewarding.object.colour` is the identity of the rewarding
-    object (blue or green)
-  - **Fixed effect:** `trial` is the number of the training trial. In this model
-    it is supplied as an integer
-  - **Random effect:** `id` is the identity of the individual fish
 
 ```{r model-2, echo=TRUE}
 training_data_model <-
@@ -993,11 +984,6 @@ throughout all of training and compared the feeding counts between treatments.
 To do this we fit a generalized linear model with a negative binomial
 distribution. The response variable 'feeding count' is a sum of the number of
 trials in which a guppy ate.
-
-  - **Response variable:** `feeding.count` is the number of trials in which an
-    individual fish ate
-  - **Fixed effect:** `rewarding.object.colour` is the identity of the rewarding
-    object (blue or green)
 
 ```{r model-4, echo=TRUE}
 feeding_data_model <-
