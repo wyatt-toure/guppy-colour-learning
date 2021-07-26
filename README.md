@@ -11,7 +11,7 @@ This is the repository containing all the code to produce the analyses and
 figures in the manuscript ‘Colour biases in learned foraging preferences in
 Trinidadian guppies’. A reader-friendly website which walks through each of the
 models in the manuscript is available at
-<https://wyatt-toure.github.io/guppy-colour-learning/>.
+<https://wyatt-toure.github.io/guppy-colour-learning/>. 
 
 ## How to reproduce the results
 
@@ -55,27 +55,50 @@ variables necessary for the analysis are created as the script progresses.
 - `R/` contains custom R functions used in the analysis
 - `figs/` contains the individual files for the figures and residual diagnostic plots produced by the analysis script. This directory is populated by running `analysis-experiment-1.Rmd`, `analysis-experiment-2.Rmd` and `combined-figures.Rmd`
 
-The root directory contains all the Rmd scripts used to conduct the analyses and
-render the website pages.
+### Root directory contents
 
-The R code for the analysis can be found in
-[`analysis-experiment-1.Rmd`](https://github.com/wyatt-toure/guppy-colour-learning/blob/main/analysis-experiment-1.Rmd)
-for the experiment 1 analysis and
-[`analysis-experiment-2.Rmd`](https://github.com/wyatt-toure/guppy-colour-learning/blob/main/analysis-experiment-2.Rmd)
-for the experiment 2 analysis.
+The root directory contains Rmd scripts used to conduct the analyses, create
+figures, and render the website pages. Below we describe the contents of the
+root directory `.Rmd` files.
 
-The protocols page is built from the
-[protocols.Rmd](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/methods.Rmd)
-file and the home page is built from the
-[index.Rmd](https://github.com/wyatt-toure/guppy-colour-learning/blob/main/index.Rmd)
-file.
+  - [`analysis-experiment-1.Rmd`](https://github.com/wyatt-toure/guppy-colour-learning/blob/main/analysis-experiment-1.Rmd)
+    is the R code and documentation for the experiment 1 data preparation and
+    analysis. This script generates the
+    [Analysis 1](https://wyatt-toure.github.io/guppy-colour-learning/analysis-experiment-1.html)
+    page of the website.
+
+  - [`analysis-experiment-2.Rmd`](https://github.com/wyatt-toure/guppy-colour-learning/blob/main/analysis-experiment-2.Rmd)
+    is the R code and documentation for the experiment 2 data preparation and
+    analysis. This script generates the
+    [Analysis 2](https://wyatt-toure.github.io/guppy-colour-learning/analysis-experiment-2.html)
+    page of the website.
+
+  - [`protocols.Rmd`](https://github.com/wyatt-toure/guppy-colour-learning-project/blob/main/methods.Rmd)
+    contains the protocols used to conduct the experiments and generate the
+    data. This script generates the
+    [Protocols](https://wyatt-toure.github.io/guppy-colour-learning/protocols.html)
+    page of the website.
+
+  - [`index.Rmd`](https://github.com/wyatt-toure/guppy-colour-learning/blob/main/index.Rmd):
+    [Homepage](https://wyatt-toure.github.io/guppy-colour-learning/index.html)
+    of the project site.
+
+  - [`combined-figures.Rmd`](https://github.com/wyatt-toure/guppy-colour-learning/blob/main/combined-figures.Rmd)
+    is the R code used to create figures that combine data from experiments 1
+    and 2. Not used in the project site.
+
+  - [`treatment-object.side-assignment.Rmd`](https://github.com/wyatt-toure/guppy-colour-learning/blob/main/treatment-object-side-assignment.Rmd)
+    is the R code used to assign treatments and object sides during trials for
+    experiment 2. Not used in the project site.
 
 ## Metadata
 
-Data are available in the `data/` directory.
+Data are available in the `data/` directory. 
+
+- [`colour-learning-experiment-1-data.csv`](https://github.com/wyatt-toure/guppy-colour-learning/blob/main/data/colour-learning-experiment-1-data.csv) are the data for experiment 1
+- [`colour-learning-experiment-2-full-data.csv`](https://github.com/wyatt-toure/guppy-colour-learning/blob/main/data/colour-learning-experiment-2-full-data.csv) are the data for experiment 2
 
 We provide the variable descriptions for the data sets in the file `metadata.md`
-located in the `data/` directory. The [packages
-required](#required-tools-and-references) to conduct the analyses and construct
-the website as well as their versions and citations are provided in the file
-`i_dont_know_yet.md`.
+located in the `data/` directory. The packages required to conduct the analyses
+and construct the website as well as their versions and citations are provided
+in the file `i_dont_know_yet.md`.
