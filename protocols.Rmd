@@ -62,23 +62,24 @@ knitr::include_graphics("images/experiment-timeline.png")
 
 ## Tests trials 
 
-For the initial and final tests (Probe 1, Probe 2, G1, G2, and Odour) guppies
-were presented with the green and blue objects with empty food strips attached
-to them. You can see an example of this above. The following protocol was used
-for testing:
+For the initial test and final tests (Probe 1, Probe 2, G1, G2, and Odour)
+guppies were presented with the green and blue objects with empty food strips
+attached to them. You can see an example of this above. The following protocol
+was used for testing:
 
-1.  We transferred the guppy from the home tank to the test tank where the water
-    level was 8 cm via a white opaque plastic cup where the green and blue
-    objects had already been placed with new and blank plastic food strips.
-2.  Guppies were allowed to acclimate in a 20 cm tall, open-ended glass holding
+1.  Fill the test tank with water from several home tanks to the 8 cm line.
+2.  Transfer the guppy from the home tank to the test tank via a white opaque
+    plastic cup where the green and blue objects had already been placed with
+    new and blank plastic food strips.
+3.  Allow guppies to acclimate in a 20 cm tall, open-ended glass holding
     cylinder (7 cm diameter) after being transferred into the test tank for 120
     seconds.
-3.  After acclimation the release glass was lifted and the guppies given 5
+4.  After acclimation lift the release glass was lifted and give guppies 5
     minutes to move about the tank and feed from the objects. At this point the
-    experimenter left the room.
-4.  After the 5 minutes the guppy was transferred back to the home tank via the
-    white opaque plastic cup.
-5.  Repeat steps 1 to 4 for all guppies.
+    experimenter leaves the room.
+5.  After 5 minutes the guppy is transferred back to the home tank via the white
+    opaque plastic cup.
+6.  Repeat steps 2 to 5 for all guppies.
 
 ***
 
@@ -93,12 +94,11 @@ discovered. To see how to make the food reward go to [Food
 strips](#food-strips). The protocol was as follows:
 
 1.  Fill the test tank with water from several home tanks to the 8 cm line.
-2.  Transfer the guppy from the home tank to the test tank which has been filled
-    with water from several guppy home tanks to a level of 8 cm via a white
-    opaque plastic cup where the green and blue objects have already been placed
-    into the test tank. The objects should be placed on their designated velcro
-    piece which are each 6 cm from the side of the tank with one on the left and
-    right end of the tank. The two objects are 38 cm apart.
+2.  Transfer the guppy from the home tank to the test tank via a white opaque
+    plastic cup where the green and blue objects have already been placed into
+    the test tank. The objects should be placed on their designated velcro piece
+    which are each 6 cm from the side of the tank with one on the left and right
+    end of the tank. The two objects are 38 cm apart.
 3.  Dip the food strip in some water to remove excess flakes. Keep dipping until
     the strip does not shed flakes upon being dipped in water (about 8 to 10
     dips)
@@ -115,7 +115,7 @@ strips](#food-strips). The protocol was as follows:
     the cup. Come back after 5 minutes and 20 seconds.
 7.  Stop the video recording using the remote.
 8.  Transfer the guppy back to the home tank via the white opaque plastic cup.
-9. Repeat steps 3 to 8 for all guppies.
+9.  Repeat steps 3 to 8 for all guppies.
 
 ***
 
@@ -189,7 +189,9 @@ We quantified behaviour throughout this project using [EthoVision
 XT 11.5](https://www.noldus.com/ethovision-xt). Below are the instructions that
 were given to an undergraduate student (Mina Araya-Yohannes) tasked with
 conducting experimental trials, and collecting as well as quantifying
-behavioural data.
+behavioural data for a large portion of experiment 2 trials. While EthoVision is
+proprietary software, we reproduce our protocol for using it in this experiment
+for those who may have it or intend to use it.
 
 1.  Carefully remove the SD card from the camera and place it into the card
     reader on the wet lab computer.
