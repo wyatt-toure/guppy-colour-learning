@@ -1119,69 +1119,6 @@ ggsave(
 
 ***
 
-## Descriptive statistics
-
-### Time near objects
-
-During all of training fish spent on average
-`r training_data %>% summarise(mean((time.with.both.objects/total.time))) %>% round(3)*100`%
-of the trial time near an object during training.
-`r training_data %>% summarise(mean((time.with.trained.object/total.time))) %>% round(3)*100`%
-of trial time was spent near the rewarding object and
-`r training_data %>% summarise(mean((time.with.untrained.object/total.time))) %>% round(3)*100`%
-of trial time was spent near the unrewarding object.
-
-### Weight
-
-After trial 21 the guppies were all weighed. These can be seen in the code chunk
-below where we programatically assign the weights.
-
-```{r}
-## Assigning weights
-weight_data <- full_data %>%
-  filter(trial == 0) %>% 
-  mutate(
-    weight =
-      case_when(
-        id == "1a" ~ 0.29, id == "1b" ~ 0.10,
-        id == "2a" ~ 0.20, id == "2b" ~ 0.11,
-        id == "3a" ~ 0.20, id == "3b" ~ 0.12,
-        id == "4a" ~ 0.21, id == "4b" ~ 0.11,
-        id == "5a" ~ 0.18, id == "5b" ~ 0.13,
-        id == "6a" ~ 0.15, id == "6b" ~ 0.11,
-        id == "7a" ~ 0.31, id == "7b" ~ 0.13,
-        id == "8a" ~ 0.17, id == "8b" ~ 0.14
-      )
-  )
-```
-
-The weights ranged from `r min(weight_data$weight)` to
-`r max(weight_data$weight)` grams. Guppies weighed on average
-`r weight_data %>% summarise(mean(weight)) %>% round(2)` grams. Blue-trained
-guppies tended to weigh more than green-trained guppies
-(`r weight_data %>% filter(rewarding.object.colour == "blue") %>% summarise(mean(weight)) %>% round(2)`
-grams vs
-`r weight_data %>% filter(rewarding.object.colour == "green") %>% summarise(mean(weight)) %>% round(2)`
-grams) but this difference was not statistically significant.
-
-
-```{r, echo=FALSE}
-lm(weight ~ rewarding.object.colour, data = weight_data) %>%
-  broom::tidy() %>%
-  rename_tidy_lme4_cols() %>%
-  mutate(
-    Factor =
-      case_when(
-        Factor == "(Intercept)" ~ "Intercept",
-        Factor == "rewarding.object.colourgreen" ~ "Rewarding object colour"
-      )
-  ) %>%
-  mutate_if(is.numeric, round, digits = 3) %>%
-  kable()
-```
-
-***
-
 ## ESM Models
 
 ### ESM Model 1 - Percentage preference for the rewarded object during testing depending on treatment
@@ -1567,6 +1504,56 @@ ggsave(
   device = "png",
   dpi = 300
 )
+```
+
+### Weight
+
+After trial 21 the guppies were all weighed. These can be seen in the code chunk
+below where we programmatically assign the weights.
+
+```{r}
+## Assigning weights
+weight_data <- full_data %>%
+  filter(trial == 0) %>% 
+  mutate(
+    weight =
+      case_when(
+        id == "1a" ~ 0.29, id == "1b" ~ 0.10,
+        id == "2a" ~ 0.20, id == "2b" ~ 0.11,
+        id == "3a" ~ 0.20, id == "3b" ~ 0.12,
+        id == "4a" ~ 0.21, id == "4b" ~ 0.11,
+        id == "5a" ~ 0.18, id == "5b" ~ 0.13,
+        id == "6a" ~ 0.15, id == "6b" ~ 0.11,
+        id == "7a" ~ 0.31, id == "7b" ~ 0.13,
+        id == "8a" ~ 0.17, id == "8b" ~ 0.14
+      )
+  )
+```
+
+The weights ranged from `r min(weight_data$weight)` to
+`r max(weight_data$weight)` grams. Guppies weighed on average
+`r weight_data %>% summarise(mean(weight)) %>% round(2)` grams. Blue-trained
+guppies tended to weigh more than green-trained guppies
+(`r weight_data %>% filter(rewarding.object.colour == "blue") %>% summarise(mean(weight)) %>% round(2)`
+grams vs
+`r weight_data %>% filter(rewarding.object.colour == "green") %>% summarise(mean(weight)) %>% round(2)`
+grams) but this difference was not statistically significant when investigated
+with a linear model (Table \@ref(tab:weight-model)).
+
+
+```{r weight-model, echo=FALSE}
+lm(weight ~ rewarding.object.colour, data = weight_data) %>%
+  broom::tidy() %>%
+  rename_tidy_lme4_cols() %>%
+  mutate(
+    Factor =
+      case_when(
+        Factor == "(Intercept)" ~ "Intercept",
+        Factor == "rewarding.object.colourgreen" ~ "Rewarding object colour"
+      )
+  ) %>%
+  mutate_if(is.numeric, round, digits = 3) %>%
+  kable(caption = "Summary table for a linear model with a response variable of weight and a fixed effect of rewarding object colour.")
 ```
 
 
