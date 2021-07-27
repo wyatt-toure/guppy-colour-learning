@@ -121,6 +121,8 @@ to
 prop.trained.object but renamed to allow for combined plotting with
 experiment 2)
 
+--------------------------------------------------------------------------------
+
 ### Experiment 2 Metadata
 
 Variable descriptions for `colour-learning-experiment-2-full-data.csv`
