@@ -54,6 +54,8 @@ variables necessary for the analysis are created as the script progresses.
   - `docs/` contains the reader-friendly html write-up of the analyses, the
     GitHub pages site is built from this folder
   - `R/` contains custom R functions used in the analysis
+  - `references/` contains reference information and formatting for citations
+    used in the project
   - `figs/` contains the individual files for the figures and residual
     diagnostic plots produced by the analysis scripts. This directory is created
     and populated by running `analysis-experiment-1.Rmd`,
