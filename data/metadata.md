@@ -234,3 +234,5 @@ periphery and time in center
 `training.feeding.count`	
 : The number of training trials (refresher excluded) for which that guppy ate
 
+`weight`
+: The weight of the guppy in grams (obtained after trial 21)
