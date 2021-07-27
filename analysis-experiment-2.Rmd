@@ -1,8 +1,8 @@
 ---
-title: "Analysis for 'Colour biases in learned foraging preferences in Trinidadian guppies' "
+title: "Analysis for 'Colour biases in learned foraging preferences in Trinidadian guppies'"
 subtitle: "Experiment 2 Data Preparation and Analysis"
 author: 
-  - name: "M. Wyatt Toure^1^"
+  - name: "M. Wyatt Toure^1^, Simon M. Reader^1^"
     affiliation: "^1^McGill University, Department of Biology, 1205 Docteur Penfield, Montreal, Quebec H3A 1B1, Canada" 
 date: "Last Update: `r format(Sys.Date(), '%b %d %Y')`"
 output:

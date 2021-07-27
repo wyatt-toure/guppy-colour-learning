@@ -2,7 +2,7 @@
 title: "Analysis for 'Colour biases in learned foraging preferences in Trinidadian guppies'"
 subtitle: "Experiment 1 Data Preparation and Analysis"
 author: 
-  - name: "M. Wyatt Toure^1^"
+  - name: "M. Wyatt Toure^1^, Simon M. Reader^1^"
     affiliation: "^1^McGill University, Department of Biology, 1205 Docteur Penfield, Montreal, Quebec H3A 1B1, Canada"  
 date: "Last Update: `r format(Sys.Date(), '%b %d %Y')`"
 output:
@@ -1163,7 +1163,14 @@ guppies). Values are all rounded to 3 decimal places. CL = confidence limit."
 )
 ```
 
-We find the same pattern of results as in [Model 3](#model-3)
+We find the same pattern of results as in [Model 3](#model-3). Green-trained
+guppies significantly increase their preference for the green object by 23% (p =
+`r prop_pairwise_comparison_contrasts_table$p.value[2]`) whereas blue-trained
+guppies non-significantly increase their preference for the blue object by 6% (p
+= `r prop_pairwise_comparison_contrasts_table$p.value[1]`. There is no
+significant difference in preference for the rewarding object between the
+treatments before training (p =
+`r prop_pairwise_comparison_contrasts_table$p.value[4]`).
 
 ***
 
