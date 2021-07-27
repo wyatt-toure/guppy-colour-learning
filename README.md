@@ -24,12 +24,16 @@ time this project was created, you will need to install `renv` using
 
 If you want to reproduce the results it is best to download the entire
 repository onto your system. This can be done either by clicking the green code
-button on GitHub repository homepage and then clicking Download ZIP or from the
-command line using
+button on the GitHub repository homepage and then clicking Download ZIP or from
+the command line using
 
 `git clone https://github.com/wyatt-toure/guppy-colour-learning`
 
-which will download the repository to your current directory.
+which will download the repository to your current directory. It may preferable
+to download the repository as a ZIP file since cloning the repository downloads
+the entire git history as well. Many binary files were included in the commits
+causing the size of the git repository to be quite large (250+ MB compared to 20
+MB for just the files in the directory).
 
 Once the repository is downloaded onto your system, navigate to the root
 directory and open `guppy-colour-learning-project.Rproj`. It is important to
