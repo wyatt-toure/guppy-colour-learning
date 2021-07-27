@@ -360,6 +360,28 @@ feeding_data <- full_data %>%
   dplyr::select(id, training.feeding.count, rewarding.object.colour)
 ```
 
+After trial 21 all guppies were weighted. In the next chunk of code we
+programmatically assign the weights (measured in grams) to their respective
+guppy IDs.
+
+```{r}
+## Assigning weights
+full_data <- full_data %>% 
+  mutate(
+    weight =
+      case_when(
+        id == "1a" ~ 0.29, id == "1b" ~ 0.10,
+        id == "2a" ~ 0.20, id == "2b" ~ 0.11,
+        id == "3a" ~ 0.20, id == "3b" ~ 0.12,
+        id == "4a" ~ 0.21, id == "4b" ~ 0.11,
+        id == "5a" ~ 0.18, id == "5b" ~ 0.13,
+        id == "6a" ~ 0.15, id == "6b" ~ 0.11,
+        id == "7a" ~ 0.31, id == "7b" ~ 0.13,
+        id == "8a" ~ 0.17, id == "8b" ~ 0.14
+      )
+  )
+```
+
 ### Exporting processed data and creating data subsets
 
 Finally we export the full data set as a `.csv` file to future proof the full
@@ -1336,7 +1358,7 @@ ggsave(
 ```
 
 
-### ESM Model 2 - Does the object pair influence behaviour
+### ESM Model 2 - Does the object pair influence behaviour?
 
 To determine whether guppies were treating object pairs differently from each
 other during training (*e.g.*, avoiding larger object pairs), we asked whether
@@ -1506,28 +1528,14 @@ ggsave(
 )
 ```
 
-### Weight
+### ESM Model 3 - Is there a weight difference between the treatments?
 
-After trial 21 the guppies were all weighed. These can be seen in the code chunk
-below where we programmatically assign the weights.
+
+We only need one trial in order to have the data needed to compare the weights
+of the groups so we arbitrarily pick trial 0.
 
 ```{r}
-## Assigning weights
-weight_data <- full_data %>%
-  filter(trial == 0) %>% 
-  mutate(
-    weight =
-      case_when(
-        id == "1a" ~ 0.29, id == "1b" ~ 0.10,
-        id == "2a" ~ 0.20, id == "2b" ~ 0.11,
-        id == "3a" ~ 0.20, id == "3b" ~ 0.12,
-        id == "4a" ~ 0.21, id == "4b" ~ 0.11,
-        id == "5a" ~ 0.18, id == "5b" ~ 0.13,
-        id == "6a" ~ 0.15, id == "6b" ~ 0.11,
-        id == "7a" ~ 0.31, id == "7b" ~ 0.13,
-        id == "8a" ~ 0.17, id == "8b" ~ 0.14
-      )
-  )
+weight_data <- full_data %>% filter(trial == 0)
 ```
 
 The weights ranged from `r min(weight_data$weight)` to
@@ -1539,7 +1547,6 @@ grams vs
 `r weight_data %>% filter(rewarding.object.colour == "green") %>% summarise(mean(weight)) %>% round(2)`
 grams) but this difference was not statistically significant when investigated
 with a linear model (Table \@ref(tab:weight-model)).
-
 
 ```{r weight-model, echo=FALSE}
 lm(weight ~ rewarding.object.colour, data = weight_data) %>%
@@ -1555,7 +1562,6 @@ lm(weight ~ rewarding.object.colour, data = weight_data) %>%
   mutate_if(is.numeric, round, digits = 3) %>%
   kable(caption = "Summary table for a linear model with a response variable of weight and a fixed effect of rewarding object colour.")
 ```
-
 
 ***
 
