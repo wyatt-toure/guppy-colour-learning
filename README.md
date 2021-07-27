@@ -1,4 +1,4 @@
-# Analysis documentation for 'Colour biases in learned foraging preferences in Trinidadian guppies'
+# R code, data, and analysis documentation for 'Colour biases in learned foraging preferences in Trinidadian guppies'
 
 ## Authors
 
