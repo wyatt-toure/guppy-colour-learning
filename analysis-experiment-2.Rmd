@@ -452,7 +452,6 @@ dir.create(file.path("figs/exp-2/exp-2-residual-plots"),
            showWarnings = FALSE)
 ```
 
-
 ***
 
 ## Models

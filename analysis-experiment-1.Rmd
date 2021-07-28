@@ -385,10 +385,6 @@ tidy_training_data_model <- broom.mixed::tidy(training_data_model)
 # Formatting p value
 tidy_training_data_model$p.value <- format_p_value(tidy_training_data_model$p.value)
 
-# Getting model confidence intervals
-training_data_model_confint <- tibble::as_tibble((training_data_model %>%
-  confint()), rownames = "factor")
-
 # Changing tibble header names
 tidy_training_data_model <- rename_tidy_lme4_cols(tidy_training_data_model)
 
@@ -523,9 +519,6 @@ tidy_test_data_model <- broom.mixed::tidy(test_data_model_glm)
 
 # Formatting p value
 tidy_test_data_model$p.value <- format_p_value(tidy_test_data_model$p.value)
-
-# Getting model confidence intervals
-# test.data.model.confint = tibble::as_tibble((test.data.model %>% confint()), rownames = "factor")
 
 # Changing tibble header names
 tidy_test_data_model <- rename_tidy_lme4_cols(tidy_test_data_model)
@@ -1028,9 +1021,6 @@ tidy_prop_test_data_model <- broom.mixed::tidy(prop_test_data_model_glm)
 
 # Formatting p value
 tidy_prop_test_data_model$p.value <- format_p_value(tidy_prop_test_data_model$p.value)
-
-# Getting model confidence intervals
-# test.data.model.confint = tibble::as_tibble((test.data.model %>% confint()), rownames = "factor")
 
 # Changing tibble header names
 tidy_prop_test_data_model <- rename_tidy_lme4_cols(tidy_prop_test_data_model)

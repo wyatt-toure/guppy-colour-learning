@@ -1,9 +1,9 @@
 ## Required R packages for the guppy colour learinng project
 
-In the table below we list all packages and package dependencies (as well as 
-their versions and installation source) required to re-create the results and 
-html documentation for the analyses described in 'Colour biases in learned 
-foraging preferences in Trinidadian guppies'. NULL indicates that the package 
+In the table below we list all packages and package dependencies (as well as
+their versions and installation source) required to re-create the results and
+html documentation for the analyses described in 'Colour biases in learned
+foraging preferences in Trinidadian guppies'. NULL indicates that the package
 was likely installed directly from GitHub using devtools.
 
 |package      |version    |source |
