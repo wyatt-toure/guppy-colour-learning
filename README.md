@@ -109,4 +109,4 @@ Data are available in the `data/` directory.
 We provide the variable descriptions for the data sets in the file `metadata.md`
 located in the `data/` directory. The packages required to conduct the analyses
 and construct the website as well as their versions and citations are provided
-in the file `i_dont_know_yet.md`.
+in the file `required-r-packages.md`.
