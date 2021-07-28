@@ -60,6 +60,8 @@ variables necessary for the analysis are created as the script progresses.
   - `R/` contains custom R functions used in the analysis
   - `references/` contains reference information and formatting for citations
     used in the project
+  - `renv/` contains an activation script and configuration files for the renv
+    package manager
   - `figs/` contains the individual files for the figures and residual
     diagnostic plots produced by the analysis scripts. This directory is created
     and populated by running `analysis-experiment-1.Rmd`,
