@@ -29,11 +29,11 @@ the command line using
 
 `git clone https://github.com/wyatt-toure/guppy-colour-learning`
 
-which will download the repository to your current directory. It may preferable
-to download the repository as a ZIP file since cloning the repository downloads
-the entire git history as well. Many binary files were included in the commits
-causing the size of the git repository to be quite large (250+ MB compared to 20
-MB for just the files in the directory).
+which will download the repository to your current directory. It may be
+preferable to download the repository as a ZIP file since cloning the repository
+downloads the entire git history as well. Many binary files were included in the
+commits causing the size of the git repository to be quite large (250+ MB
+compared to 20 MB for just the files in the directory).
 
 Once the repository is downloaded onto your system, navigate to the root
 directory and open `guppy-colour-learning-project.Rproj`. It is important to
@@ -41,7 +41,7 @@ open the project using the `.Rproj` file to ensure the working directory is set
 correctly. Then install the package dependencies onto your system using
 `renv::restore()`. Running `renv::restore()` will install the correct versions
 of all the packages needed to reproduce our results. Packages are installed in a
-stand-alone library for this project, and will not affect your installed R
+stand-alone library for this project and will not affect your installed R
 packages anywhere else.
 
 If you want to reproduce specific results from the analyses you can open either
@@ -51,6 +51,18 @@ the root directory. You can select the Run All option under the Code option in
 the navbar of RStudio to execute all the code chunks. You can also run all
 chunks independently as well though we advise that you do so sequentially since
 variables necessary for the analysis are created as the script progresses.
+
+## Metadata
+
+Data are available in the `data/` directory. 
+
+- `colour-learning-experiment-1-data.csv` are the data for experiment 1
+- `colour-learning-experiment-2-full-data.csv` are the data for experiment 2
+
+We provide the variable descriptions for the data sets in the file `metadata.md`
+located in the `data/` directory. The packages required to conduct the analyses
+and construct the website as well as their versions and citations are provided
+in the file `required-r-packages.md`.
 
 ## Directory structure
 
@@ -98,15 +110,20 @@ root directory `.Rmd` files.
   - `treatment-object.side-assignment.Rmd` is the R code used to assign
     treatments and object sides during trials for experiment 2. Not used in the
     project site.
-
-## Metadata
-
-Data are available in the `data/` directory. 
-
-- `colour-learning-experiment-1-data.csv` are the data for experiment 1
-- `colour-learning-experiment-2-full-data.csv` are the data for experiment 2
-
-We provide the variable descriptions for the data sets in the file `metadata.md`
-located in the `data/` directory. The packages required to conduct the analyses
-and construct the website as well as their versions and citations are provided
-in the file `required-r-packages.md`.
+    
+  - `renv.lock` is a JSON formatted file which contains package information for
+    the project. renv will install the packages listed in this file upon
+    executing `renv::restore()`
+    
+  - `required-r-packages.md` is a plain text file containing the versions and
+    sources of the packages required for the project.
+    
+  - `styles.css` contains the CSS formatting for the rendered html pages
+  
+  - `LICENSE.md` contains the license indicating the conditions upon which the
+    code can be reused
+  
+  - `guppy-colour-learning-project.Rproj` is the R project file which sets the
+    working directory of the R instance to the root directory of this
+    repository. If trying to run the code in this repository to reproduce
+    results it is important to open R by clicking on this `.Rproj` file.
