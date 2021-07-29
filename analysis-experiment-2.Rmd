@@ -806,7 +806,8 @@ rewarding object preference for each rewarding object colour respectively to
 establish whether learning had occurred. Learning was assumed to have occurred
 if the change in preference between the initial trial (serving as the control)
 and the test trial was significant. We used a multivariate t adjustment to
-correct p values in light of multiple comparisons.
+correct p values in light of multiple comparisons 
+[@hothorn2008SimultaneousInferenceGeneral].
 
 ```{r post-hoc-comparisons, echo=TRUE}
 test_data_model_emmeans <- emmeans(test_data_model_glm,
@@ -846,7 +847,7 @@ test_data_contrasts %>%
     "Upper CL" = upper.CL
   ) %>%
   kable(
-    caption = "Table of post-hoc tests with a Dunnett adjustment for multiple 
+    caption = "Table of post-hoc tests with a multivariate t adjustment for multiple 
 comparisons. Initial = Initial test (trial 0). Probe 1 = First probe test with object pair A (trial 21). Generalization 1 = Generalization to similar Lego colours test (trial 23). Generalization 2 = Generalization to non-Lego clay objects (trial 25). Probe 2 = Second probe test with object pair A (trial 27). Odour = Probe test with object pair A and food odour present on the food strips for both objects. The colour corresponds to the identity of the 
 rewarding object (blue for blue-rewarded guppies, green for green-rewarded 
 guppies). Values are all rounded to 3 decimal places."
@@ -1229,6 +1230,7 @@ post-hoc tests as described in the [Model 3](#model-3) section.
 ```{r}
 prop_test_data_model_emmeans <- emmeans(prop_test_data_model_glm,
         specs = trt.vs.ctrl ~ rewarding.object.colour:trial,
+        adjust = "mvt",
         by = "rewarding.object.colour")
 ```
 
@@ -1260,7 +1262,7 @@ prop_test_data_contrasts %>%
     "P Value" = p.value
   ) %>%
   kable(
-    caption = "Table of post-hoc tests with a Dunnett adjustment for multiple 
+    caption = "Table of post-hoc tests with a multivariate t adjustment for multiple 
 comparisons. Initial = Initial test (trial 0). Probe 1 = First probe test with object pair A (trial 21). Generalization 1 = Generalization to similar Lego colours test (trial 23). Generalization 2 = Generalization to non-Lego clay objects (trial 25). Probe 2 = Second probe test with object pair A (trial 27). Odour = Probe test with object pair A and food odour present on the food strips for both objects. The colour corresponds to the identity of the 
 rewarding object (blue for blue-rewarded guppies, green for green-rewarded 
 guppies). Values are all rounded to 3 decimal places."
