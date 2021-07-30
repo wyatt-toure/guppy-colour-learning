@@ -272,7 +272,7 @@ knitr::kable(tidy_baseline_model %>%
 
 During the initial test, there was no significant preference for the green
 object across all guppies (green object preference:
-`r report_est_and_std_error(tidy_baseline_model, rounding = 2)` seconds, p =
+`r report_est_and_std_error(tidy_baseline_model, rounding = 0)` seconds, p =
 `r tidy_baseline_model$'P value' %>% round(3)`).
 
 
@@ -405,17 +405,17 @@ knitr::kable(tidy_training_data_model[1:4, ] %>%
 There was a significant effect of trial. Over the 20 training trials, guppies in
 the two treatments increased their relative preference for their respective
 rewarded objects by
-`r report_est_and_std_error(tidy_training_data_model, rounding = 2)[3]` seconds
+`r report_est_and_std_error(tidy_training_data_model, rounding = 0)[3]` seconds
 each trial (Figure \@ref(fig:colour-pref-training-plot), p
 `r tidy_training_data_model$'P value'[3]`). There was also a significant effect
 of rewarded-object colour (p = `r tidy_training_data_model$'P value'[2]`).
 during training green-rewarded guppies expressed a stronger preference for their
 rewarded object (the green object) than did blue-rewarded guppies did for the
 blue object, a difference of
-`r report_est_and_std_error(tidy_training_data_model, rounding = 2)[2]` seconds.
+`r report_est_and_std_error(tidy_training_data_model, rounding = 0)[2]` seconds.
 However, there was no significant interaction effect between rewarding object
 colour and trial
-(`r report_est_and_std_error(tidy_training_data_model, rounding = 2)[4]`
+(`r report_est_and_std_error(tidy_training_data_model, rounding = 0)[4]`
 seconds, p = `r tidy_training_data_model$'P value'[4]`), *i.e.*, the rate of
 increase in object preference over trials did not significantly differ between
 the treatments.
@@ -548,7 +548,7 @@ training and without food rewards present, we found a significant interaction
 effect between test and rewarding object colour (p =
 `r tidy_test_data_model$'P value'[4]`). Guppies that had been green-rewarded had
 a shift in their rewarded object preference that was on average
-`r report_est_and_std_error(tidy_test_data_model, rounding = 2)[4]` seconds
+`r report_est_and_std_error(tidy_test_data_model, rounding = 0)[4]` seconds
 stronger than the shift in rewarded object preference of guppies trained to blue
 (Figure \@ref(fig:test-data-pref-plot)).
 
@@ -680,22 +680,22 @@ guppies). Values are all rounded to 3 decimal places. CL = confidence limit."
 Post-hoc comparisons (Table \@ref(tab:contrasts-table-display)) reveal that
 initially, before training, there was no significant difference in the strength
 of preference for the rewarded object between the treatments
-(`r report_est_and_std_error(pairwise_comparison_contrasts_table, 2, F)[4]`
+(`r report_est_and_std_error(pairwise_comparison_contrasts_table, 0, F)[4]`
 seconds, p = `r pairwise_comparison_contrasts_table$p.value[4]`). The shift in
 rewarded object preference between the initial and final preference tests was
 significant for green-trained guppies but not for blue-trained guppies: green
 trained guppies increased their preference for the green object by
-`r report_est_and_std_error(pairwise_comparison_contrasts_table, 2, F)[2]`
+`r report_est_and_std_error(pairwise_comparison_contrasts_table, 0, F)[2]`
 seconds, from initial to final (p
 `r pairwise_comparison_contrasts_table$p.value[2]`) test whereas blue-trained
 guppies increased their preference for the blue object by
-`r report_est_and_std_error(pairwise_comparison_contrasts_table, 2, F)[1]`
+`r report_est_and_std_error(pairwise_comparison_contrasts_table, 0, F)[1]`
 seconds an effect that was not statistically significant (p =
 `r pairwise_comparison_contrasts_table$p.value[1]`). At final test,
 green-rewarded guppies had a significantly stronger preference for the
 previously rewarded object compared to the blue-rewarded guppies (Difference in
 preference:
-`r report_est_and_std_error(pairwise_comparison_contrasts_table, 2, F)[3]`
+`r report_est_and_std_error(pairwise_comparison_contrasts_table, 0, F)[3]`
 seconds, p = `r pairwise_comparison_contrasts_table$p.value[3]`).
 
 ***

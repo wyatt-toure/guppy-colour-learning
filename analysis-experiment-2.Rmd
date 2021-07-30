@@ -526,7 +526,7 @@ knitr::kable(tidy_baseline_model %>%
 
 Before training began, there was no significant difference in the time spent
 near the green versus the blue object across all guppies (green object
-preference: `r report_est_and_std_error(tidy_baseline_model, rounding = 2)`
+preference: `r report_est_and_std_error(tidy_baseline_model, rounding = 0)`
 seconds, p = `r tidy_baseline_model$'P value' %>% round(3)`).
 
 ```{r baseline-pref-plot, echo=FALSE, message=FALSE, echo=FALSE, fig.cap="Preference for the green object relative to the blue object across all guppies at baseline. Negative values represent more time spent with the blue object, positive values indicate more time spent with the green object. Data are means ± 95% CI", fig.id="baseline-pref-plot",  warning=FALSE, message=FALSE}
@@ -644,7 +644,7 @@ knitr::kable(tidy_training_data_model[1:4, ] %>%
 ```
 
 There was a significant interaction effect between trial and rewarding object
-colour (`r report_est_and_std_error(tidy_training_data_model, rounding = 2)[4]`
+colour (`r report_est_and_std_error(tidy_training_data_model, rounding = 0)[4]`
 seconds, p = `r tidy_training_data_model$'P value'[4]`) indicating that the
 change in rewarding object preference has a different trend depending on the
 rewarding object colour. We used the `emtrends()` function from `emmeans` to
@@ -904,59 +904,59 @@ the first probe trial. Blue-trained guppies significantly increased their
 preference for the rewarding object by
 `r test_data_contrasts$estimate[1] %>% round(0)` seconds (p =
 `r test_data_contrasts$p.value[1]`,
-`r report_ci(test_data_contrasts, rounding = 2)[1]`) and green-trained guppies
+`r report_ci(test_data_contrasts, rounding = 0)[1]`) and green-trained guppies
 significantly increased their preference for the rewarding object by
 `r test_data_contrasts$estimate[6] %>% round(0)` seconds (p =
 `r test_data_contrasts$p.value[6]`,
-`r report_ci(test_data_contrasts, rounding = 2)[6]`). There is no difference in
+`r report_ci(test_data_contrasts, rounding = 0)[6]`). There is no difference in
 performance between the two colour treatments in this test (p =
 `r test_data_simple_contrasts$p.value[2]`,
-`r report_ci(test_data_simple_contrasts, rounding = 2)[2]`).
+`r report_ci(test_data_simple_contrasts, rounding = 0)[2]`).
 
 Neither group displayed evidence of generalizing the learned colour preference
 to a Lego object with a darker blue or green colouration (blue: p =
 `r test_data_contrasts$p.value[2]`,
-`r report_ci(test_data_contrasts, rounding = 2)[2]`, green: p =
+`r report_ci(test_data_contrasts, rounding = 0)[2]`, green: p =
 `r test_data_contrasts$p.value[7]`,
-`r report_ci(test_data_contrasts, rounding = 2)[7]`) and the groups did not
+`r report_ci(test_data_contrasts, rounding = 0)[7]`) and the groups did not
 perform differently on this test (p = `r test_data_simple_contrasts$p.value[3]`,
-`r report_ci(test_data_simple_contrasts, rounding = 2)[3]`).
+`r report_ci(test_data_simple_contrasts, rounding = 0)[3]`).
 
 Green-trained guppies showed evidence of generalizing their learned preference
 to a non-Lego clay object (p = `r test_data_contrasts$p.value[8]`,
-`r report_ci(test_data_contrasts, rounding = 2)[8]`), displaying a change in
+`r report_ci(test_data_contrasts, rounding = 0)[8]`), displaying a change in
 preference of `r test_data_contrasts$estimate[8] %>% round(0)` seconds whereas
 blue-trained guppies did not show evidence of a learned preference (p =
 `r test_data_contrasts$p.value[3]`,
-`r report_ci(test_data_contrasts, rounding = 2)[3]`). There is a significant
+`r report_ci(test_data_contrasts, rounding = 0)[3]`). There is a significant
 difference in performance between the two colour treatments in this test with
 green-trained guppies displaying a superior performance over blue-trained
 guppies (p = `r test_data_simple_contrasts$p.value[4]`,
-`r report_ci(test_data_simple_contrasts, rounding = 2)[4]`).
+`r report_ci(test_data_simple_contrasts, rounding = 0)[4]`).
 
 For the second probe test to see if the learned preference would habituate with
 a repeated test, green-trained guppies displayed limited evidence of having
 retained their learned preference maintaining a shift in preference of
 `r test_data_contrasts$estimate[9] %>% round(0)` seconds (p =
 `r test_data_contrasts$p.value[9]`,
-`r report_ci(test_data_contrasts, rounding = 2)[9]`) but blue-trained guppies
+`r report_ci(test_data_contrasts, rounding = 0)[9]`) but blue-trained guppies
 did not (p = `r test_data_contrasts$p.value[4]`,
-`r report_ci(test_data_contrasts, rounding = 2)[4]`). There is a trend for
+`r report_ci(test_data_contrasts, rounding = 0)[4]`). There is a trend for
 green-trained guppies to outperform blue-trained guppies in this test but this
 is not significant ( p = `r test_data_simple_contrasts$p.value[5]`,
-`r report_ci(test_data_simple_contrasts, rounding = 2)[5]`).
+`r report_ci(test_data_simple_contrasts, rounding = 0)[5]`).
 
 For the odour test green-trained guppies showed evidence of learning, displaying
 a shift in preference of `r test_data_contrasts$estimate[10] %>% round(0)`
 seconds (p `r test_data_contrasts$p.value[10]`,
-`r report_ci(test_data_contrasts, rounding = 2)[10]`) but blue-trained guppies
+`r report_ci(test_data_contrasts, rounding = 0)[10]`) but blue-trained guppies
 did not (p = `r test_data_contrasts$p.value[5]`,
-`r report_ci(test_data_contrasts, rounding = 2)[5]`) displaying a
+`r report_ci(test_data_contrasts, rounding = 0)[5]`) displaying a
 non-significant shift of `r test_data_contrasts$estimate[5] %>% round(0)`
 seconds. There is a significant difference in performance between the two colour
 treatments in this test with green-trained guppies displaying a superior
 performance over blue (p `r test_data_simple_contrasts$p.value[6]`,
-`r report_ci(test_data_simple_contrasts, rounding = 2)[6]`).
+`r report_ci(test_data_simple_contrasts, rounding = 0)[6]`).
 
 Thus, in three out of five test trials green-trained guppies showed evidence of
 learning while blue-trained guppies show evidence of learning in only one out of
