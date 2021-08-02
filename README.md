@@ -107,7 +107,7 @@ root directory `.Rmd` files.
   - `combined-figures.Rmd` is the R code used to create figures that combine
     data from experiments 1 and 2. Not used in the project site.
 
-  - `treatment-object.side-assignment.Rmd` is the R code used to assign
+  - `treatment-object-side-assignment.Rmd` is the R code used to assign
     treatments and object sides during trials for experiment 2. Not used in the
     project site.
     
