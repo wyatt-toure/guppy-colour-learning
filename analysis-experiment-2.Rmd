@@ -1440,7 +1440,8 @@ p1 <- ggplot(
   aes(
     x = object.pair,
     y = rewarding.object.preference,
-    color = object.pair
+    color = object.pair,
+    shape = object.pair
   )
 ) +
   theme_minimal() +
@@ -1474,6 +1475,7 @@ p1 <- ggplot(
     trim = FALSE,
     color = NA
   ) +
+  scale_shape_manual(values = c(15,16,17,18)) +
   guides(fill = FALSE)
 
 p2 <- ggplot(
@@ -1481,7 +1483,8 @@ p2 <- ggplot(
   aes(
     x = trial,
     y = rewarding.object.preference,
-    color = object.pair
+    color = object.pair,
+    shape = object.pair
   )
 ) +
   theme_minimal() +
@@ -1507,6 +1510,7 @@ p2 <- ggplot(
   geom_line(aes(group = id), alpha = 0.2, color = "grey") +
   scale_x_continuous(breaks = c(1:20)) +
   scale_y_continuous(breaks = seq(-300, 300, by = 100)) +
+  scale_shape_manual(values = c(15,16,17,18)) +
   stat_summary(fun = "mean", size = 0.8)
 
 # Combining both plots and adding figure labels 
@@ -1517,8 +1521,7 @@ ggarrange(p1, p2,
   label.y = c(1, 1),
   hjust = -1,
   vjust = 2.5,
-  nrow = 2,
-  common.legend = TRUE
+  nrow = 2
 )
 
 ggsave(
