@@ -816,14 +816,6 @@ ggplot(
   )
 ) +
   geom_point(position = position_jitter(width = 0.05), alpha = 0.8) +
-  geom_flat_violin(
-    aes(fill = rewarding.object.colour),
-    position = position_nudge(x = .25, y = 0),
-    adjust = 0.7,
-    alpha = 0.4,
-    trim = FALSE,
-    color = NA
-  ) +
   stat_summary(geom = "point", fun = "mean", size = 4.5, shape = 15) +
   stat_summary(
     geom = "errorbar",

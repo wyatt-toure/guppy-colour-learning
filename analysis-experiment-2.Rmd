@@ -1098,14 +1098,6 @@ ggplot(
   )
 ) +
   geom_point(position = position_jitter(width = 0.05), alpha = 0.8) +
-  geom_flat_violin(
-    aes(fill = rewarding.object.colour),
-    position = position_nudge(x = .25, y = 0),
-    adjust = 0.7,
-    alpha = 0.4,
-    trim = FALSE,
-    color = NA
-  ) +
   stat_summary(geom = "point", fun = "mean", size = 4.5, shape = 15) +
   stat_summary(
     geom = "errorbar",
@@ -1434,7 +1426,7 @@ experienced with the colour association task by the time object pair 4 began
 regularly appearing and likely explains the slightly higher rewarding object
 preference for trials where object pair 4 is present.
 
-```{r object-pair-plot, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="(A) Relative preference for the rewarding object for all guppies across all training trials (trials 1-20). Large circles are means ± 95% CI, smaller circles are raw data points. To the right of the raw data are probability density functions displaying the distribution of the data. (B) Relative preference for the rewarding object for all guppies during each individual training trial (trials 1-20). Negative values represent more time spent with the unrewarding object, positive values indicate more time spent with the rewarding object. Light grey lines connect individuals across trials. Large coloured circles are trial means ± 95% CI.", fig.height=8.5, fig.width=7.5}
+```{r object-pair-plot, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Object-pair preferences during Experiment 2 (pair 1: red squares; pair 2: green circles; pair 3: blue triangles; pair 4: purple diamonds). (A) Relative preference for the rewarding object for all guppies across all training trials. Large points are means ± 95% CI, smaller points are raw data points. To the right of the raw data are probability density functions displaying the distribution of the data. (B) Relative preference for the rewarding object for all guppies during each individual training trial (trials 1-20). Positive values indicate more time spent with the rewarding object and negative values represent more time spent with the unrewarding object. Light grey lines connect individuals across trials. Large coloured points are trial means ± 95% CI, smaller points are raw data points.", fig.height=8.5, fig.width=7.5}
 p1 <- ggplot(
   training_data,
   aes(
