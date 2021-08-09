@@ -940,10 +940,10 @@ interaction effect)."
 ```
 
 The main results do not change if we control for feeding count. Table
-\@ref(tab:feeding-controlled-table) is the output feeding controlled model. Below
-we have the output table for the non-feeding-count controlled model from
-[Model 3](#model-3) (Table \@ref(tab:model-3-table)) reproduced. In both models
-the statistical conclusions are the same.
+\@ref(tab:feeding-controlled-table) is the output for the feeding controlled
+model. Below we have the output table for the non-feeding-count controlled model
+from [Model 3](#model-3) (Table \@ref(tab:model-3-table)) reproduced. In both
+models the statistical conclusions are the same.
 
 ```{r, results=TRUE, echo=FALSE}
 knitr::kable(tidy_test_data_model[1:4, ] %>%
