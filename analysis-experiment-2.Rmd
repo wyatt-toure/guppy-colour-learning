@@ -806,10 +806,14 @@ rewarding object preference for each rewarding object colour respectively to
 establish whether learning had occurred. Learning was assumed to have occurred
 if the change in preference between the initial trial (serving as the control)
 and the test trial was significant. We used a multivariate t adjustment to
-correct p values in light of multiple comparisons 
-[@hothorn2008SimultaneousInferenceGeneral].
+correct p values in light of multiple comparisons
+[@hothorn2008SimultaneousInferenceGeneral]. Since the multivariate t
+adjustment is simulation based we set a random seed to produce consistent
+confidence intervals upon re-running the code.
 
 ```{r post-hoc-comparisons, echo=TRUE}
+set.seed(123)
+
 test_data_model_emmeans <- emmeans(test_data_model_glm,
         specs = trt.vs.ctrl ~ rewarding.object.colour:trial,
         adjust = "mvt",
