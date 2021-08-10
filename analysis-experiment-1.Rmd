@@ -140,7 +140,9 @@ We remove males from our analyses due to consistently low feeding motivation in
 this particular experimental design across all males. However, we note that the
 conclusions of the experiment do not change even if males are included, one can
 remove the line of code below removing males from the analyses and re run the R
-script and find that the statistical conclusions are maintained.
+script and find that the statistical conclusions are maintained. Additionally, 
+two fish died before testing in Experiment 1 and were not included in the 
+analyses.
 
 ```{r remove-males}
 # Removing males
@@ -149,7 +151,8 @@ my_data <- my_data %>%
     id != "a3", id != "b3",
     id != "c3", id != "e3",
     id != "g3", id != "v3",
-    id != "w3", id != "x3"
+    id != "w3", id != "x3",
+    id != "b1", id != "b2"
   ) %>%
   droplevels()
 ```
@@ -204,8 +207,8 @@ dir.create(file.path("figs/exp-1/residual-plots"),
 ## Models
 
 We analysed the data from our experiment using linear, linear mixed effect,
-generalized linear mixed effect, and generalized linear models with the `lm`,
-`lmer()`, `glmmTMB()`, and `glm.nb` functions from the `stats`, `lme4`,
+generalized linear mixed effect, and generalized linear models with the `lm()`,
+`lmer()`, `glmmTMB()`, and `glm.nb()` functions from the `stats`, `lme4`,
 `glmmTMB`, and `MASS` packages respectively. P-values and effective degrees of
 freedom for `lme4` models were obtained using the `lmerTest` package. Model
 residuals were checked they met distributional assumptions with the `DHARMa`
@@ -776,10 +779,6 @@ feeding_model_table_row_name_vec <- c(
 
 # Converting data frame to tibble
 tidy_feeding_data_model <- broom.mixed::tidy(feeding_data_model)
-
-# Getting model confidence intervals
-feeding_data_model_confint <- tibble::as_tibble((feeding_data_model %>%
-  confint()), rownames = "factor")
 
 # Changing tibble header names
 tidy_feeding_data_model <- rename_tidy_lme4_cols(tidy_feeding_data_model)

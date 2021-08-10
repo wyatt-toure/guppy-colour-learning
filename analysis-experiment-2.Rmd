@@ -457,8 +457,8 @@ dir.create(file.path("figs/exp-2/exp-2-residual-plots"),
 ## Models
 
 We analysed the data from our experiment using linear, linear mixed effect,
-generalized linear mixed effect, and generalized linear models with the `lm`,
-`lmer()`, `glmmTMB()`, and `glm.nb` functions from the `stats`, `lme4`,
+generalized linear mixed effect, and generalized linear models with the `lm()`,
+`lmer()`, `glmmTMB()`, and `glm.nb()` functions from the `stats`, `lme4`,
 `glmmTMB`, and `MASS` packages respectively. P-values and effective degrees of
 freedom were obtained using the `lmerTest` package which uses Satterthwaite's
 degrees of freedom method [@kuznetsova2017LmerTestPackageTests]. Model

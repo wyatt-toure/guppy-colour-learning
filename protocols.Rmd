@@ -63,7 +63,7 @@ knitr::include_graphics("images/experiment-timeline.png")
 
 In the video below we provide sample footage of the behavioural assays conducted
 during the experiments. The footage below is of a green-trained guppy throughout
-experiment 2 and demonstrates that types of trials guppies were exposed to in 
+experiment 2 and demonstrates the types of trials guppies were exposed to in 
 this project (see Figure \@ref(fig:experiment-2-objects) for details on trials).
 
 <video width="90%" height="auto" controls>
