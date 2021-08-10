@@ -1166,12 +1166,11 @@ include the dependencies of these packages, it includes only packages
 explicitly loaded with a `library()` call. Installing these packages would
 automatically install all their dependencies but to see the full list of
 dependencies for all packages used as well as their versions please visit the
-[How to Reproduce the
-Results](https://github.com/wyatt-toure/guppy-colour-learning#how-to-reproduce-the-results)
+[metadata](https://github.com/wyatt-toure/guppy-colour-learning#metadata)
 section of the README.
 
 ```{r r-packages, echo=FALSE, warning=FALSE}
 report(sessionInfo()) %>% 
   as.data.frame() %>% 
-  kable(caption = "All packages used for this analysis. The dependencies for these packages as well as their versions can be found in the README file.")
+  kable(caption = "All packages used for this analysis. The dependencies for these packages as well as their versions can be found in the metadata.md file.")
 ```

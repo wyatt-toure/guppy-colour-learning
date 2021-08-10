@@ -42,17 +42,18 @@ object preferences for the green and blue objects (Figure
 foraging experiences with these objects. This was done by providing food
 reinforcement for approaching one of the two colours.
 
-On the first trial, guppies were placed in the test tank with both objects but
-empty food strips to measure initial preferences. Training then occurred once
-daily between 10h00 to 16h00 for 20 days constituting 20 trials. During
-training, the location of the rewarding object (left or right) was randomized
-across days and individuals. That is, only the object’s appearance provided a
-reliable cue to food location. On the 21st day, an unreinforced ‘probe’ test was
-given where new duplicates of the objects were presented with empty plastic
-strips attached to them. This unreinforced trial (trial 21) was used to assess
-whether learning had occurred. In experiment 2 an additional four test trials
-were conducted to see how robust learning was in both groups across different
-contexts.
+On the first trial, guppies were placed in the test tank with two objects, one
+blue and one green, but with empty food strips to measure initial preferences.
+Training then occurred once daily between 10h00 to 16h00 for 20 days
+constituting 20 trials. During training, the location of the rewarding object
+(left or right) was randomized across days and individuals. That is, only the
+object’s appearance provided a reliable cue to food location. On the 21st day,
+an unreinforced test was given where new duplicates of the objects were
+presented with empty plastic strips attached to them. In both experiments this
+unreinforced trial (Trial 21, Probe 1) was used to assess whether learning had
+occurred. At this point, experiment 1 ended. In experiment 2 an additional four
+test trials were conducted to see how robust learning was in both groups across
+different contexts.
 
 ```{r timeline, echo=FALSE, fig.cap="An experimental timeline representing the order of the trials. Experiment 1 ends at trial 21. Experiment 2 ends at trial 29."}
 knitr::include_graphics("images/experiment-timeline.png")
@@ -150,7 +151,7 @@ protocol:
 
 ## Objects 
 
-```{r experiment-2-objects, echo=FALSE, fig.cap="(A) The two objects used in experiment 1. Blue-trained guppies were trained to the left object and green-trained guppies were trained to the right object. The manufacturer’s colour name for the blue object is ‘dark azur (hex #078BC9) and for the green object is ‘bright yellowish green’ (hex # BBE90B). (B) The 7 pairs of objects in experiment 2. Object pairs 1,2,3,4, and A had the same colour properties as the object pair used in experiment 1. The bricks for the generalization objects were 'dark green' (hex #237841) and 'bright blue' (#0055BF) as specified by the manufacturer. The numbered object pairs are used for training while the lettered object pairs are used for testing. The experimental timeline represents the order of the trials. Experiment 1 ends at trial 21."}
+```{r experiment-2-objects, echo=FALSE, fig.cap="(A) The two objects used in experiment 1. Blue-trained guppies were trained to the left object and green-trained guppies were trained to the right object. The manufacturer’s colour name for the blue object is ‘dark azur (hex #078BC9) and for the green object is ‘bright yellowish green’ (hex # BBE90B). (B) The 7 pairs of objects in experiment 2. Object pairs 1,2,3,4, and A had the same colour properties as the object pair used in experiment 1. The bricks for the generalization objects were 'dark green' (hex #237841) and 'bright blue' (#0055BF) as specified by the manufacturer. The numbered object pairs are used for training while the lettered object pairs are used for testing. All Lego objects were placed in the tank with the studs facing up except object pair 1 which was placed in the tank with studs facing to the side as in the image. The experimental timeline represents the order of the trials. Experiment 1 ends at trial 21. Experiment 2 ends at trial 29."}
 knitr::include_graphics("images/objects-colour-learning-both-exp.png")
 ```
 
@@ -181,14 +182,15 @@ brick](https://www.lego.com/en-us/service/replacementparts/sale/enter-set-number
 service by entering the design ID in the *Enter an item number or design ID*
 prompt of the *Enter set number* section.
 
-| Object Pair 	| Brick Style 	| Design ID 	|
-|-------------	|-------------	|-----------	|
-| Pair A      	| BRICK 1X2   	| 3004      	|
-| Pair B      	| BRICK 2x4     | 3001        |
-| Pair 1      	| BRICK 1X2 (x2)| 3004      	|
-| Pair 2      	| BRICK 2X4   	| 3001      	|
-| Pair 3      	| BRICK 2X2   	| 30165     	|
-| Pair 4      	| BRICK 1X1   	| 3005      	|
+|     Object Pair                     |     Brick Style       |     Design ID    |
+|-------------------------------------|-----------------------|------------------|
+|     Pair A                          |     BRICK 1X2         |     3004         |
+|     Pair B                          |     BRICK 2x4         |     3001         |
+|     Pair 1                          |     BRICK 1X2 (x2)    |     3004         |
+|     Pair 2                          |     BRICK 2X4         |     3001         |
+|     Pair 3 & Exp. 1 Green object    |     BRICK 2X2         |     30165        |
+|     Pair 4                          |     BRICK 1X1         |     3005         |
+|     Exp. 1 Blue object              |     BRICK 1X3         |     3622         |
 
 Table: (\#tab:brick-details) The specific models for the Lego object pairs used in the experiment. Pair 1 was constructed by combining two 1X2 bricks and laying the composite brick on its side. 
 
