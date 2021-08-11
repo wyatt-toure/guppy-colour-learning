@@ -234,7 +234,7 @@ baseline_data_model <-
 <button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName"> See Model 1 Residuals </button>  
 <div id="BlockName" class="collapse"> 
 
-```{r, echo=FALSE, message=FALSE}
+```{r, message=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = baseline_data_model)
 plot(simulationOutput)
 
@@ -349,7 +349,7 @@ training_data_model <-
 <button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName2"> See Model 2 Residuals </button>  
 <div id="BlockName2" class="collapse">  
 
-```{r, echo=FALSE, message=FALSE}
+```{r, message=FALSE}
 # Residual diagnostics
 simulationOutput <- simulateResiduals(
   fittedModel = training_data_model,
@@ -492,7 +492,7 @@ test_data_model_glm <-
 <button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName3"> See Model 3 Residuals </button>  
 <div id="BlockName3" class="collapse">  
 
-```{r, include=TRUE,echo=FALSE, message=FALSE}
+```{r, include=TRUE, message=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = test_data_model_glm, n = 1000)
 plot(simulationOutput)
 
@@ -809,7 +809,7 @@ feeding_data_model <-
 <button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName4"> See Model 4 Residuals </button>  
 <div id="BlockName4" class="collapse">  
 
-```{r, echo=FALSE, message=FALSE}
+```{r, warning=FALSE, message=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = feeding_data_model)
 plot(simulationOutput)
 
@@ -940,7 +940,7 @@ test_data_feeding_controlled_model <-
 <button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName7"> See ESM Model 1 Residuals </button>  
 <div id="BlockName7" class="collapse">  
 
-```{r, echo=FALSE, message=FALSE}
+```{r, message=FALSE}
 simulationOutput <- simulateResiduals(fittedModel = test_data_feeding_controlled_model)
 plot(simulationOutput)
 
@@ -1042,7 +1042,7 @@ plot(simulationOutput)
 
 </div>
 
-```{r, echo=FALSE, message=FALSE}
+```{r, message=FALSE}
 # Saving plot to figs directory
 ggsave(
   filename = "exp-1-ESM-model-2-residual-plot.png",
