@@ -701,17 +701,43 @@ preference:
 `r report_est_and_std_error(pairwise_comparison_contrasts_table, 0, F)[3]`
 seconds, p = `r pairwise_comparison_contrasts_table$p.value[3]`).
 
-Additionally, we compared the mean for each colour group in each test trial against 
-zero to see if the preference for the rewarding object was significantly 
+Additionally, we compared the mean for each colour group in each test trial
+against zero to see if the preference for the rewarding object was significantly
 different from zero within a test trial.
+
+```{r, eval=FALSE}
+set.seed(123)
+
+emmeans(test_data_model_glm,
+  specs = ~ rewarding.object.colour:trial,
+  adjust = "mvt"
+) %>%
+  summary(infer = TRUE)
+```
 
 ```{r, echo=FALSE}
 set.seed(123)
 
-emmeans(test_data_model_glm, 
-        specs = ~ rewarding.object.colour:trial,
-        adjust = "mvt") %>% 
-  summary(infer = TRUE) %>% 
+contrast_against_chance <- as.data.frame(
+  emmeans(test_data_model_glm,
+    specs = ~ rewarding.object.colour:trial,
+    adjust = "mvt"
+  ) %>%
+    summary(infer = TRUE)
+) %>%
+  mutate_if(is.numeric, round, digits = 3)
+
+contrast_against_chance$p.value <- 
+  format_p_value(contrast_against_chance$p.value)
+
+contrast_against_chance$trial <- c(
+  "Initial Test",
+  "Initial Test",
+  "Final Test",
+  "Final Test"
+)
+
+contrast_against_chance %>%
   rename(
     "Rewarding object colour" = rewarding.object.colour,
     "Trial" = trial,
@@ -721,9 +747,13 @@ emmeans(test_data_model_glm,
     "P Value" = p.value,
     "Lower CL" = lower.CL,
     "Upper CL" = upper.CL
-  ) %>% 
-  kable()
+  ) %>%
+  kable(caption = "")
 ```
+
+We find that only green-trained guppies during the final test trial display a 
+rewarding object preference that is significantly different from chance 
+(green object preference: `r contrast_against_chance$emmean[4] %>% round(0)` ± `r contrast_against_chance$SE[4] %>% round(0)` seconds, p `r contrast_against_chance$p.value[4]`).
 
 
 ***
@@ -1177,6 +1207,63 @@ guppies non-significantly increase their preference for the blue object by 6% (p
 significant difference in preference for the rewarding object between the
 treatments before training (p =
 `r prop_pairwise_comparison_contrasts_table$p.value[4]`).
+
+Additionally, we again compared each test trial mean to chance (50% in this 
+case). 
+
+```{r, eval=FALSE}
+set.seed(123)
+
+emmeans(prop_test_data_model_glm,
+    specs = ~ rewarding.object.colour:trial,
+    adjust = "mvt",
+    type = "response"
+  ) %>% 
+  summary(infer = TRUE)
+```
+
+
+```{r, echo=FALSE}
+set.seed(123)
+
+percent_contrast_against_chance <- as.data.frame(
+  emmeans(prop_test_data_model_glm,
+    specs = ~ rewarding.object.colour:trial,
+    adjust = "mvt",
+    type = "response"
+  ) %>%
+    summary(infer = TRUE)
+) %>% 
+  mutate_if(is.numeric, round, digits = 3) 
+
+percent_contrast_against_chance$trial <- c(
+  "Initial Test",
+  "Initial Test",
+  "Final Test",
+  "Final Test"
+) 
+
+percent_contrast_against_chance$p.value <- 
+  format_p_value(percent_contrast_against_chance$p.value)
+
+percent_contrast_against_chance %>%
+  rename(
+    "Rewarding object colour" = rewarding.object.colour,
+    "Trial" = trial,
+    "Estimate" = response,
+    "Std. Error" = SE,
+    "T ratio" = t.ratio,
+    "P Value" = p.value,
+    "Lower CL" = lower.CL,
+    "Upper CL" = upper.CL
+  ) %>%
+  kable(caption = "")
+```
+
+We find that only green-trained guppies during the final test trial display a 
+rewarding object preference that is significantly different from chance 
+(green object preference: `r percent_contrast_against_chance$response[4] * 100` ± `r percent_contrast_against_chance$SE[4] * 100`%, p `r percent_contrast_against_chance$p.value[4]`) which is the same result we find when
+using a difference measure.
 
 ***
 
