@@ -751,9 +751,11 @@ contrast_against_chance %>%
   kable(caption = "")
 ```
 
-We find that only green-trained guppies during the final test trial display a 
-rewarding object preference that is significantly different from chance 
-(green object preference: `r contrast_against_chance$emmean[4] %>% round(0)` ± `r contrast_against_chance$SE[4] %>% round(0)` seconds, p `r contrast_against_chance$p.value[4]`).
+We find that only green-trained guppies during the final test trial display a
+rewarding object preference that is significantly different from chance (green
+object preference: `r contrast_against_chance$emmean[4] %>% round(0)` ±
+`r contrast_against_chance$SE[4] %>% round(0)` seconds, p
+`r contrast_against_chance$p.value[4]`).
 
 
 ***

@@ -976,8 +976,8 @@ significantly increased their preference for the rewarding object by
 performance between the two colour treatments in this test (p =
 `r test_data_simple_contrasts$p.value[2]`,
 `r report_ci(test_data_simple_contrasts, rounding = 0)[2]`). Green-trained
-guppies have a rewarding object preference that differs significantly from zero (p =
-`r contrast_against_zero$p.value[4]`) but blue-trained guppies do not (p =
+guppies have a rewarding object preference that differs significantly from zero
+(p = `r contrast_against_zero$p.value[4]`) but blue-trained guppies do not (p =
 `r contrast_against_zero$p.value[3]`).
 
 Neither group displayed evidence of generalizing the learned colour preference
@@ -1004,8 +1004,8 @@ difference in performance between the two colour treatments in this test with
 green-trained guppies displaying a superior performance over blue-trained
 guppies (p = `r test_data_simple_contrasts$p.value[4]`,
 `r report_ci(test_data_simple_contrasts, rounding = 0)[4]`). Green-trained
-guppies have a rewarding object preference that differs significantly from zero (p =
-`r contrast_against_zero$p.value[8]`) but blue-trained guppies do not (p =
+guppies have a rewarding object preference that differs significantly from zero
+(p = `r contrast_against_zero$p.value[8]`) but blue-trained guppies do not (p =
 `r contrast_against_zero$p.value[7]`).
 
 For the second probe test to see if the learned preference would habituate with
@@ -1015,11 +1015,14 @@ retained their learned preference maintaining a shift in preference of
 `r test_data_contrasts$p.value[9]`,
 `r report_ci(test_data_contrasts, rounding = 0)[9]`) but blue-trained guppies
 did not (p = `r test_data_contrasts$p.value[4]`,
-`r report_ci(test_data_contrasts, rounding = 0)[4]`). Green-trained guppies do not significantly outperform blue-trained guppies in this test (p = `r test_data_simple_contrasts$p.value[5]`,
+`r report_ci(test_data_contrasts, rounding = 0)[4]`). Green-trained guppies do
+not significantly outperform blue-trained guppies in this test (p =
+`r test_data_simple_contrasts$p.value[5]`,
 `r report_ci(test_data_simple_contrasts, rounding = 0)[5]`). Neither
 green-trained nor blue-trained guppies have a rewarding object preference that
-differs significantly from zero (green: p = `r contrast_against_zero$p.value[10]`;
-blue: p = `r contrast_against_zero$p.value[9]`).
+differs significantly from zero (green: p =
+`r contrast_against_zero$p.value[10]`; blue: p =
+`r contrast_against_zero$p.value[9]`).
 
 For the odour test green-trained guppies showed evidence of learning, displaying
 a shift in preference of `r test_data_contrasts$estimate[10] %>% round(0)`
@@ -1032,16 +1035,20 @@ seconds. There is a significant difference in performance between the two colour
 treatments in this test with green-trained guppies displaying a superior
 performance over blue (p `r test_data_simple_contrasts$p.value[6]`,
 `r report_ci(test_data_simple_contrasts, rounding = 0)[6]`). Green-trained
-guppies have a rewarding object preference that differs significantly from zero (p
-`r contrast_against_zero$p.value[12]`) but blue-trained guppies do not (p =
+guppies have a rewarding object preference that differs significantly from zero
+(p `r contrast_against_zero$p.value[12]`) but blue-trained guppies do not (p =
 `r contrast_against_zero$p.value[11]`).
 
-Thus, in three out of five post-training test trials green-trained guppies showed evidence of
-learning while blue-trained guppies show evidence of learning in only one out of
-five test trials with this trial being the very first probe trial after
-training. Additionally, in three out of five post-training test trials, green-trained guppies show a preference for their rewarding object that is significantly different from chance whereas blue-trained guppies never display a rewarding object preference that is significantly different from chance. Moreover, in two out of five test trials green-trained guppies
-outperform blue-trained guppies. Meanwhile blue-trained guppies never
-outperform green-trained guppies.
+Thus, in three out of five post-training test trials green-trained guppies
+showed evidence of learning while blue-trained guppies show evidence of learning
+in only one out of five test trials with this trial being the very first probe
+trial after training. Additionally, in three out of five post-training test
+trials, green-trained guppies show a preference for their rewarding object that
+is significantly different from chance whereas blue-trained guppies never
+display a rewarding object preference that is significantly different from
+chance. Moreover, in two out of five test trials green-trained guppies
+outperform blue-trained guppies. Meanwhile blue-trained guppies never outperform
+green-trained guppies.
 
 ```{r test-data-pref-plot, echo=FALSE, message=FALSE, fig.cap="Rewarding object preferences for an initial test prior to training and 5 probe tests after training. During training, fish were rewarded for approaching the blue object (blue squares) or the green object (green circles). At test, no food reward was present. Dashed line represents an equal preference for either object. Large blue squares and large green circles are means ± 95% CI, smaller blue squares and green circles are individual data points", fig.id="test-data-pref-plot", warning=FALSE, message=FALSE}
 testing_data_x_axis_labels <- c("Initial", "Probe 1", "G1", "G2", "Probe 2", "Odour")
