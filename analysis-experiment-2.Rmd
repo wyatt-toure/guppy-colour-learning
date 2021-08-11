@@ -660,7 +660,11 @@ training_data_model_trends <-
 
 ```{r, echo=FALSE}
 training_data_model_trends_values <- training_data_model_trends$emtrends %>%
+  summary(infer = TRUE) %>% 
   as.data.frame()
+
+training_data_model_trends_values$p.value <- 
+  format_p_value(training_data_model_trends_values$p.value)
 
 kable((training_data_model_trends_values %>%
   rename(
@@ -668,7 +672,9 @@ kable((training_data_model_trends_values %>%
     "Trial trend" = trial.trend,
     "Std. Error" = SE,
     "Lower CL" = lower.CL,
-    "Upper CL" = upper.CL
+    "Upper CL" = upper.CL,
+    "T Ratio" = t.ratio,
+    "P Value" = p.value
   )) %>%
   mutate_if(is.numeric, round, digits = 3))
 ```
@@ -903,6 +909,57 @@ test_data_simple_contrasts %>%
   )
 ```
 
+Finally we compared the mean for each colour group in each test trial against 
+zero to see if the preference for the rewarding object was significantly 
+different from zero within a test trial.
+
+```{r eval=FALSE}
+emmeans(test_data_model_glm, 
+        specs = ~ rewarding.object.colour:trial,
+        adjust = "mvt")
+```
+
+
+```{r contrasts-against-zero, echo=FALSE}
+set.seed(123)
+
+contrast_against_zero <- as.data.frame(
+  emmeans(test_data_model_glm, 
+        specs = ~ rewarding.object.colour:trial,
+        adjust = "mvt") %>% 
+  summary(infer = TRUE) 
+) %>% 
+  mutate_if(is.numeric, round, digits = 3) 
+
+contrast_against_zero$p.value <- format_p_value(contrast_against_zero$p.value)
+
+contrast_against_zero$trial <- c("Initial",
+                                 "Initial",
+                                      "Probe 1",
+                                 "Probe 1",
+                                      "Generalization 1",
+                                 "Generalization 1",
+                                      "Generalization 2",
+                                 "Generalization 2",
+                                      "Probe 2",
+                                 "Probe 2",
+                                      "Odour",
+                                 "Odour")
+
+contrast_against_zero %>% 
+  rename(
+    "Rewarding object colour" = rewarding.object.colour,
+    "Trial" = trial,
+    "Estimate" = emmean,
+    "Std. Error" = SE,
+    "T ratio" = t.ratio,
+    "P Value" = p.value,
+    "Lower CL" = lower.CL,
+    "Upper CL" = upper.CL
+  ) %>% 
+  kable(caption = "")
+```
+
 Both rewarding object colour treatments showed evidence of having learned during
 the first probe trial. Blue-trained guppies significantly increased their
 preference for the rewarding object by
@@ -915,7 +972,7 @@ significantly increased their preference for the rewarding object by
 `r report_ci(test_data_contrasts, rounding = 0)[6]`). There is no difference in
 performance between the two colour treatments in this test (p =
 `r test_data_simple_contrasts$p.value[2]`,
-`r report_ci(test_data_simple_contrasts, rounding = 0)[2]`).
+`r report_ci(test_data_simple_contrasts, rounding = 0)[2]`). Green-trained guppies have a preference that differs significantly from zero: (p = `r contrast_against_zero$p.value[4]`) but blue-trained guppies do not (p = `r contrast_against_zero$p.value[3]`).
 
 Neither group displayed evidence of generalizing the learned colour preference
 to a Lego object with a darker blue or green colouration (blue: p =
@@ -924,7 +981,7 @@ to a Lego object with a darker blue or green colouration (blue: p =
 `r test_data_contrasts$p.value[7]`,
 `r report_ci(test_data_contrasts, rounding = 0)[7]`) and the groups did not
 perform differently on this test (p = `r test_data_simple_contrasts$p.value[3]`,
-`r report_ci(test_data_simple_contrasts, rounding = 0)[3]`).
+`r report_ci(test_data_simple_contrasts, rounding = 0)[3]`). Neither green-trained nor blue-trained guppies have a rewarding object preference that differs significantly from zero: (green-trained green object preference: _, p = `r contrast_against_zero$p.value[6]` ; blue-trained blue object preference-, p = `r contrast_against_zero$p.value[5]`).
 
 Green-trained guppies showed evidence of generalizing their learned preference
 to a non-Lego clay object (p = `r test_data_contrasts$p.value[8]`,
@@ -936,7 +993,7 @@ blue-trained guppies did not show evidence of a learned preference (p =
 difference in performance between the two colour treatments in this test with
 green-trained guppies displaying a superior performance over blue-trained
 guppies (p = `r test_data_simple_contrasts$p.value[4]`,
-`r report_ci(test_data_simple_contrasts, rounding = 0)[4]`).
+`r report_ci(test_data_simple_contrasts, rounding = 0)[4]`). Green-trained guppies have a preference that differs significantly from zero: (p = `r contrast_against_zero$p.value[8]`) but blue-trained guppies do not (p = `r contrast_against_zero$p.value[7]`).
 
 For the second probe test to see if the learned preference would habituate with
 a repeated test, green-trained guppies displayed limited evidence of having
@@ -948,7 +1005,7 @@ did not (p = `r test_data_contrasts$p.value[4]`,
 `r report_ci(test_data_contrasts, rounding = 0)[4]`). There is a trend for
 green-trained guppies to outperform blue-trained guppies in this test but this
 is not significant ( p = `r test_data_simple_contrasts$p.value[5]`,
-`r report_ci(test_data_simple_contrasts, rounding = 0)[5]`).
+`r report_ci(test_data_simple_contrasts, rounding = 0)[5]`). Neither green-trained nor blue-trained guppies have a rewarding object preference that differs significantly from zero: (p = `r contrast_against_zero$p.value[10]`; blue-trained blue object preferene:  p = `r contrast_against_zero$p.value[9]`).
 
 For the odour test green-trained guppies showed evidence of learning, displaying
 a shift in preference of `r test_data_contrasts$estimate[10] %>% round(0)`
@@ -960,7 +1017,7 @@ non-significant shift of `r test_data_contrasts$estimate[5] %>% round(0)`
 seconds. There is a significant difference in performance between the two colour
 treatments in this test with green-trained guppies displaying a superior
 performance over blue (p `r test_data_simple_contrasts$p.value[6]`,
-`r report_ci(test_data_simple_contrasts, rounding = 0)[6]`).
+`r report_ci(test_data_simple_contrasts, rounding = 0)[6]`). Green-trained guppies have a preference that differs significantly from zero: (p `r contrast_against_zero$p.value[12]`) but blue-trained guppies do not (p = `r contrast_against_zero$p.value[11]`).
 
 Thus, in three out of five test trials green-trained guppies showed evidence of
 learning while blue-trained guppies show evidence of learning in only one out of

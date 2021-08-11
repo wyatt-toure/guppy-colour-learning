@@ -701,6 +701,31 @@ preference:
 `r report_est_and_std_error(pairwise_comparison_contrasts_table, 0, F)[3]`
 seconds, p = `r pairwise_comparison_contrasts_table$p.value[3]`).
 
+Additionally, we compared the mean for each colour group in each test trial against 
+zero to see if the preference for the rewarding object was significantly 
+different from zero within a test trial.
+
+```{r, echo=FALSE}
+set.seed(123)
+
+emmeans(test_data_model_glm, 
+        specs = ~ rewarding.object.colour:trial,
+        adjust = "mvt") %>% 
+  summary(infer = TRUE) %>% 
+  rename(
+    "Rewarding object colour" = rewarding.object.colour,
+    "Trial" = trial,
+    "Estimate" = emmean,
+    "Std. Error" = SE,
+    "T ratio" = t.ratio,
+    "P Value" = p.value,
+    "Lower CL" = lower.CL,
+    "Upper CL" = upper.CL
+  ) %>% 
+  kable()
+```
+
+
 ***
 
 ```{r feeding-data-prep, include = FALSE}
