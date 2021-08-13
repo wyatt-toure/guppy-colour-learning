@@ -74,10 +74,9 @@ this project (see Figure \@ref(fig:experiment-2-objects) for details on trials).
 
 ## Test trials 
 
-For the initial test and final tests (Probe 1, Probe 2, G1, G2, and Odour)
-guppies were presented with the green and blue objects with empty food strips
-attached to them. You can see an example of this above. The following protocol
-was used for testing:
+For the initial test and final tests guppies were presented with the green and 
+blue objects with empty food strips attached to them. You can see an example of 
+this above. The following protocol was used for testing:
 
 1.  Fill the test tank with water from several home tanks to the 8 cm line.
 2.  Transfer the guppy from the home tank to the test tank via a white opaque
