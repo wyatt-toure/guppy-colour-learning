@@ -76,7 +76,11 @@ this project (see Figure \@ref(fig:experiment-2-objects) for details on trials).
 
 For the initial test and final tests guppies were presented with the green and 
 blue objects with empty food strips attached to them. You can see an example of 
-this above. The following protocol was used for testing:
+this from experiment 1 below. 
+
+<img src="images/test-trial.gif" width="50%" />
+
+The following protocol was used for testing:
 
 1.  Fill the test tank with water from several home tanks to the 8 cm line.
 2.  Transfer the guppy from the home tank to the test tank via a white opaque
@@ -102,7 +106,11 @@ green-rewarded. The food reward was a gelatin mixture of flake food which was
 placed on the back of the objects facing away from the guppy so that the
 rewarding object had to be approached and investigated for the food reward to be
 discovered. To see how to make the food reward go to [Food
-strips](#food-strips). The protocol was as follows:
+strips](#food-strips). An example training trial is below.
+
+<img src="images/sample-training-trial.gif" width="50%" />
+
+The protocol was as follows:
 
 1.  Fill the test tank with water from several home tanks to the 8 cm line.
 2.  Transfer the guppy from the home tank to the test tank via a white opaque
