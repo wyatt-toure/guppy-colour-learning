@@ -962,7 +962,7 @@ contrast_against_zero %>%
     "Lower CL" = lower.CL,
     "Upper CL" = upper.CL
   ) %>%
-  kable(caption = "")
+  kable(caption = "Comparisons of estimated marginal means of rewarding object preference by rewarding object colour for every test trial in Experiment 2 against zero. A multivariate t adjustment was used to address multiple comparisons.")
 ```
 
 Both rewarding object colour treatments showed evidence of having learned during
@@ -1390,7 +1390,7 @@ percent_contrast_against_zero %>%
     "Lower CL" = lower.CL,
     "Upper CL" = upper.CL
   ) %>%
-  kable(caption = "")
+  kable(caption = "Comparisons of estimated marginal means of rewarding object preference by rewarding object colour for every test trial in Experiment 2 against chance (50%). A multivariate t adjustment was used to address multiple comparisons.")
 ```
 
 

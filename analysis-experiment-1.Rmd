@@ -749,7 +749,7 @@ contrast_against_chance %>%
     "Lower CL" = lower.CL,
     "Upper CL" = upper.CL
   ) %>%
-  kable(caption = "")
+  kable(caption = "Comparisons of estimated marginal means of rewarding object preference by rewarding object colour for every test trial in Experiment 1 against zero. A multivariate t adjustment was used to address multiple comparisons.")
 ```
 
 We find that only green-trained guppies during the final test trial display a
@@ -1043,8 +1043,6 @@ simulationOutput <- simulateResiduals(
 plot(simulationOutput)
 ```
 
-</div>
-
 ```{r, message=FALSE}
 # Saving plot to figs directory
 ggsave(
@@ -1055,6 +1053,8 @@ ggsave(
   dpi = 300
 )
 ```
+
+</div>
 
 ```{r tidying-esm-model-3, echo=FALSE, message=FALSE}
 # Setting table row names
@@ -1260,7 +1260,7 @@ percent_contrast_against_chance %>%
     "Lower CL" = lower.CL,
     "Upper CL" = upper.CL
   ) %>%
-  kable(caption = "")
+  kable(caption = "Comparisons of estimated marginal means of rewarding object preference by rewarding object colour for every test trial in Experiment 1 against chance (50%). A multivariate t adjustment was used to address multiple comparisons.")
 ```
 
 We find that only green-trained guppies during the final test trial display a 
