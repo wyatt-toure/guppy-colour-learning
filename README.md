@@ -7,33 +7,27 @@ Simon M. Reader
 
 ## Summary
 
-This is the repository containing the R code to produce the analyses and figures
-in the manuscript ‘Colour biases in learned foraging preferences in Trinidadian
-guppies’. R version 3.6.2 was used for this project. A reader-friendly website
-which walks through each of the models in the manuscript is available at
-<https://wyatt-toure.github.io/guppy-colour-learning/>.
+This is the repository containing the R code and data to produce the analyses
+and figures in the manuscript ‘Colour biases in learned foraging preferences in
+Trinidadian guppies’. R version 3.6.2 was used for this project. A
+reader-friendly website which walks through each of the models in the manuscript
+is available at <https://wyatt-toure.github.io/guppy-colour-learning/>. This
+README explains how to reproduce the results, provides the location of the
+metadata for the data sheets, and gives descriptions of the root directory
+contents and folder contents.
 
 ## How to reproduce the results
 
-This project uses the
-[`renv`](https://rstudio.github.io/renv/articles/renv.html) package from RStudio
-to manage package dependencies and ensure reproducibility through time. To
-ensure results are reproduced based on the versions of the packages used at the
-time this project was created, you will need to install `renv` using
-`install.packages("renv")` in RStudio.
+This project uses the `renv` package from RStudio to manage package dependencies
+and ensure reproducibility through time. To ensure results are reproduced based
+on the versions of the packages used at the time this project was created, you
+will need to install `renv` using `install.packages("renv")` in R.
 
 If you want to reproduce the results it is best to download the entire
-repository onto your system. This can be done either by clicking the green code
-button on the GitHub repository homepage and then clicking Download ZIP or from
-the command line using
-
-`git clone https://github.com/wyatt-toure/guppy-colour-learning`
-
-which will download the repository to your current directory. It may be
-preferable to download the repository as a ZIP file since cloning the repository
-downloads the entire git history as well. Many binary files were included in the
-commits causing the size of the git repository to be quite large (250+ MB
-compared to 20 MB for just the files in the directory).
+repository onto your system. This can be done by clicking the Download button on
+the FigShare repository (DOI: 10.6084/m9.figshare.14404868). This will download
+a zip file of the entire repository. Unzip the zip file to get access to the
+project files.
 
 Once the repository is downloaded onto your system, navigate to the root
 directory and open `guppy-colour-learning-project.Rproj`. It is important to
@@ -82,27 +76,21 @@ in the file `required-r-packages.md`.
 ### Root directory contents
 
 The root directory contains Rmd scripts used to conduct the analyses, create
-figures, and render the website pages. Below we describe the contents of the
-root directory `.Rmd` files.
+figures, and render the website pages. Below we describe the contents of these
+files as well as the additional files contained in the root directory.
 
   - `analysis-experiment-1.Rmd` is the R code and documentation for the
-    experiment 1 data preparation and analysis. This script generates the
-    [Analysis 1](https://wyatt-toure.github.io/guppy-colour-learning/analysis-experiment-1.html)
-    page of the website.
+    experiment 1 data preparation and analysis. This script generates the 
+    Analysis 1 page of the website.
 
   - `analysis-experiment-2.Rmd` is the R code and documentation for the
     experiment 2 data preparation and analysis. This script generates the
-    [Analysis 2](https://wyatt-toure.github.io/guppy-colour-learning/analysis-experiment-2.html)
-    page of the website.
+    Analysis 2 page of the website.
 
   - `protocols.Rmd` contains the protocols used to conduct the experiments and
-    generate the data. This script generates the
-    [Protocols](https://wyatt-toure.github.io/guppy-colour-learning/protocols.html)
-    page of the website.
+    generate the data. This script generates the Protocols page of the website.
 
-  - `index.Rmd` creates the
-    [Homepage](https://wyatt-toure.github.io/guppy-colour-learning/index.html)
-    of the project site.
+  - `index.Rmd` creates the Homepage of the project site.
 
   - `combined-figures.Rmd` is the R code used to create figures that combine
     data from experiments 1 and 2. Not used in the project site.
@@ -111,9 +99,9 @@ root directory `.Rmd` files.
     treatments and object sides during trials for experiment 2. Not used in the
     project site.
     
-  - `renv.lock` is a JSON formatted file which contains package information for
-    the project. renv will install the packages listed in this file upon
-    executing `renv::restore()`
+  - `renv.lock` is a JSON formatted plain text file which contains package
+    information for the project. renv will install the packages listed in this
+    file upon executing `renv::restore()`
     
   - `required-r-packages.md` is a plain text file containing the versions and
     sources of the packages required for the project.
