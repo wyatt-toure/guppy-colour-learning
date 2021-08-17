@@ -220,7 +220,7 @@ model.
 
 ### Model 1 -  Preference for the green object at baseline
 
-This first model contains the data for all individual guppies. I looked at the
+This first model contains the data for all individual guppies. We looked at the
 green object preference of all guppies in an intercept only model to see if the
 green object preference at baseline was significantly different from zero.
 `green.object.preference` is the time spent near the green object subtracted by
@@ -470,7 +470,7 @@ ggsave(
 ### Model 3 -  Preference for the rewarded object during testing depending on treatment {#model-3}
 
 For the main effects of training and rewarding object colour on rewarding object
-preference I fit a generalized linear mixed effects model with a Gaussian
+preference we fit a generalized linear mixed effects model with a Gaussian
 distribution which modeled the variances to account for variance heterogeneity
 using the package
 [`glmmTMB`](https://cran.r-project.org/web/packages/glmmTMB/index.html). Our
@@ -616,8 +616,8 @@ ggsave(
 #### Post-hoc Comparisons
 
 To determine whether the means of the final rewarding object preference for the
-two treatments were different I conducted post-hoc comparisons with the package
-[`emmeans`](https://cran.r-project.org/package=emmeans). I compared the
+two treatments were different We conducted post-hoc comparisons with the package
+[`emmeans`](https://cran.r-project.org/package=emmeans). We compared the
 following means:
 
   - Final test blue-trained and initial test blue-trained
@@ -779,7 +779,7 @@ feeding <- feeding %>%
 feeding <- feeding %>%
   dplyr::select(-feeding.count)
 
-# Add the feeding values to the main data frame so I can get treatment IDs
+# Add the feeding values to the main data frame so we can get treatment IDs
 my_feeding_data <- left_join(baseline_data, feeding, by = "id")
 
 # Replace NAs with 0, rename n to feeding count, and extract id, feeding count,
@@ -794,9 +794,9 @@ my_feeding_data <- my_feeding_data %>%
 
 A discrepancy in reinforcement between treatments may influence performance on a
 final preference test. To see whether there was a difference in feeding between
-treatments I counted the number of trials in which an individual fish ate
+treatments we counted the number of trials in which an individual fish ate
 throughout all of training and compared the feeding counts between treatments.
-To do this I fit a generalized linear model with a negative binomial
+To do this we fit a generalized linear model with a negative binomial
 distribution. The response variable 'feeding count' is a sum of the number of
 trials in which a guppy ate.
 
