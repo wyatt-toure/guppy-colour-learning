@@ -25,7 +25,7 @@ will need to install `renv` using `install.packages("renv")` in R.
 
 If you want to reproduce the results it is best to download the entire
 repository onto your system. This can be done by clicking the Download button on
-the FigShare repository (DOI: <https://doi.org/10.6084/m9.figshare.15195468>). 
+the FigShare repository (DOI: <https://doi.org/10.6084/m9.figshare.14404868>). 
 This will download a zip file of the entire repository. Unzip the zip file to 
 get access to the project files.
 
