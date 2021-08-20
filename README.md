@@ -79,6 +79,9 @@ The root directory contains Rmd scripts used to conduct the analyses, create
 figures, and render the website pages. Below we describe the contents of these
 files as well as the additional files contained in the root directory.
 
+  - `CITATION.cff` contains the information needed to cite the code and 
+    data in the repository
+
   - `analysis-experiment-1.Rmd` is the R code and documentation for the
     experiment 1 data preparation and analysis. This script generates the 
     Analysis 1 page of the website.
