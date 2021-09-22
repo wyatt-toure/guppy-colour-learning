@@ -1,5 +1,6 @@
 cff-version: 1.2.0
 message: "If you decide to use the code or data in this repository, please cite it as below."
+type: data
 authors:
 - family-names: "Toure"
   given-names: "M. Wyatt"
