@@ -7,7 +7,6 @@ authors:
 - family-names: "Reader"
   given-names: "Simon M."
 title: "R code, data, and analysis documentation for Colour biases in learned foraging preferences in Trinidadian guppies"
-version: 2.0
 doi: 10.6084/m9.figshare.14404868
 date-released: 2021-08-20
 url: "https://wyatt-toure.github.io/guppy-colour-learning/"
