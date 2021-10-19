@@ -8,13 +8,15 @@ Simon M. Reader
 ## Summary
 
 This is the repository containing the R code and data to produce the analyses
-and figures in the manuscript ‘Colour biases in learned foraging preferences in
-Trinidadian guppies’. R version 3.6.2 was used for this project. A
-reader-friendly website which walks through each of the models in the manuscript
-is available at <https://wyatt-toure.github.io/guppy-colour-learning/>. This
-README explains how to reproduce the results, provides the location of the
-metadata for the data sheets, and gives descriptions of the root directory
-contents and folder contents.
+and figures in the article [Toure, M. W., & Reader, S. M. (2021). Colour biases
+in learned foraging preferences in Trinidadian guppies.
+Ethology, 00, 1-12](https://doi.org/10.1111/eth.13237). R version 3.6.2 was
+used for this project. A reader-friendly website which walks through each of the
+models in the manuscript is available at
+<https://wyatt-toure.github.io/guppy-colour-learning/>. This README explains how
+to reproduce the results, provides the location of the metadata for the data
+sheets, and gives descriptions of the root directory contents and folder
+contents.
 
 ## How to reproduce the results
 

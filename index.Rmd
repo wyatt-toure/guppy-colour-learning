@@ -18,17 +18,21 @@ knit: (function(input, ...) {
 
 ***
 
-Welcome to the project site for the experiment described in the manuscript
-'Colour biases in learned foraging preferences in Trinidadian guppies'. This
-site contains the code, model outputs, data tables, and residual diagnostics for
-the analyses in the manuscript as well as detailed protocols and sample videos
-for the experiment. The Rmarkdown scripts to reconstruct this site are available
-at the [GitHub repository for this
+Welcome to the project site for the experiments described in the manuscript
+[Toure, M. W., & Reader, S. M. (2021). Colour biases in learned foraging
+preferences in Trinidadian guppies.
+Ethology, 00, 1-12](https://doi.org/10.1111/eth.13237). This site contains
+the code, model outputs, data tables, and residual diagnostics for the analyses
+in the manuscript as well as detailed protocols and sample videos for the
+experiment. The Rmarkdown scripts to reconstruct this site are available at the
+[GitHub repository for this
 site](https://github.com/wyatt-toure/guppy-colour-learning-project). If you
 would like to reproduce the results in the manuscript please consult the [How to
 Reproduce the
 Results](https://github.com/wyatt-toure/guppy-colour-learning#how-to-reproduce-the-results)
-section of the README.
+section of the README. The data and R scripts to produce all analyses, figures,
+and residual diagnostic plots are permanently archived at FigShare (DOI:
+<https://doi.org/10.6084/m9.figshare.14404868>).
 
 The goal of this project was to determine whether we could shift the preference
 for particular objects in Trinidadian guppies regardless of the object's colour,
